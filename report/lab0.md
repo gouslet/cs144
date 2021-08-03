@@ -24,7 +24,7 @@
 - 容量限制可以保存在内存中的字节数，但是不限制流的长度
 - 一个容量为1字节的对象可以持有以TB为单位的字节流，只要writer持续每次写1个字节，reader在writer写入下一个字节之前读取每个字节
 
-# 第一次测试
+## 第一次测试
 - 9项用例通过了4项，未通过的用例为
  	 ```
      23 - t_byte_stream_construction (Failed)
@@ -33,4 +33,39 @@
 	 26 - t_byte_stream_capacity (Failed)
 	 27 - t_byte_stream_many_writes (Failed)
      ```
+- 其中未通过的方法有
+    - eof
+    - buffer_empty
+    - input_ended
+- 抛出的错误有
+  - Exception: The test "overwrite" caused your implementation to throw an exception!
+  - Expected "cat" at the front of the stream, but found "tac"
+    
     详情见[test_lab0-1](../sponge/build/test-results/test_lab0-1)
+- 针对buffer_empty方法，在`byte_stream.hh`文件中可见其声明和说明为
+    ```c
+    //! \returns `true` if the buffer is empty
+    bool buffer_empty() const;
+    ```
+将其实现为
+    ```c
+    return cap > 0 && size == 0;
+    ```
+
+## 第二次测试
+- 9项用例通过了5项，未通过的用例为
+     
+     ```
+     23 - t_byte_stream_construction (Failed)
+	 24 - t_byte_stream_one_write (Failed)
+	 25 - t_byte_stream_two_writes (Failed)
+	 26 - t_byte_stream_capacity (Failed)
+     ```
+- 其中未通过的方法有
+  - eof
+- 抛出的错误有
+  - Exception: The test "overwrite" caused your implementation to throw an exception!
+  - Expected "cat" at the front of the stream, but found "tac"
+    
+    详情见[test_lab0-1](../sponge/build/test-results/test_lab0-1)
+

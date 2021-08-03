@@ -12,7 +12,7 @@
 
 using namespace std;
 
-ByteStream::ByteStream(const size_t capacity):bas{},cap{capacity},size{},b_read{},b_written{},i_ended{true}, o_ended{true},_error{false}{ }
+ByteStream::ByteStream(const size_t capacity):bas{},cap{capacity},size{},b_read{},b_written{},i_ended{false}, o_ended{false},_error{false}{ }
 
 size_t ByteStream::write(const string &data) {
     size_t i = 0;
@@ -82,9 +82,9 @@ bool ByteStream::input_ended() const { return i_ended; }
 
 size_t ByteStream::buffer_size() const { return size; }
 
-bool ByteStream::buffer_empty() const { return cap - size; }
+bool ByteStream::buffer_empty() const { return cap > 0 && size == 0; }
 
-bool ByteStream::eof() const { return o_ended; }
+bool ByteStream::eof() const { return o_ended || size <= 0; }
 
 size_t ByteStream::bytes_written() const { return b_written; }
 
