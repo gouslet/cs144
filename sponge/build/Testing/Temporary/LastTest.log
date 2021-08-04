@@ -1,29 +1,17 @@
-Start testing: Aug 04 00:36 CST
+Start testing: Aug 04 21:15 CST
 ----------------------------------------------------------
 23/166 Testing: t_byte_stream_construction
 23/166 Test: t_byte_stream_construction
 Command: "/root/cs144/sponge/build/tests/byte_stream_construction"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_construction" start time: Aug 04 00:36 CST
+"t_byte_stream_construction" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: eof: 0
-
-Failure message:
-	The ByteStream should have had eof equal to 0 but instead it was 1
-
-List of steps that executed successfully:
-	Initialized with (capacity=15)
-	Expectation: input_ended: 0
-	Expectation: buffer_empty: 1
-
-Exception: The test "construction" failed
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
-Test Failed.
-"t_byte_stream_construction" end time: Aug 04 00:36 CST
+Test Passed.
+"t_byte_stream_construction" end time: Aug 04 21:15 CST
 "t_byte_stream_construction" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -31,32 +19,14 @@ Test Failed.
 24/166 Test: t_byte_stream_one_write
 Command: "/root/cs144/sponge/build/tests/byte_stream_one_write"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_one_write" start time: Aug 04 00:36 CST
+"t_byte_stream_one_write" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: "cat" at the front of the stream
-
-Failure message:
-	Expected "cat" at the front of the stream, but found "tac"
-
-List of steps that executed successfully:
-	Initialized with (capacity=15)
-	     Action: write "cat" to the stream
-	Expectation: input_ended: 0
-	Expectation: buffer_empty: 0
-	Expectation: eof: 0
-	Expectation: bytes_read: 0
-	Expectation: bytes_written: 3
-	Expectation: remaining_capacity: 12
-	Expectation: buffer_size: 3
-
-Exception: The test "write-end-pop" failed
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
-Test Failed.
-"t_byte_stream_one_write" end time: Aug 04 00:36 CST
+Test Passed.
+"t_byte_stream_one_write" end time: Aug 04 21:15 CST
 "t_byte_stream_one_write" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -64,32 +34,14 @@ Test Failed.
 25/166 Test: t_byte_stream_two_writes
 Command: "/root/cs144/sponge/build/tests/byte_stream_two_writes"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_two_writes" start time: Aug 04 00:36 CST
+"t_byte_stream_two_writes" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: "cat" at the front of the stream
-
-Failure message:
-	Expected "cat" at the front of the stream, but found "tac"
-
-List of steps that executed successfully:
-	Initialized with (capacity=15)
-	     Action: write "cat" to the stream
-	Expectation: input_ended: 0
-	Expectation: buffer_empty: 0
-	Expectation: eof: 0
-	Expectation: bytes_read: 0
-	Expectation: bytes_written: 3
-	Expectation: remaining_capacity: 12
-	Expectation: buffer_size: 3
-
-Exception: The test "write-write-end-pop-pop" failed
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
-Test Failed.
-"t_byte_stream_two_writes" end time: Aug 04 00:36 CST
+Test Passed.
+"t_byte_stream_two_writes" end time: Aug 04 21:15 CST
 "t_byte_stream_two_writes" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -97,32 +49,14 @@ Test Failed.
 26/166 Test: t_byte_stream_capacity
 Command: "/root/cs144/sponge/build/tests/byte_stream_capacity"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_capacity" start time: Aug 04 00:36 CST
+"t_byte_stream_capacity" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: "ca" at the front of the stream
-
-Exception:
-	basic_string::_M_construct null not valid
-
-List of steps that executed successfully:
-	Initialized with (capacity=2)
-	     Action: write "cat" to the stream
-	Expectation: input_ended: 0
-	Expectation: buffer_empty: 0
-	Expectation: eof: 0
-	Expectation: bytes_read: 0
-	Expectation: bytes_written: 2
-	Expectation: remaining_capacity: 0
-	Expectation: buffer_size: 2
-
-Exception: The test "overwrite" caused your implementation to throw an exception!
 <end of output>
-Test time =   0.00 sec
+Test time =   0.54 sec
 ----------------------------------------------------------
-Test Failed.
-"t_byte_stream_capacity" end time: Aug 04 00:36 CST
+Test Passed.
+"t_byte_stream_capacity" end time: Aug 04 21:15 CST
 "t_byte_stream_capacity" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -130,14 +64,14 @@ Test Failed.
 27/166 Test: t_byte_stream_many_writes
 Command: "/root/cs144/sponge/build/tests/byte_stream_many_writes"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_many_writes" start time: Aug 04 00:36 CST
+"t_byte_stream_many_writes" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"t_byte_stream_many_writes" end time: Aug 04 00:36 CST
+"t_byte_stream_many_writes" end time: Aug 04 21:15 CST
 "t_byte_stream_many_writes" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -145,29 +79,33 @@ Test Passed.
 28/166 Test: t_webget
 Command: "/root/cs144/sponge/tests/webget_t.sh"
 Directory: /root/cs144/sponge/build
-"t_webget" start time: Aug 04 00:36 CST
+"t_webget" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
+HTTP/1.1 200 OK
+Content-type: text/plain
+
+7SmXqWkrLKzVBCEalbSPqBcvs11Pw263K7x4Wv3JckI
 <end of output>
-Test time =  10.02 sec
+Test time =   1.72 sec
 ----------------------------------------------------------
-Test Failed.
-"t_webget" end time: Aug 04 00:36 CST
-"t_webget" time elapsed: 00:00:10
+Test Passed.
+"t_webget" end time: Aug 04 21:15 CST
+"t_webget" time elapsed: 00:00:01
 ----------------------------------------------------------
 
 50/166 Testing: t_address_dt
 50/166 Test: t_address_dt
 Command: "/root/cs144/sponge/build/doctests/address_dt"
 Directory: /root/cs144/sponge/build
-"t_address_dt" start time: Aug 04 00:36 CST
+"t_address_dt" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"t_address_dt" end time: Aug 04 00:36 CST
+"t_address_dt" end time: Aug 04 21:15 CST
 "t_address_dt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -175,14 +113,14 @@ Test Passed.
 51/166 Test: t_parser_dt
 Command: "/root/cs144/sponge/build/doctests/parser_dt"
 Directory: /root/cs144/sponge/build
-"t_parser_dt" start time: Aug 04 00:36 CST
+"t_parser_dt" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"t_parser_dt" end time: Aug 04 00:36 CST
+"t_parser_dt" end time: Aug 04 21:15 CST
 "t_parser_dt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -190,15 +128,15 @@ Test Passed.
 52/166 Test: t_socket_dt
 Command: "/root/cs144/sponge/build/doctests/socket_dt"
 Directory: /root/cs144/sponge/build
-"t_socket_dt" start time: Aug 04 00:36 CST
+"t_socket_dt" start time: Aug 04 21:15 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"t_socket_dt" end time: Aug 04 00:36 CST
+"t_socket_dt" end time: Aug 04 21:15 CST
 "t_socket_dt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Aug 04 00:36 CST
+End testing: Aug 04 21:15 CST

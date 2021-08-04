@@ -1,0 +1,45 @@
+[100%] Testing Lab 0...
+Test project /root/cs144/sponge/build
+    Start 23: t_byte_stream_construction
+1/9 Test #23: t_byte_stream_construction .......   Passed    0.00 sec
+    Start 24: t_byte_stream_one_write
+2/9 Test #24: t_byte_stream_one_write ..........   Passed    0.00 sec
+    Start 25: t_byte_stream_two_writes
+3/9 Test #25: t_byte_stream_two_writes .........   Passed    0.00 sec
+    Start 26: t_byte_stream_capacity
+4/9 Test #26: t_byte_stream_capacity ...........***Failed    0.00 sec
+Test Failure on expectation:
+	     Action: write "tac" to the stream
+
+Failure message:
+	The ByteStream should have had bytes_written equal to 2 but instead it was 0
+
+List of steps that executed successfully:
+	Initialized with (capacity=2)
+	     Action: write "cat" to the stream
+	     Action: pop 2
+
+Exception: The test "overwrite-clear-overwrite" failed
+
+    Start 27: t_byte_stream_many_writes
+5/9 Test #27: t_byte_stream_many_writes ........   Passed    0.01 sec
+    Start 28: t_webget
+6/9 Test #28: t_webget .........................   Passed    2.08 sec
+    Start 50: t_address_dt
+7/9 Test #50: t_address_dt .....................   Passed    0.01 sec
+    Start 51: t_parser_dt
+8/9 Test #51: t_parser_dt ......................   Passed    0.00 sec
+    Start 52: t_socket_dt
+9/9 Test #52: t_socket_dt ......................   Passed    0.01 sec
+
+89% tests passed, 1 tests failed out of 9
+
+Total Test time (real) =   2.12 sec
+
+The following tests FAILED:
+	 26 - t_byte_stream_capacity (Failed)
+Errors while running CTest
+make[3]: *** [CMakeFiles/check_lab0.dir/build.make:77: CMakeFiles/check_lab0] Error 8
+make[2]: *** [CMakeFiles/Makefile2:335: CMakeFiles/check_lab0.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:342: CMakeFiles/check_lab0.dir/rule] Error 2
+make: *** [Makefile:187: check_lab0] Error 2
