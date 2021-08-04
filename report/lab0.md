@@ -48,7 +48,7 @@
     //! \returns `true` if the buffer is empty
     bool buffer_empty() const;
     ```
-将其实现为
+  将其实现为
     ```c++
     return cap > 0 && size == 0;
     ```
@@ -57,10 +57,10 @@
 - 9项用例通过了5项，未通过的用例为
      
    ```
-   23 - t_byte_stream_construction (Failed)
-	 24 - t_byte_stream_one_write (Failed)
-	 25 - t_byte_stream_two_writes (Failed)
-	 26 - t_byte_stream_capacity (Failed)
+    23 - t_byte_stream_construction (Failed)
+    24 - t_byte_stream_one_write (Failed)
+    25 - t_byte_stream_two_writes (Failed)
+    26 - t_byte_stream_capacity (Failed)
   ```
 - 其中未通过的方法有
   - eof
@@ -113,9 +113,9 @@
      
    ```
    23 - t_byte_stream_construction (Failed)
-	 24 - t_byte_stream_one_write (Failed)
-	 25 - t_byte_stream_two_writes (Failed)
-	 26 - t_byte_stream_capacity (Failed)
+   24 - t_byte_stream_one_write (Failed)
+   25 - t_byte_stream_two_writes (Failed)
+   26 - t_byte_stream_capacity (Failed)
   ```
 - 其中未通过的方法有
   - eof
@@ -126,7 +126,9 @@
   - Exception:basic_string::_M_construct null not valid
     
   详情见[test_lab0-3](../sponge/build/test-results/test_lab0-3)
-- 针对Expected "cattac" at the front of the stream, but found "taccat"，根据
+- 针对Expected "cattac" at the front of the stream, but found "taccat"
+  
+  根据
   List of steps that executed successfully:
 	Initialized with (capacity=15)
 	     Action: write "cat" to the stream
@@ -171,9 +173,9 @@
      
    ```
    23 - t_byte_stream_construction (Failed)
-	 24 - t_byte_stream_one_write (Failed)
-	 25 - t_byte_stream_two_writes (Failed)
-	 26 - t_byte_stream_capacity (Failed)
+   24 - t_byte_stream_one_write (Failed)
+   25 - t_byte_stream_two_writes (Failed)
+   26 - t_byte_stream_capacity (Failed)
   ```
 - 其中未通过的方法有
   - eof
@@ -186,6 +188,7 @@
   详情见[test_lab0-4](../sponge/build/test-results/test_lab0-4)
 - 针对
   The ByteStream should have had bytes_read equal to 2 but instead it was 0
+  
   根据
   List of steps that executed successfully:
 	Initialized with (capacity=15)
@@ -210,42 +213,125 @@
     return i;
   }
   ```
-  将string ByteStream::peek_output(const size_t len) const 函数实现为
+  将void ByteStream::pop_output(const size_t len) 函数修正为
   ```c++
   {
-    string s;
-    if (!_error && size >= len) {
-        for (size_t i = 0;i < len;i++) {
-            s.push_back(bas.at(i));
-        }
-        return s;
+    if (_error) {
+        return;
     }
-    return nullptr;
+    if (len > size) {
+        set_error();
+        return;
+    }
+    for (size_t i = 0; i < len; i++) {
+        bas.pop_front();
+    }
+    b_read += len;
+    size -= len;
   }
   ```
+## 第五次测试
+- 9项用例通过了6项，未通过的用例为
+     
+   ```
+   23 - t_byte_stream_construction (Failed)
+   24 - t_byte_stream_one_write (Failed)
+   26 - t_byte_stream_capacity (Failed)
+  ```
+- 其中未通过的方法有
+  - eof
+- 错误有
+  - The ByteStream should have had eof equal to 0 but instead it was 1
+	- basic_string::_M_construct null not valid
+  - Exception: The test "overwrite" caused your implementation to throw an exception!
+  - Exception:basic_string::_M_construct null not valid
+    
+  详情见[test_lab0-5](../sponge/build/test-results/test_lab0-5)
+- 针对
+  - The ByteStream should have had eof equal to 0 but instead it was 1
+  
+  根据
+  List of steps that executed successfully:
+    Initialized with (capacity=15)
+    Expectation: input_ended: 0
+    Expectation: buffer_empty: 1
 
-## 第九次测试
+  将bool ByteStream::eof() const函数修正为
+  ```c++
+  { return size <= 0 && i_ended; }
+  ```
+
+## 第六次测试
 - 9项用例通过了8项，未通过的用例为
+     
    ```
 	 26 - t_byte_stream_capacity (Failed)
   ```
 - 其中错误有
-	- The ByteStream should have had bytes_written equal to 2 but instead it was 0
+  - Expectation: "ca" at the front of the stream
+	- basic_string::_M_construct null not valid
+  - Exception: The test "overwrite" caused your implementation to throw an exception!
     
-  详情见[test_lab0-9](../sponge/build/test-results/test_lab0-9)
+  详情见[test_lab0-6](../sponge/build/test-results/test_lab0-6)
 - 针对
-	The ByteStream should have had bytes_written equal to 2 but instead it was 0
+	- basic_string::_M_construct null not valid
+  
   根据
   List of steps that executed successfully:
-	Initialized with (capacity=2)
-	     Action: write "cat" to the stream
-	     Action: pop 2
+    Initialized with (capacity=2)
+        Action: write "cat" to the stream
+    Expectation: input_ended: 0
+    Expectation: buffer_empty: 0
+    Expectation: eof: 0
+    Expectation: bytes_read: 0
+    Expectation: bytes_written: 2
+    Expectation: remaining_capacity: 0
+    Expectation: buffer_size: 2
 
-  将size_t ByteStream::write(const string &data)函数修正为
+  将std::string ByteStream::read(const size_t len)函数修正为 
   ```c++
   {
+    string s;
+    for (size_t i = 0; i < len; i++) {
+        if (!_error && !o_ended && size > 0) {
+            s.push_back(move(bas.front()));
+            bas.pop_front();
+            b_read++;
+            size--;
+        } else {
+            break;
+        }
+    }
+    return s;
+  }
+  ```
+
+## 第七次测试
+- 9项用例通过了8项，未通过的用例为
+     
+   ```
+	 26 - t_byte_stream_capacity (Failed)
+  ```
+- 其中错误有
+  - Failure message:
+      The ByteStream should have had bytes_written equal to 2 but instead it was 0
+    
+  详情见[test_lab0-7](../sponge/build/test-results/test_lab0-7)
+- 针对
+  - Failure message:
+	    The ByteStream should have had bytes_written equal to 2 but instead it was 0
+  
+  根据
+  List of steps that executed successfully:
+    Initialized with (capacity=2)
+        Action: write "cat" to the stream
+        Action: pop 2
+
+  将size_t ByteStream::write(const string &data)函数修正为
+  ```c
+  {
     size_t i = 0;
-    for (auto it = data.begin();it != data.end();++it) {
+    for (auto it = data.begin(); it != data.end();++it) {
         if (!_error && !i_ended && size < cap) {
             bas.push_back(*it);
             i++;
@@ -259,5 +345,7 @@
   }
   ```
 
-## 第十次测试
+## 第八次测试
 - 本次测试全部9个用例均通过
+  详情见[test_lab0-8](../sponge/build/test-results/test_lab0-8)
+- 详情见
