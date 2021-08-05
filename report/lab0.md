@@ -346,6 +346,4 @@
   ```
 
 ## 第八次测试
-- 本次测试全部9个用例均通过
-  详情见[test_lab0-8](../sponge/build/test-results/test_lab0-8)
-- 详情见
+- 本次测试全部9个用例均通过，详情见[test_lab0-8](../sponge/build/test-results/test_lab0-8)
