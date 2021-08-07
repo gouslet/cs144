@@ -4,8 +4,8 @@
 #include "byte_stream.hh"
 
 #include <cstdint>
-#include <string>
 #include <map>
+#include <string>
 
 using std::map;
 using std::pair;
@@ -18,8 +18,13 @@ class StreamReassembler {
     // Your code here -- add private members as necessary.
     ByteStream _output;  //!< The reassembled in-order byte stream
     size_t _capacity;    //!< The maximum number of bytes
-    size_t next_index;  //!< The next index of a byte which could get into the in-order ByteStream
-    map<int,pair<string,bool>> buffer;
+    size_t next_index;   //!< The next index of a byte which could get into the in-order ByteStream
+    map<size_t, pair<string, bool>> buffer;
+    size_t unassem_bytes;
+  
+  protected:
+    void string_2_stream(string& string,size_t index,bool eof);
+    void buffer_2_stream();
 
   public:
     //! \brief Construct a `StreamReassembler` that will store up to `capacity` bytes.

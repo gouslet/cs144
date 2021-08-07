@@ -17,62 +17,19 @@ List of steps that executed successfully:
 Exception: The reassembler was expected to have `8` total bytes assembled, but there were `3`
 
       Start 16: t_strm_reassem_seq
- 2/16 Test #16: t_strm_reassem_seq ...............***Failed    0.00 sec
-Test Failure on expectation:
-	Expectation: net bytes assembled = 8
-
-Failure message:
-	The reassembler was expected to have `8` total bytes assembled, but there were `4`
-
-List of steps that executed successfully:
-	Initialized (capacity = 65000)
-	Action:      substring submitted with data "abcd", index `0`, eof `0`
-	Expectation: net bytes assembled = 4
-	Expectation: stream_out().buffer_size() returned 4, and stream_out().read(4) returned the string "abcd"
-	Expectation: not at EOF
-	Action:      substring submitted with data "efgh", index `4`, eof `0`
-
-Exception: The reassembler was expected to have `8` total bytes assembled, but there were `4`
-
+ 2/16 Test #16: t_strm_reassem_seq ...............   Passed    0.00 sec
       Start 17: t_strm_reassem_dup
- 3/16 Test #17: t_strm_reassem_dup ...............***Failed    0.00 sec
-Test Failure on expectation:
-	Expectation: net bytes assembled = 8
-
-Failure message:
-	The reassembler was expected to have `8` total bytes assembled, but there were `4`
-
-List of steps that executed successfully:
-	Initialized (capacity = 65000)
-	Action:      substring submitted with data "abcd", index `0`, eof `0`
-	Expectation: net bytes assembled = 4
-	Expectation: stream_out().buffer_size() returned 4, and stream_out().read(4) returned the string "abcd"
-	Expectation: not at EOF
-	Action:      substring submitted with data "abcd", index `4`, eof `0`
-
-Exception: The reassembler was expected to have `8` total bytes assembled, but there were `4`
+ 3/16 Test #17: t_strm_reassem_dup ...............***Exception: SegFault  0.25 sec
 
       Start 18: t_strm_reassem_holes
- 4/16 Test #18: t_strm_reassem_holes .............***Failed    0.00 sec
-Test Failure on expectation:
-	Expectation: net bytes assembled = 2
-
-Failure message:
-	The reassembler was expected to have `2` total bytes assembled, but there were `3`
-
-List of steps that executed successfully:
-	Initialized (capacity = 65000)
-	Action:      substring submitted with data "b", index `1`, eof `0`
-	Action:      substring submitted with data "ab", index `0`, eof `0`
-
-Exception: The reassembler was expected to have `2` total bytes assembled, but there were `3`
+ 4/16 Test #18: t_strm_reassem_holes .............***Exception: SegFault  0.06 sec
 
       Start 19: t_strm_reassem_many
  5/16 Test #19: t_strm_reassem_many ..............***Failed    0.00 sec
-Exception: test 1 - number of bytes RX is incorrect
+Exception: basic_string::substr: __pos (which is 23404) > this->size() (which is 483)
 
       Start 20: t_strm_reassem_overlapping
- 6/16 Test #20: t_strm_reassem_overlapping .......***Failed    0.00 sec
+ 6/16 Test #20: t_strm_reassem_overlapping .......***Failed    0.01 sec
 Test Failure on expectation:
 	Expectation: net bytes assembled = 2
 
@@ -88,10 +45,10 @@ Exception: The reassembler was expected to have `2` total bytes assembled, but t
 
       Start 21: t_strm_reassem_win
  7/16 Test #21: t_strm_reassem_win ...............***Failed    0.00 sec
-Exception: test 2 - number of RX bytes is incorrect
+Exception: basic_string::substr: __pos (which is 28912) > this->size() (which is 1893)
 
       Start 22: t_strm_reassem_cap
- 8/16 Test #22: t_strm_reassem_cap ...............***Failed    0.00 sec
+ 8/16 Test #22: t_strm_reassem_cap ...............***Failed    0.01 sec
 Test Failure on expectation:
 	Expectation: net bytes assembled = 2
 
@@ -115,27 +72,26 @@ Exception: The reassembler was expected to have `2` total bytes assembled, but t
       Start 24: t_byte_stream_one_write
 10/16 Test #24: t_byte_stream_one_write ..........   Passed    0.00 sec
       Start 25: t_byte_stream_two_writes
-11/16 Test #25: t_byte_stream_two_writes .........   Passed    0.00 sec
+11/16 Test #25: t_byte_stream_two_writes .........   Passed    0.01 sec
       Start 26: t_byte_stream_capacity
-12/16 Test #26: t_byte_stream_capacity ...........   Passed    0.51 sec
+12/16 Test #26: t_byte_stream_capacity ...........   Passed    0.48 sec
       Start 27: t_byte_stream_many_writes
 13/16 Test #27: t_byte_stream_many_writes ........   Passed    0.01 sec
       Start 50: t_address_dt
-14/16 Test #50: t_address_dt .....................   Passed    0.01 sec
+14/16 Test #50: t_address_dt .....................   Passed    0.03 sec
       Start 51: t_parser_dt
 15/16 Test #51: t_parser_dt ......................   Passed    0.00 sec
       Start 52: t_socket_dt
-16/16 Test #52: t_socket_dt ......................   Passed    0.01 sec
+16/16 Test #52: t_socket_dt ......................   Passed    0.00 sec
 
-50% tests passed, 8 tests failed out of 16
+56% tests passed, 7 tests failed out of 16
 
-Total Test time (real) =   0.58 sec
+Total Test time (real) =   0.90 sec
 
 The following tests FAILED:
 	 15 - t_strm_reassem_single (Failed)
-	 16 - t_strm_reassem_seq (Failed)
-	 17 - t_strm_reassem_dup (Failed)
-	 18 - t_strm_reassem_holes (Failed)
+	 17 - t_strm_reassem_dup (SEGFAULT)
+	 18 - t_strm_reassem_holes (SEGFAULT)
 	 19 - t_strm_reassem_many (Failed)
 	 20 - t_strm_reassem_overlapping (Failed)
 	 21 - t_strm_reassem_win (Failed)

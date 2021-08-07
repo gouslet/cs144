@@ -15,9 +15,9 @@ class ByteStream {
   private:
     // Your code here -- add private members as necessary.
     std::deque<BYTE> bas;
-    size_t cap;        // capacity
-    size_t size;       //
-    size_t b_read;     //
+    size_t cap;                 // capacity
+    size_t size;                //
+    size_t b_read;              //
     volatile size_t b_written;  //
     bool i_ended, o_ended;
     // Hint: This doesn't need to be a sophisticated data structure at

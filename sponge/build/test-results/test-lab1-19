@@ -1,0 +1,57 @@
+[100%] Testing the stream reassembler...
+Test project /root/cs144/sponge/build
+      Start 15: t_strm_reassem_single
+ 1/16 Test #15: t_strm_reassem_single ............***Exception: SegFault  0.06 sec
+
+      Start 16: t_strm_reassem_seq
+ 2/16 Test #16: t_strm_reassem_seq ...............   Passed    0.01 sec
+      Start 17: t_strm_reassem_dup
+ 3/16 Test #17: t_strm_reassem_dup ...............   Passed    0.01 sec
+      Start 18: t_strm_reassem_holes
+ 4/16 Test #18: t_strm_reassem_holes .............***Exception: SegFault  0.09 sec
+
+      Start 19: t_strm_reassem_many
+ 5/16 Test #19: t_strm_reassem_many ..............***Failed    0.01 sec
+Exception: basic_string::substr: __pos (which is 22471) > this->size() (which is 805)
+
+      Start 20: t_strm_reassem_overlapping
+ 6/16 Test #20: t_strm_reassem_overlapping .......***Exception: SegFault  0.10 sec
+
+      Start 21: t_strm_reassem_win
+ 7/16 Test #21: t_strm_reassem_win ...............***Failed    0.01 sec
+Exception: basic_string::substr: __pos (which is 1910) > this->size() (which is 1025)
+
+      Start 22: t_strm_reassem_cap
+ 8/16 Test #22: t_strm_reassem_cap ...............   Passed    0.10 sec
+      Start 23: t_byte_stream_construction
+ 9/16 Test #23: t_byte_stream_construction .......   Passed    0.01 sec
+      Start 24: t_byte_stream_one_write
+10/16 Test #24: t_byte_stream_one_write ..........   Passed    0.01 sec
+      Start 25: t_byte_stream_two_writes
+11/16 Test #25: t_byte_stream_two_writes .........   Passed    0.00 sec
+      Start 26: t_byte_stream_capacity
+12/16 Test #26: t_byte_stream_capacity ...........   Passed    0.53 sec
+      Start 27: t_byte_stream_many_writes
+13/16 Test #27: t_byte_stream_many_writes ........   Passed    0.01 sec
+      Start 50: t_address_dt
+14/16 Test #50: t_address_dt .....................   Passed    0.01 sec
+      Start 51: t_parser_dt
+15/16 Test #51: t_parser_dt ......................   Passed    0.00 sec
+      Start 52: t_socket_dt
+16/16 Test #52: t_socket_dt ......................   Passed    0.01 sec
+
+69% tests passed, 5 tests failed out of 16
+
+Total Test time (real) =   0.98 sec
+
+The following tests FAILED:
+	 15 - t_strm_reassem_single (SEGFAULT)
+	 18 - t_strm_reassem_holes (SEGFAULT)
+	 19 - t_strm_reassem_many (Failed)
+	 20 - t_strm_reassem_overlapping (SEGFAULT)
+	 21 - t_strm_reassem_win (Failed)
+Errors while running CTest
+make[3]: *** [CMakeFiles/check_lab1.dir/build.make:77: CMakeFiles/check_lab1] Error 8
+make[2]: *** [CMakeFiles/Makefile2:2601: CMakeFiles/check_lab1.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:2608: CMakeFiles/check_lab1.dir/rule] Error 2
+make: *** [Makefile:1227: check_lab1] Error 2

@@ -1,30 +1,17 @@
-Start testing: Aug 05 14:22 CST
+Start testing: Aug 07 12:36 CST
 ----------------------------------------------------------
 15/166 Testing: t_strm_reassem_single
 15/166 Test: t_strm_reassem_single
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_single"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_single" start time: Aug 05 14:22 CST
+"t_strm_reassem_single" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: net bytes assembled = 8
-
-Failure message:
-	The reassembler was expected to have `8` total bytes assembled, but there were `3`
-
-List of steps that executed successfully:
-	Initialized (capacity = 8)
-	Action:      substring submitted with data "abc", index `0`, eof `0`
-	Expectation: net bytes assembled = 3
-	Action:      substring submitted with data "bcdefgh", index `1`, eof `1`
-
-Exception: The reassembler was expected to have `8` total bytes assembled, but there were `3`
 <end of output>
-Test time =   0.00 sec
+Test time =   0.08 sec
 ----------------------------------------------------------
 Test Failed.
-"t_strm_reassem_single" end time: Aug 05 14:22 CST
+"t_strm_reassem_single" end time: Aug 07 12:36 CST
 "t_strm_reassem_single" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -32,29 +19,14 @@ Test Failed.
 16/166 Test: t_strm_reassem_seq
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_seq"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_seq" start time: Aug 05 14:22 CST
+"t_strm_reassem_seq" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: net bytes assembled = 8
-
-Failure message:
-	The reassembler was expected to have `8` total bytes assembled, but there were `4`
-
-List of steps that executed successfully:
-	Initialized (capacity = 65000)
-	Action:      substring submitted with data "abcd", index `0`, eof `0`
-	Expectation: net bytes assembled = 4
-	Expectation: stream_out().buffer_size() returned 4, and stream_out().read(4) returned the string "abcd"
-	Expectation: not at EOF
-	Action:      substring submitted with data "efgh", index `4`, eof `0`
-
-Exception: The reassembler was expected to have `8` total bytes assembled, but there were `4`
 <end of output>
-Test time =   0.00 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
-Test Failed.
-"t_strm_reassem_seq" end time: Aug 05 14:22 CST
+Test Passed.
+"t_strm_reassem_seq" end time: Aug 07 12:36 CST
 "t_strm_reassem_seq" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -62,29 +34,14 @@ Test Failed.
 17/166 Test: t_strm_reassem_dup
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_dup"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_dup" start time: Aug 05 14:22 CST
+"t_strm_reassem_dup" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: net bytes assembled = 8
-
-Failure message:
-	The reassembler was expected to have `8` total bytes assembled, but there were `4`
-
-List of steps that executed successfully:
-	Initialized (capacity = 65000)
-	Action:      substring submitted with data "abcd", index `0`, eof `0`
-	Expectation: net bytes assembled = 4
-	Expectation: stream_out().buffer_size() returned 4, and stream_out().read(4) returned the string "abcd"
-	Expectation: not at EOF
-	Action:      substring submitted with data "abcd", index `4`, eof `0`
-
-Exception: The reassembler was expected to have `8` total bytes assembled, but there were `4`
 <end of output>
-Test time =   0.00 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
-Test Failed.
-"t_strm_reassem_dup" end time: Aug 05 14:22 CST
+Test Passed.
+"t_strm_reassem_dup" end time: Aug 07 12:36 CST
 "t_strm_reassem_dup" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -92,26 +49,14 @@ Test Failed.
 18/166 Test: t_strm_reassem_holes
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_holes"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_holes" start time: Aug 05 14:22 CST
+"t_strm_reassem_holes" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: net bytes assembled = 2
-
-Failure message:
-	The reassembler was expected to have `2` total bytes assembled, but there were `3`
-
-List of steps that executed successfully:
-	Initialized (capacity = 65000)
-	Action:      substring submitted with data "b", index `1`, eof `0`
-	Action:      substring submitted with data "ab", index `0`, eof `0`
-
-Exception: The reassembler was expected to have `2` total bytes assembled, but there were `3`
 <end of output>
-Test time =   0.00 sec
+Test time =   0.11 sec
 ----------------------------------------------------------
 Test Failed.
-"t_strm_reassem_holes" end time: Aug 05 14:22 CST
+"t_strm_reassem_holes" end time: Aug 07 12:36 CST
 "t_strm_reassem_holes" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -119,15 +64,15 @@ Test Failed.
 19/166 Test: t_strm_reassem_many
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_many"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_many" start time: Aug 05 14:22 CST
+"t_strm_reassem_many" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Exception: test 1 - number of bytes RX is incorrect
+Exception: basic_string::substr: __pos (which is 11431) > this->size() (which is 1456)
 <end of output>
-Test time =   0.00 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Failed.
-"t_strm_reassem_many" end time: Aug 05 14:22 CST
+"t_strm_reassem_many" end time: Aug 07 12:36 CST
 "t_strm_reassem_many" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -135,26 +80,14 @@ Test Failed.
 20/166 Test: t_strm_reassem_overlapping
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_overlapping"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_overlapping" start time: Aug 05 14:22 CST
+"t_strm_reassem_overlapping" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: net bytes assembled = 2
-
-Failure message:
-	The reassembler was expected to have `2` total bytes assembled, but there were `1`
-
-List of steps that executed successfully:
-	Initialized (capacity = 1000)
-	Action:      substring submitted with data "a", index `0`, eof `0`
-	Action:      substring submitted with data "ab", index `0`, eof `0`
-
-Exception: The reassembler was expected to have `2` total bytes assembled, but there were `1`
 <end of output>
-Test time =   0.00 sec
+Test time =   0.10 sec
 ----------------------------------------------------------
 Test Failed.
-"t_strm_reassem_overlapping" end time: Aug 05 14:22 CST
+"t_strm_reassem_overlapping" end time: Aug 07 12:36 CST
 "t_strm_reassem_overlapping" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -162,15 +95,15 @@ Test Failed.
 21/166 Test: t_strm_reassem_win
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_win"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_win" start time: Aug 05 14:22 CST
+"t_strm_reassem_win" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Exception: test 2 - number of RX bytes is incorrect
+Exception: basic_string::substr: __pos (which is 32611) > this->size() (which is 1130)
 <end of output>
-Test time =   0.00 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Failed.
-"t_strm_reassem_win" end time: Aug 05 14:22 CST
+"t_strm_reassem_win" end time: Aug 07 12:36 CST
 "t_strm_reassem_win" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -178,31 +111,14 @@ Test Failed.
 22/166 Test: t_strm_reassem_cap
 Command: "/root/cs144/sponge/build/tests/fsm_stream_reassembler_cap"
 Directory: /root/cs144/sponge/build
-"t_strm_reassem_cap" start time: Aug 05 14:22 CST
+"t_strm_reassem_cap" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
-Test Failure on expectation:
-	Expectation: net bytes assembled = 2
-
-Failure message:
-	The reassembler was expected to have `2` total bytes assembled, but there were `1`
-
-List of steps that executed successfully:
-	Initialized (capacity = 1)
-	Action:      substring submitted with data "ab", index `0`, eof `0`
-	Expectation: net bytes assembled = 1
-	Action:      substring submitted with data "ab", index `0`, eof `0`
-	Expectation: net bytes assembled = 1
-	Expectation: stream_out().buffer_size() returned 1, and stream_out().read(1) returned the string "a"
-	Expectation: net bytes assembled = 1
-	Action:      substring submitted with data "abc", index `0`, eof `0`
-
-Exception: The reassembler was expected to have `2` total bytes assembled, but there were `1`
 <end of output>
-Test time =   0.00 sec
+Test time =   0.11 sec
 ----------------------------------------------------------
-Test Failed.
-"t_strm_reassem_cap" end time: Aug 05 14:22 CST
+Test Passed.
+"t_strm_reassem_cap" end time: Aug 07 12:36 CST
 "t_strm_reassem_cap" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -210,14 +126,14 @@ Test Failed.
 23/166 Test: t_byte_stream_construction
 Command: "/root/cs144/sponge/build/tests/byte_stream_construction"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_construction" start time: Aug 05 14:22 CST
+"t_byte_stream_construction" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
-Test time =   0.00 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"t_byte_stream_construction" end time: Aug 05 14:22 CST
+"t_byte_stream_construction" end time: Aug 07 12:36 CST
 "t_byte_stream_construction" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -225,14 +141,14 @@ Test Passed.
 24/166 Test: t_byte_stream_one_write
 Command: "/root/cs144/sponge/build/tests/byte_stream_one_write"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_one_write" start time: Aug 05 14:22 CST
+"t_byte_stream_one_write" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"t_byte_stream_one_write" end time: Aug 05 14:22 CST
+"t_byte_stream_one_write" end time: Aug 07 12:36 CST
 "t_byte_stream_one_write" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -240,14 +156,14 @@ Test Passed.
 25/166 Test: t_byte_stream_two_writes
 Command: "/root/cs144/sponge/build/tests/byte_stream_two_writes"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_two_writes" start time: Aug 05 14:22 CST
+"t_byte_stream_two_writes" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"t_byte_stream_two_writes" end time: Aug 05 14:22 CST
+"t_byte_stream_two_writes" end time: Aug 07 12:36 CST
 "t_byte_stream_two_writes" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -255,14 +171,14 @@ Test Passed.
 26/166 Test: t_byte_stream_capacity
 Command: "/root/cs144/sponge/build/tests/byte_stream_capacity"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_capacity" start time: Aug 05 14:22 CST
+"t_byte_stream_capacity" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
-Test time =   0.51 sec
+Test time =   0.52 sec
 ----------------------------------------------------------
 Test Passed.
-"t_byte_stream_capacity" end time: Aug 05 14:22 CST
+"t_byte_stream_capacity" end time: Aug 07 12:36 CST
 "t_byte_stream_capacity" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -270,14 +186,14 @@ Test Passed.
 27/166 Test: t_byte_stream_many_writes
 Command: "/root/cs144/sponge/build/tests/byte_stream_many_writes"
 Directory: /root/cs144/sponge/build
-"t_byte_stream_many_writes" start time: Aug 05 14:22 CST
+"t_byte_stream_many_writes" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"t_byte_stream_many_writes" end time: Aug 05 14:22 CST
+"t_byte_stream_many_writes" end time: Aug 07 12:36 CST
 "t_byte_stream_many_writes" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -285,14 +201,14 @@ Test Passed.
 50/166 Test: t_address_dt
 Command: "/root/cs144/sponge/build/doctests/address_dt"
 Directory: /root/cs144/sponge/build
-"t_address_dt" start time: Aug 05 14:22 CST
+"t_address_dt" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
-Test time =   0.01 sec
+Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"t_address_dt" end time: Aug 05 14:22 CST
+"t_address_dt" end time: Aug 07 12:36 CST
 "t_address_dt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -300,14 +216,14 @@ Test Passed.
 51/166 Test: t_parser_dt
 Command: "/root/cs144/sponge/build/doctests/parser_dt"
 Directory: /root/cs144/sponge/build
-"t_parser_dt" start time: Aug 05 14:22 CST
+"t_parser_dt" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"t_parser_dt" end time: Aug 05 14:22 CST
+"t_parser_dt" end time: Aug 07 12:36 CST
 "t_parser_dt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -315,15 +231,15 @@ Test Passed.
 52/166 Test: t_socket_dt
 Command: "/root/cs144/sponge/build/doctests/socket_dt"
 Directory: /root/cs144/sponge/build
-"t_socket_dt" start time: Aug 05 14:22 CST
+"t_socket_dt" start time: Aug 07 12:36 CST
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"t_socket_dt" end time: Aug 05 14:22 CST
+"t_socket_dt" end time: Aug 07 12:36 CST
 "t_socket_dt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Aug 05 14:22 CST
+End testing: Aug 07 12:36 CST
