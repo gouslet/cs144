@@ -23,46 +23,44 @@ StreamReassembler::StreamReassembler(const size_t capacity)
 void StreamReassembler::push_substring(const string &data, const size_t index, const bool eof) {
     size_t rc = _output.remaining_capacity();
     size_t ds_index = index;
-    string ds = data;
+    string ds(data);
     if (!rc) 
         return;
     // if (unassem_bytes < rc) {
     if (next_index >= ds_index) {
-        if (ds_index + ds.length() >= next_index)
-            string_2_stream(ds,ds_index,eof);   
+        string_2_stream(ds,ds_index,eof);   
     } else {
         if (buffer.empty()) {
             size_t wslen = ds.length() < rc?ds.length():rc;
-            string ws = ds.substr(0,wslen);
+            string ws(ds.substr(0,wslen));
             buffer.emplace(ds_index,make_pair(ws,eof));
             unassem_bytes += wslen;
-            ds_index += wslen;
+            // ds_index += wslen;
         } else {
             for (auto it = buffer.begin();it != buffer.end();it++) {
-                string s = (*it).second.first;
+                string s((*it).second.first);
                 size_t s_index = (*it).first;
                 if (s_index <= ds_index) {
-                    if (ds == "")
+                    if (ds.empty()) {
                         break;
-                    if (s_index + s.length() < index)
+                    }
+                    if (s_index + s.length() < index) {
                         continue;
-                    else {
-                        if (index + ds.length() <= s_index + s.length())
-                            continue;
-                        else {
+                    } else {
+                        if (index + ds.length() > s_index + s.length()) {
                             size_t start = s_index + s.length() - ds_index;
                             size_t len = ds_index + ds.length() - s_index - s.length();
                             ds = ds.substr(start,len);
-                           ds_index += start;
+                            ds_index += start;
                         }
                     }
                 } else {
                     size_t start = s_index + s.length() - ds_index;
-                    if (ds_index + ds.length() > s_index + s.length())
-                        continue;
-                    size_t len = ds_index + ds.length() - s_index - s.length();
-                    ds = ds.substr(start,len);
-                    ds_index += start;
+                    if (ds_index + ds.length() <= s_index + s.length()) {
+                       size_t len = ds_index + ds.length() - s_index - s.length();
+                        ds = ds.substr(start,len);
+                        ds_index += start;
+                    }   
                 }
                 rc = _output.remaining_capacity();
                 if (it == buffer.end() && unassem_bytes < rc) {
@@ -70,14 +68,13 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
                     string ws = ds.substr(0,wslen);
                     buffer.emplace(ds_index,make_pair(ws,eof));
                     unassem_bytes += wslen;
-                    ds_index += wslen;
                     break;                
                 }
                 auto nit = ++it;
                 size_t ns_index = (*nit).first;
                 if (ns_index > ds_index) {
                     size_t wslen = ds.length() < rc?ds.length():rc;
-                    string ws = ds.substr(0,wslen);
+                    string ws(ds.substr(0,wslen));
                     buffer.emplace(ds_index,make_pair(ws,eof));
                     unassem_bytes += wslen;
                     ds_index += wslen;
@@ -91,12 +88,13 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
     int overflow = unassem_bytes - _output.remaining_capacity();
 
     for (auto i = buffer.rbegin();i != buffer.rend();i++) {
-        string s = (*i).second.first;
+        string s((*i).second.first);
         size_t s_index = (*i).first;
         size_t slen = s.length();
 
-        if (overflow <= 0) 
+        if (overflow <= 0) {
             break;
+        }
         if (slen - overflow > 0) {
             s = s.substr(0,slen - overflow);
             (*i).second.first = s;
@@ -179,29 +177,31 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
 }
 
 void StreamReassembler::string_2_stream(string& str,size_t index,bool eof) {
-    size_t start = next_index - index;  //str中可写入ByteStream的起始位置  
-    size_t slen = str.length() - (next_index - index);  //str中index大于等于next_index的总长度
-    size_t rc = _output.remaining_capacity();
-    bool flag = rc < slen;
-    size_t len = flag?rc:slen;  //str中可写入ByteStream的长度
-    string ws = str.substr(start,len);   //待写入ByteStream的str子串
-    _output.write(ws);
-    if (eof) {
-        _output.end_input();
-    }
-    next_index += len;  
-    if (!flag) {
-        buffer_2_stream();
-    } else {
-        buffer.clear();
-        unassem_bytes = 0;
+    if (index + str.length() > next_index) {
+        size_t start = next_index - index;  //str中可写入ByteStream的起始位置  
+        size_t slen = str.length() - (next_index - index);  //str中index大于等于next_index的总长度
+        size_t rc = _output.remaining_capacity();
+        bool flag = rc < slen;
+        size_t len = flag?rc:slen;  //str中可写入ByteStream的长度
+        string ws(str.substr(start,len));   //待写入ByteStream的str子串
+        _output.write(ws);
+        if (eof) {
+            _output.end_input();
+        }
+        next_index += len;  
+        if (!flag) {
+            buffer_2_stream();
+        } else {
+            buffer.clear();
+            unassem_bytes = 0;
+        }
     }
 }
 
 void StreamReassembler::buffer_2_stream() {
     if (!buffer.empty()) {
         for (auto it = buffer.begin();it != buffer.end();it++) {
-            string s = (*it).second.first;
+            string s((*it).second.first);
             size_t s_index = (*it).first;
             bool eof = (*it).second.second;
             if (s_index <= next_index) {
@@ -209,9 +209,10 @@ void StreamReassembler::buffer_2_stream() {
                     buffer.erase(s_index);
                     unassem_bytes -= s.length();
                 } else 
-                string_2_stream(s,s_index,eof);
-            } else
+                    string_2_stream(s,s_index,eof);
+            } else {
                 break;
+            }
         }
     }
 
