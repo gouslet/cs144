@@ -20,10 +20,10 @@ class StreamReassembler {
     size_t _capacity;    //!< The maximum number of bytes
     size_t next_index;   //!< The next index of a byte which could get into the in-order ByteStream
     map<size_t, pair<string, bool>> buffer;
-    size_t unassem_bytes;
+    size_t unassem_bytes; //buffer中bytes数量
   
   protected:
-    void string_2_stream(string& string,size_t index,bool eof);
+    void string_2_buffer(const string& string,const size_t index,const bool eof);
     void buffer_2_stream();
 
   public:

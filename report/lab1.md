@@ -228,3 +228,22 @@ StreamReassembler::string_2_stream(string& str,size_t index,bool eof) {
   if (index + str.length() >= next_index)  
   修正为  
   if (index + str.length() > next_index)  
+
+# 疑难
+## gdb设置行号断点有offset
+### 现象
+- 第23次测试后用gdb调试cs144/sponge/build/tests/fsm_stream_reassembler_holes
+- 在stream_reassembler.cc文件的71行处插入断点
+  ```
+  b stream_reassembler.cc:71
+  ```
+- 但实际显示为在73行处插入了断点
+  ```
+  (gdb) b stream_reassembler.cc:71
+  Breakpoint 1 at 0x40a250: file /root/cs144/sponge/libsponge/stream_reassembler.cc, line 73.
+  ```
+### 原因
+- 考虑到使用clang作为编译器，猜想可能是clang对程序作了优化
+
+### 解决
+- 改用g++编译程序

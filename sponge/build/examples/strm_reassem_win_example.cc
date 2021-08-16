@@ -45,7 +45,7 @@ int main() {
 
             for (auto [off, sz] : seq_size) {
                 string dd(d.cbegin() + off, d.cbegin() + off + sz);
-                // cout << dd << endl;
+                cout << dd << endl;
                 buf.push_substring(move(dd), off, off + sz == offset);
             }
 

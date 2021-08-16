@@ -107,9 +107,11 @@ int main() {
             }
 
             buf.push_substring(string(d.cbegin(), d.cbegin() + 15), size, true);
-
+            cout << "string(d.cbegin(), d.cbegin() + 15) = " << string(d.cbegin(), d.cbegin() + 15) << " | len = " << string(d.cbegin(), d.cbegin() + 15).length() << endl;
             auto res2 = read(buf);
             if (buf.stream_out().bytes_written() != 2 * size && buf.stream_out().bytes_written() != size + 15) {
+                cout << "buf.stream_out().bytes_written() = " << buf.stream_out().bytes_written() << " | 2 * size = " << 2 * size << " | size + 15 = " << size + 15 << endl;
+                
                 throw runtime_error("test 4 - number of RX bytes is incorrect after 2nd read");
             }
             if (!equal(res2.cbegin(), res2.cend(), d.cbegin())) {

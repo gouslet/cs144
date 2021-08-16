@@ -1,7 +1,8 @@
 CC := g++
 LIBSPONGE := ../../libsponge
 CXXFLAGS := -I$(LIBSPONGE) -g
-PROGS := stream_reassembler_example
+PROGS := stream_reassembler_example\
+	strm_reassem_win_example
 
 all:$(PROGS) 
 

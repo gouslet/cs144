@@ -21,201 +21,178 @@ StreamReassembler::StreamReassembler(const size_t capacity)
 //! possibly out-of-order, from the logical stream, and assembles any newly
 //! contiguous substrings and writes them into the output stream in order.
 void StreamReassembler::push_substring(const string &data, const size_t index, const bool eof) {
-    size_t rc = _output.remaining_capacity();
-    size_t ds_index = index;
-    string ds(data);
-    if (!rc) 
-        return;
-    // if (unassem_bytes < rc) {
-    if (next_index >= ds_index) {
-        string_2_stream(ds,ds_index,eof);   
-    } else {
-        if (buffer.empty()) {
-            size_t wslen = ds.length() < rc?ds.length():rc;
-            string ws(ds.substr(0,wslen));
-            buffer.emplace(ds_index,make_pair(ws,eof));
-            unassem_bytes += wslen;
-            // ds_index += wslen;
-        } else {
-            for (auto it = buffer.begin();it != buffer.end();it++) {
-                string s((*it).second.first);
-                size_t s_index = (*it).first;
-                if (s_index <= ds_index) {
-                    if (ds.empty()) {
-                        break;
-                    }
-                    if (s_index + s.length() < index) {
-                        continue;
-                    } else {
-                        if (index + ds.length() > s_index + s.length()) {
-                            size_t start = s_index + s.length() - ds_index;
-                            size_t len = ds_index + ds.length() - s_index - s.length();
-                            ds = ds.substr(start,len);
-                            ds_index += start;
-                        }
-                    }
-                } else {
-                    size_t start = s_index + s.length() - ds_index;
-                    if (ds_index + ds.length() <= s_index + s.length()) {
-                       size_t len = ds_index + ds.length() - s_index - s.length();
-                        ds = ds.substr(start,len);
-                        ds_index += start;
-                    }   
-                }
-                rc = _output.remaining_capacity();
-                if (it == buffer.end() && unassem_bytes < rc) {
-                    size_t wslen = ds.length() < rc?ds.length():rc;
-                    string ws = ds.substr(0,wslen);
-                    buffer.emplace(ds_index,make_pair(ws,eof));
-                    unassem_bytes += wslen;
-                    break;                
-                }
-                auto nit = ++it;
-                size_t ns_index = (*nit).first;
-                if (ns_index > ds_index) {
-                    size_t wslen = ds.length() < rc?ds.length():rc;
-                    string ws(ds.substr(0,wslen));
-                    buffer.emplace(ds_index,make_pair(ws,eof));
-                    unassem_bytes += wslen;
-                    ds_index += wslen;
-                    ds = ds.substr(wslen,ds.length() - wslen);
-                }
-                it--;
-            }
-        }
-    }
-
-    int overflow = unassem_bytes - _output.remaining_capacity();
-
-    for (auto i = buffer.rbegin();i != buffer.rend();i++) {
-        string s((*i).second.first);
-        size_t s_index = (*i).first;
-        size_t slen = s.length();
-
-        if (overflow <= 0) {
-            break;
-        }
-        if (slen - overflow > 0) {
-            s = s.substr(0,slen - overflow);
-            (*i).second.first = s;
-            unassem_bytes -= overflow;
-        } else {
-            buffer.erase(s_index);
-            overflow -= slen;
-            unassem_bytes -= slen;
-        }
-    }
-    //     if (index <= next_index) {
-    //         if (index + data.length() < next_index){
-    //             return;
-    //         }
-    //         if (!_output.error() && !_output.input_ended()) {
-    //             size_t pos = next_index - index;
-    //             if (data.length() > )
-    //             size_t len = data.length() - pos;
-    //             string ws = data.substr(pos,len);
-    //             _output.write(ws);
-    //             // if (buffer.erase(index))
-    //                 // unassem_bytes -= data.length();
-    //             if (eof) {
-    //                 _output.end_input();
-    //                 return;
-    //             }
-    //             next_index += ws.length();
-    //         }
-    //         // size_t i = index + 1;
-    //         for (auto it = buffer.begin(); it != buffer.end(); it++) {
-    //             string s = ((*it).second).first;
-    //             size_t s_index = (*it).first;
-    //             if (s_index <= next_index) {
-    //                 if (s_index + s.length() < next_index) {
-    //                     buffer.erase(s_index);
-    //                     unassem_bytes -= s.length();
-    //                 }
-    //                 else {
-    //                     if (!_output.error() && !_output.input_ended() && _output.remaining_capacity() > 0) {
-    //                         size_t start = next_index - s_index - 1;
-    //                         size_t len = s.length() - start - 1;
-    //                         _output.write(s.substr(start, len));
-    //                         next_index += len;
-    //                         buffer.erase(s_index);
-    //                         unassem_bytes -= s.length();
-    //                     } else {
-    //                         break;
-    //                     }
-    //                 }
-    //             } 
-    //         }
-    //     } else {
-    //         if (buffer.empty()) {
-    //             buffer.emplace(index, make_pair(data, eof));
-    //             unassem_bytes += data.length();
-    //         }
-    //         string ds = data;
-    //         size_t ds_index = index;
-    //         for (auto it = buffer.begin(); it != buffer.end(); it++) {
-    //             string s = ((*it).second).first;
-    //             size_t s_index = (*it).first;
-    //             // if (s_index <= index) {
-    //             //     if (s_index + s.length() < next_index)
-    //             //         continue;
-    //             //     else {
-    //             //         size_t delta = s_index + s.length() - ds_index;
-    //             //         ds = ds.substr(delta, s.length() - 1 - delta);
-    //             //         ds_index += delta;
-    //             //     }
-    //             // } else {
-    //                 size_t delta = s_index - ds_index;
-    //                 buffer.emplace(ds_index, make_pair(ds.substr(0, delta + 1), eof));
-    //                 unassem_bytes += delta + 1;
-    //                 ds = ds.substr(delta + 1, ds.length() - delta);
-    //                 ds_index += delta + 1;
-    //             // }
-    //         }
-    //     }
-    // }
+    string_2_buffer(data,index,eof);
+    buffer_2_stream();
 }
 
-void StreamReassembler::string_2_stream(string& str,size_t index,bool eof) {
-    if (index + str.length() > next_index) {
-        size_t start = next_index - index;  //str中可写入ByteStream的起始位置  
-        size_t slen = str.length() - (next_index - index);  //str中index大于等于next_index的总长度
-        size_t rc = _output.remaining_capacity();
-        bool flag = rc < slen;
-        size_t len = flag?rc:slen;  //str中可写入ByteStream的长度
-        string ws(str.substr(start,len));   //待写入ByteStream的str子串
-        _output.write(ws);
-        if (eof) {
-            _output.end_input();
+void StreamReassembler::string_2_buffer(const string& str,const size_t index,const bool eof) {
+    auto str_hindex = index + str.length() - 1;
+    auto str_len = str.length();
+    cout << "str_index = " << index << " str_hindex = " << str_hindex << endl;
+    if (str.empty() || buffer.empty()) {
+        buffer.emplace(index,make_pair(str,eof));
+        unassem_bytes += str_len;
+    } else if (buffer.size() == 1) {
+        auto s = buffer.begin();
+        auto s_index = (*s).first;
+        auto s_data = (*s).second.first;
+        auto s_len = s_data.length();
+        auto s_hindex = s_index + s_len - 1;
+        if (index < s_index) {
+            if (str_hindex < s_index) {
+                buffer.emplace(index,make_pair(str,eof));
+                unassem_bytes += str_len;
+            }else {
+                if (str_hindex >= s_hindex) {
+                    buffer.clear();
+                    buffer.emplace(index,make_pair(str,eof));
+                    unassem_bytes += (str_len - s_len);
+                }else {
+                    auto ws = str.substr(0,s_index - index);
+                    buffer.emplace(index,make_pair(ws,eof));
+                    unassem_bytes += ws.length();
+                }
+            }
+        }else {
+            if (index > s_hindex) {
+                buffer.emplace(index,make_pair(str,eof));
+                unassem_bytes += str_len;
+            }else {
+                if (str_hindex <= s_hindex) {
+                    return;
+                } else {
+                    auto ws = str.substr(s_hindex + 1 - index,str_hindex - s_hindex);
+                    buffer.emplace(index,make_pair(ws,eof));
+                    unassem_bytes += ws.length();
+                }
+            }
         }
-        next_index += len;  
-        if (!flag) {
-            buffer_2_stream();
-        } else {
-            buffer.clear();
-            unassem_bytes = 0;
+    } else {
+        string ds = str;
+        size_t ds_index = index;
+        auto ds_hindex = ds_index + ds.length() - 1;
+
+        for (auto it = buffer.begin();it != buffer.end()&& !ds.empty();it++) {
+            auto s_index = (*it).first;
+            auto s = (*it).second.first;
+            auto s_hindex = s_index + s.length() - 1;
+
+
+            if (ds_index < s_index) {
+                if (ds_hindex < s_index) {
+                    buffer.emplace(ds_index,make_pair(ds,eof));
+                    unassem_bytes += ds.length();
+                    ds = "";
+                }else {
+                    if (ds_hindex <= s_hindex) {
+                        auto len = s_index - ds_index;
+                        auto ws = ds.substr(0,len);
+                        buffer.emplace(ds_index,make_pair(ws,eof));
+                        unassem_bytes += len;
+                        ds = "";
+                    } else {
+                        auto len = s_index - ds_index;
+                        auto ws = ds.substr(0,len);
+                        buffer.emplace(ds_index,make_pair(ws,eof));
+                        unassem_bytes += len;
+                        ds = ds.substr(s_hindex + 1 - ds_index,ds_hindex - s_hindex);
+                        ds_index = s_hindex + 1;
+                    }
+                }
+            }else {
+                if (ds_index > s_hindex) {
+                    continue;
+                }else if  (ds_hindex <= s_hindex) {
+                    ds = "";
+                } else {
+                    ds = ds.substr(s_hindex + 1 - ds_index,ds_hindex - s_hindex);
+                    ds_index = s_hindex + 1;
+                }
+            }
         }
+     
+        if (!ds.empty()) {
+            buffer.emplace(ds_index,make_pair(ds,eof));
+            unassem_bytes += ds.length();
+        }        
     }
 }
 
 void StreamReassembler::buffer_2_stream() {
-    if (!buffer.empty()) {
-        for (auto it = buffer.begin();it != buffer.end();it++) {
-            string s((*it).second.first);
-            size_t s_index = (*it).first;
-            bool eof = (*it).second.second;
-            if (s_index <= next_index) {
-                if (s_index + s.length() < next_index) {
-                    buffer.erase(s_index);
-                    unassem_bytes -= s.length();
-                } else 
-                    string_2_stream(s,s_index,eof);
+    bool eof(false);    
+    for (auto it = buffer.begin();it != buffer.end();) {
+        if (_output.input_ended()) {
+            break;
+        }else {
+            auto rc = _output.remaining_capacity();
+            if (rc == 0) {
+                buffer.clear();
+                unassem_bytes = 0;
+                return;
             } else {
-                break;
+                auto s_index = (*it).first;
+                auto s = (*it).second.first;
+                auto s_hindex = s_index + s.length() - 1;
+                if (s.empty()) {
+                    auto s_eof = (*it).second.second;
+                    const string &ws = s;
+                    _output.write(ws);
+                    next_index++;
+                    if (s_eof) {
+                        eof = true;
+                    }
+                    buffer.erase(it++);
+                }else if (s_index <= next_index) {
+                    if (s_hindex < next_index) {
+                        buffer.erase(it++);
+                        unassem_bytes -= s.length();
+                    } else {
+                        auto len = s_hindex - next_index + 1;
+                        auto wlen = len > rc?rc:len;
+                        auto s_eof = (*it).second.second;
+                        const string &ws = s.substr(next_index - s_index,wlen);
+                        _output.write(ws);
+                        
+                        next_index += wlen;
+                        buffer.erase(it++);
+                        unassem_bytes -= s.length();
+                        if (wlen != len) {
+                            auto ds = s.substr(next_index - s_index,s_hindex + 1 - next_index);
+                            if (!ds.empty()) {
+                            buffer.emplace(next_index,make_pair(ds,s_eof));
+                            }
+                            unassem_bytes += ds.length();
+                        } else {
+                            if (s_eof) {
+                                eof = true;
+                            }
+                        }
+                    }
+                } else 
+                    break;
             }
         }
     }
 
+    if (eof) {
+        _output.end_input();
+    }
+
+    auto ite = buffer.rbegin();
+    auto rc = _output.remaining_capacity();
+
+    while (ite != buffer.rend() && rc < unassem_bytes) {
+        auto s = (*ite).second.first;
+        auto s_len = s.length();
+        auto len = unassem_bytes - rc > s_len?s_len:unassem_bytes - rc;
+        auto ws = s.substr(0,s_len - len);
+        if (!ws.empty()) {
+            (*ite++).second.first = ws;
+        } else {
+            buffer.erase((*ite++).first);
+        }
+        unassem_bytes -= len;  
+    }
 }
 
 size_t StreamReassembler::unassembled_bytes() const { 
