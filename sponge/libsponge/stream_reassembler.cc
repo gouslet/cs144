@@ -28,7 +28,6 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
 void StreamReassembler::string_2_buffer(const string& str,const size_t index,const bool eof) {
     auto str_hindex = index + str.length() - 1;
     auto str_len = str.length();
-    cout << "str_index = " << index << " str_hindex = " << str_hindex << endl;
     if (str.empty() || buffer.empty()) {
         buffer.emplace(index,make_pair(str,eof));
         unassem_bytes += str_len;
