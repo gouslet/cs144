@@ -8,3 +8,49 @@
 - 通过这个窗口，接收方可以实现流量控制，在接收方准备好接收之前限制发送方的发送
 
 # TCP如何表示stream中的每个字节——sequence number
+- 在TCP头部中，空间是稀缺的,每个字节在流中的序号并非表示为64位的，而是32位的。称为“sequence number”或“seqno”
+- 这带来了了三个复杂性
+  - 需要考虑封装32位整数
+    - TCP中的流可以是任意长度，但是2^32字节只有4GiB，是远远不够的
+    - 一旦一个32位的sequence number计数到2^32 − 1, 流中的下一个字节sequence number就会归零  
+  - TCP sequence numbers起始于任意值
+    -  为了提高安全性，避免和属于同一对节点之间之前的连接的segment混淆，TCP试图确保sequence number无法泄露，也无法重复，所以sequence number不从0开始
+    -  首个sequenc number是一个32位的随机数，称作Initial Sequence Number(ISN). 该数代表SYN(流的起始)
+    -  后续sequence number恢复正常: 数据的第一个byte的sequence number为ISN+1 (mod 2^32), 第二个字节的sequence number为ISN+2(mod 2^32)
+  - 逻辑起始各占一个sequence number
+    - 为了确保接收到数据的全部字节, TCP保证流的开头和结尾被可靠地接收
+    - 因此, 在TCP中，SYN(beginning-of-stream)和FIN(end-of-stream) 控制标志也赋予了sequence number. 
+
+- 这些sequence number(seqno)通过包含在TCP帧中进行传输
+- 同样也有两个流——两个方向各一个。每个流都有各自的sequence number和一个 不同的随机ISN 
+  
+- absolute sequence number 
+  - 通常起始于0，不需要封装, 和“stream index”有关：在StreamReassembler中已经使用: 流中各个字节的序号
+- 为了使这些差异更具体，考虑一个仅仅包含三个字母的流
+  - 如果SYN碰巧有seqno为2^32 − 2, 那么各个字节的seqnos, absolute seqnos和stream indices为  
+
+    |element|SYN|c|a|t|FIN|
+    |---|---|---|---|---|---|
+    |seqno|$2^{32}-2$|$2^{32}-1$|0|1|2|
+    |absolute seqno|0|1|2|3|4|
+    |stream index||0|1|2|
+- 下表显示了这三个不同序号的差异
+
+    |Sequence Numbers|Absolute Sequence Numbers|Stream Indices|
+    |---|---|---|
+    |从ISN开始|从0开始|从0开始|
+    |包含SYN/FIN|包含SYN/FIN|忽略SYN/FIN|
+    |32位，封装|64位，不封装|64位，不封装|
+    |"seqno"|"absolute seqno"|"stream index"|
+
+- absolute sequence number和stream indices之间的转换很容易，只需要加1或者减1
+- sequence number和absolute sequence number之间的转换可能会产生一些不容易发现的bug。为了避免这些bug，用一个自定义的WrappingInt32类型来代表sequence number
+- 并实现一个它和absolute sequence number(用uint64_t表示)之间的转换
+  - `WrappingInt32 wrap(uint64 t n, WrappingInt32 isn)`
+    - 给定一个absolute sequence number值n，和一个Initial Sequence Number(isn)，生成n的sequence number
+  - `uint64 t unwrap(WrappingInt32 n, WrappingInt32 isn, uint64 t checkpoint)`
+    - 给定一个sequence number值n,其Initial Sequence Number(isn), 和一个absolute checkpoint sequence number，计算对应到n的最接近checkpoint的absolute sequence number
+- 注意：因为任何seqno都对应多个absolute seqnos，例如，对于ISN为0，seqno “17”对应的absolute seqno有17,2^32 + 17,和2^33 + 17, 以及2^34 + 17等等
+- checkpoint用于确定精确度：是一个absolute seqno的大概值，即±2^31范围内的64位数
+- 本TCP实现中用最后一个reassembled的字节的序号作为checkpoint
+

@@ -1,0 +1,144 @@
+Test project /root/cs144/sponge/build
+    Start 1: t_wrapping_ints_cmp
+Could not find executable /root/cs144/sponge/build/tests/wrapping_integers_cmp
+Looked in the following places:
+/root/cs144/sponge/build/tests/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Release/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Release/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Development/wrapping_integers_cmp
+/root/cs144/sponge/build/tests/Development/wrapping_integers_cmp
+root/cs144/sponge/build/tests/wrapping_integers_cmp
+root/cs144/sponge/build/tests/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Release/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Release/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Debug/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Debug/wrapping_integers_cmp
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_cmp
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_cmp
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_cmp
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Development/wrapping_integers_cmp
+root/cs144/sponge/build/tests/Development/wrapping_integers_cmp
+Unable to find executable: /root/cs144/sponge/build/tests/wrapping_integers_cmp
+1/4 Test #1: t_wrapping_ints_cmp ..............***Not Run   0.00 sec
+    Start 2: t_wrapping_ints_unwrap
+Could not find executable /root/cs144/sponge/build/tests/wrapping_integers_unwrap
+Looked in the following places:
+/root/cs144/sponge/build/tests/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Release/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Release/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Development/wrapping_integers_unwrap
+/root/cs144/sponge/build/tests/Development/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Release/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Release/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Debug/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Debug/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Development/wrapping_integers_unwrap
+root/cs144/sponge/build/tests/Development/wrapping_integers_unwrap
+Unable to find executable: /root/cs144/sponge/build/tests/wrapping_integers_unwrap
+2/4 Test #2: t_wrapping_ints_unwrap ...........***Not Run   0.00 sec
+    Start 3: t_wrapping_ints_wrap
+Could not find executable /root/cs144/sponge/build/tests/wrapping_integers_wrap
+Looked in the following places:
+/root/cs144/sponge/build/tests/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Release/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Release/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Development/wrapping_integers_wrap
+/root/cs144/sponge/build/tests/Development/wrapping_integers_wrap
+root/cs144/sponge/build/tests/wrapping_integers_wrap
+root/cs144/sponge/build/tests/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Release/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Release/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Debug/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Debug/wrapping_integers_wrap
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_wrap
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_wrap
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_wrap
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Development/wrapping_integers_wrap
+root/cs144/sponge/build/tests/Development/wrapping_integers_wrap
+Unable to find executable: /root/cs144/sponge/build/tests/wrapping_integers_wrap
+3/4 Test #3: t_wrapping_ints_wrap .............***Not Run   0.00 sec
+    Start 4: t_wrapping_ints_roundtrip
+Could not find executable /root/cs144/sponge/build/tests/wrapping_integers_roundtrip
+Looked in the following places:
+/root/cs144/sponge/build/tests/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Release/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Release/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Debug/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Deployment/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Development/wrapping_integers_roundtrip
+/root/cs144/sponge/build/tests/Development/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Release/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Release/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Debug/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Debug/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/MinSizeRel/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/RelWithDebInfo/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Deployment/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Development/wrapping_integers_roundtrip
+root/cs144/sponge/build/tests/Development/wrapping_integers_roundtrip
+Unable to find executable: /root/cs144/sponge/build/tests/wrapping_integers_roundtrip
+4/4 Test #4: t_wrapping_ints_roundtrip ........***Not Run   0.00 sec
+
+0% tests passed, 4 tests failed out of 4
+
+Total Test time (real) =   0.01 sec
+
+The following tests FAILED:
+	  1 - t_wrapping_ints_cmp (Not Run)
+	  2 - t_wrapping_ints_unwrap (Not Run)
+	  3 - t_wrapping_ints_wrap (Not Run)
+	  4 - t_wrapping_ints_roundtrip (Not Run)
+Errors while running CTest
