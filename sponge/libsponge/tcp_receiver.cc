@@ -5,15 +5,41 @@
 // For Lab 2, please replace with a real implementation that passes the
 // automated checks run by `make check_lab2`.
 
-template <typename... Targs>
-void DUMMY_CODE(Targs &&... /* unused */) {}
+// template <typename... Targs>
+// void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
 void TCPReceiver::segment_received(const TCPSegment &seg) {
-    DUMMY_CODE(seg);
+    auto header = seg.header();
+    bool isSYN = header.syn;
+    bool eof = false;
+    auto payload = seg.payload();
+    if (isSYN && !isn_set) {
+        isn = header.seqno;
+        isn_set = true;
+        // payload.remove_prefix(1);
+    }
+    if (header.fin) {
+        isn_set = false;
+        // payload.remove_prefix(1);
+    }
+    if (isn_set) {
+        // if (next_seqn == header.seqno) {
+            next_seqn = header.seqno + seg.length_in_sequence_space();
+        // }
+        auto checkpoint = _capacity - window_size() - _reassembler.unassembled_bytes();
+        auto index = unwrap(header.seqno,isn,checkpoint);
+        _reassembler.push_substring(payload.copy(),index,eof);
+    }
 }
 
-optional<WrappingInt32> TCPReceiver::ackno() const { return {}; }
+optional<WrappingInt32> TCPReceiver::ackno() const { 
+    if (!isn_set) {
+        return nullopt;
+    }
+    
+    return make_optional<WrappingInt32>(next_seqn);
+}
 
-size_t TCPReceiver::window_size() const { return {}; }
+size_t TCPReceiver::window_size() const { return _reassembler.stream_out().remaining_capacity() - _reassembler.unassembled_bytes(); }

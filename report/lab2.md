@@ -54,3 +54,32 @@
 - checkpoint用于确定精确度：是一个absolute seqno的大概值，即±2^31范围内的64位数
 - 本TCP实现中用最后一个reassembled的字节的序号作为checkpoint
 
+# TCPReceiver
+- 从对等方接收帧
+- 用StreamReassembler重组ByteStream
+- 计算acknowledgment number (ackno)和window size
+
+ackno和window size最终传输回对等方
+- segment received()
+  - 每次从对等方收到一个新的栈帧都会调用TCPReceiver::segment received()
+  - 该方法需要
+    - 如果有必要，则设置Initial Sequence Number——第一个到达的带有SYN标志的帧的sequence number
+      - 为了在32位的seqnos/acknos和其绝对等价之间转换，可能需要持续跟踪 
+      - 该帧可能同时携带数据并包含FIN标志
+    - 将任何数据包或者流终结标志压入StreamReassembler
+      - 如果在TCP帧头部中设置了FIN标志，就意味着负荷的最后一个字节是整个流的最后一个字节
+      - StreamReassembler中的流序号从0开始，因此可能要对seqnos使用unwrap方法
+- ackno()
+  - 返回一个包含第一个未知sequence number字节的optional<WrappingInt32>  
+  这是windows的左边缘：receiver待接收的第一个字节
+  - 如果还未设置ISN，则返回空的optional.
+- window size()
+  - 返回“first unassembled”序号（对应于ackno）和“first unacceptable”序号之间的距离
+
+# 重要的几个变量
+
+|变量|含义|
+|---|---|
+|last_byte_reassembled|已整理的最后一个字节的序号
+|first unassembled=ackno|待整理的下一个字节序号|
+|unassembled_bytes|已接收并存储，但未整理的字节的数量|

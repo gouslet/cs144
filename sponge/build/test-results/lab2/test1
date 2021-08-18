@@ -1,0 +1,106 @@
+[100%] Testing the TCP receiver...
+Test project /root/cs144/sponge/build
+      Start  1: t_wrapping_ints_cmp
+ 1/26 Test  #1: t_wrapping_ints_cmp ..............   Passed    0.00 sec
+      Start  2: t_wrapping_ints_unwrap
+ 2/26 Test  #2: t_wrapping_ints_unwrap ...........   Passed    0.00 sec
+      Start  3: t_wrapping_ints_wrap
+ 3/26 Test  #3: t_wrapping_ints_wrap .............   Passed    0.00 sec
+      Start  4: t_wrapping_ints_roundtrip
+ 4/26 Test  #4: t_wrapping_ints_roundtrip ........   Passed    0.19 sec
+      Start  5: t_recv_connect
+ 5/26 Test  #5: t_recv_connect ...................***Failed    0.00 sec
+Test Failure on expectation:
+	Expectation: no ackno available
+
+Failure message:
+	The TCPReceiver reported ackno `1`, but it was expected to be `none`
+
+List of steps that executed successfully:
+	Initialized with (capacity=4000)
+	Expectation: window 4000
+
+The TCPReceiver reported ackno `1`, but it was expected to be `none`
+
+      Start  6: t_recv_transmit
+ 6/26 Test  #6: t_recv_transmit ..................***Failed    0.00 sec
+Buffer::remove_prefix
+
+      Start  7: t_recv_window
+ 7/26 Test  #7: t_recv_window ....................***Failed    0.00 sec
+Buffer::remove_prefix
+
+      Start  8: t_recv_reorder
+ 8/26 Test  #8: t_recv_reorder ...................***Failed    0.00 sec
+Buffer::remove_prefix
+
+      Start  9: t_recv_close
+ 9/26 Test  #9: t_recv_close .....................***Failed    0.00 sec
+Test Failure on expectation:
+	Expectation: in state `waiting for SYN: ackno is empty`
+
+Failure message:
+	The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `waiting for SYN: ackno is empty`
+
+List of steps that executed successfully:
+	Initialized with (capacity=4000)
+
+The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `waiting for SYN: ackno is empty`
+
+      Start 10: t_recv_special
+10/26 Test #10: t_recv_special ...................***Failed    0.00 sec
+Test Failure on expectation:
+	Expectation: in state `waiting for SYN: ackno is empty`
+
+Failure message:
+	The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `waiting for SYN: ackno is empty`
+
+List of steps that executed successfully:
+	Initialized with (capacity=4000)
+
+The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `waiting for SYN: ackno is empty`
+
+      Start 17: t_strm_reassem_single
+11/26 Test #17: t_strm_reassem_single ............   Passed    0.00 sec
+      Start 18: t_strm_reassem_seq
+12/26 Test #18: t_strm_reassem_seq ...............   Passed    0.00 sec
+      Start 19: t_strm_reassem_dup
+13/26 Test #19: t_strm_reassem_dup ...............   Passed    0.01 sec
+      Start 20: t_strm_reassem_holes
+14/26 Test #20: t_strm_reassem_holes .............   Passed    0.00 sec
+      Start 21: t_strm_reassem_many
+15/26 Test #21: t_strm_reassem_many ..............   Passed    0.10 sec
+      Start 22: t_strm_reassem_overlapping
+16/26 Test #22: t_strm_reassem_overlapping .......   Passed    0.00 sec
+      Start 23: t_strm_reassem_win
+17/26 Test #23: t_strm_reassem_win ...............   Passed    0.10 sec
+      Start 24: t_strm_reassem_cap
+18/26 Test #24: t_strm_reassem_cap ...............   Passed    0.10 sec
+      Start 25: t_byte_stream_construction
+19/26 Test #25: t_byte_stream_construction .......   Passed    0.00 sec
+      Start 26: t_byte_stream_one_write
+20/26 Test #26: t_byte_stream_one_write ..........   Passed    0.00 sec
+      Start 27: t_byte_stream_two_writes
+21/26 Test #27: t_byte_stream_two_writes .........   Passed    0.00 sec
+      Start 28: t_byte_stream_capacity
+22/26 Test #28: t_byte_stream_capacity ...........   Passed    0.55 sec
+      Start 29: t_byte_stream_many_writes
+23/26 Test #29: t_byte_stream_many_writes ........   Passed    0.01 sec
+      Start 52: t_address_dt
+24/26 Test #52: t_address_dt .....................   Passed    0.02 sec
+      Start 53: t_parser_dt
+25/26 Test #53: t_parser_dt ......................   Passed    0.00 sec
+      Start 54: t_socket_dt
+26/26 Test #54: t_socket_dt ......................   Passed    0.01 sec
+
+77% tests passed, 6 tests failed out of 26
+
+Total Test time (real) =   1.14 sec
+
+The following tests FAILED:
+	  5 - t_recv_connect (Failed)
+	  6 - t_recv_transmit (Failed)
+	  7 - t_recv_window (Failed)
+	  8 - t_recv_reorder (Failed)
+	  9 - t_recv_close (Failed)
+	 10 - t_recv_special (Failed)
