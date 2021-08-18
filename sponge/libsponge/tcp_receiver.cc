@@ -21,12 +21,14 @@ void TCPReceiver::segment_received(const TCPSegment &seg) {
         // payload.remove_prefix(1);
     }
     if (header.fin) {
-        isn_set = false;
+        // isn_set = false;
+        eof = true;
         // payload.remove_prefix(1);
     }
     if (isn_set) {
         // if (next_seqn == header.seqno) {
-            next_seqn = header.seqno + seg.length_in_sequence_space();
+            auto delta = (seg.length_in_sequence_space() > 0)?(seg.length_in_sequence_space()):1;
+            next_seqn = header.seqno + delta;
         // }
         auto checkpoint = _capacity - window_size() - _reassembler.unassembled_bytes();
         auto index = unwrap(header.seqno,isn,checkpoint);
