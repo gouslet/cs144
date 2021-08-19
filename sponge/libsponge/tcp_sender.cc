@@ -9,8 +9,8 @@
 // For Lab 3, please replace with a real implementation that passes the
 // automated checks run by `make check_lab3`.
 
-template <typename... Targs>
-void DUMMY_CODE(Targs &&... /* unused */) {}
+// template <typename... Targs>
+// void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
@@ -24,15 +24,28 @@ TCPSender::TCPSender(const size_t capacity, const uint16_t retx_timeout, const s
 
 uint64_t TCPSender::bytes_in_flight() const { return {}; }
 
-void TCPSender::fill_window() {}
+void TCPSender::fill_window() {
+    if (!_stream.buffer_empty() && !window_size) {
+        auto unread_size = _stream.buffer_size()-_stream.remaining_capacity();
+        auto size = unread_size < window_size?unread_size:window_size;
+        size = size < TCPConfig::MAX_PAYLOAD_SIZE?size:TCPConfig::MAX_PAYLOAD_SIZE;
+        auto str = _stream.read(size);
+        TCPSegment seg = 
+    }
+}
 
 //! \param ackno The remote receiver's ackno (acknowledgment number)
 //! \param window_size The remote receiver's advertised window size
-void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_size) { DUMMY_CODE(ackno, window_size); }
+void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_size) { 
+    this->window_size = window_size;
+    for (auto s:_segments_out)
+}
 
 //! \param[in] ms_since_last_tick the number of milliseconds since the last call to this method
 void TCPSender::tick(const size_t ms_since_last_tick) { DUMMY_CODE(ms_since_last_tick); }
 
 unsigned int TCPSender::consecutive_retransmissions() const { return {}; }
 
-void TCPSender::send_empty_segment() {}
+void TCPSender::send_empty_segment() {
+
+}
