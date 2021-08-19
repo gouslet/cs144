@@ -46,7 +46,7 @@ void TCPReceiver::segment_received(const TCPSegment &seg) {
     if (header.fin) {
         // isn_set = false;
         eof = true;
-                next_seqn = next_seqn + 1;
+        
         // auto delta = seg.length_in_sequence_space() > 1 || flag?1:2;
         // next_seqn = next_seqn + delta;
         // payload.remove_prefix(1);
@@ -64,6 +64,17 @@ void TCPReceiver::segment_received(const TCPSegment &seg) {
         uint64_t new_written_bytes = _capacity - _reassembler.stream_out().remaining_capacity();//本次接收帧之后已写入ByteStream的字节数
         cout << "new_written_bytes = " << new_written_bytes << endl;
         next_seqn = next_seqn + (new_written_bytes - old_written_bytes);
+        
+    }
+    if (header.fin) {
+        cout << "---------------------------" << endl;
+        if (_reassembler.unassembled_bytes() == 0){
+            next_seqn = next_seqn + 1;
+        }
+    } else {
+        if (_reassembler.stream_out().input_ended()) {
+            next_seqn = next_seqn + 1;
+        }
     }
 }
 

@@ -3,17 +3,17 @@ Test project /root/cs144/sponge/build
       Start  1: t_wrapping_ints_cmp
  1/26 Test  #1: t_wrapping_ints_cmp ..............   Passed    0.00 sec
       Start  2: t_wrapping_ints_unwrap
- 2/26 Test  #2: t_wrapping_ints_unwrap ...........   Passed    0.00 sec
+ 2/26 Test  #2: t_wrapping_ints_unwrap ...........   Passed    0.01 sec
       Start  3: t_wrapping_ints_wrap
- 3/26 Test  #3: t_wrapping_ints_wrap .............   Passed    0.00 sec
+ 3/26 Test  #3: t_wrapping_ints_wrap .............   Passed    0.01 sec
       Start  4: t_wrapping_ints_roundtrip
- 4/26 Test  #4: t_wrapping_ints_roundtrip ........   Passed    0.19 sec
+ 4/26 Test  #4: t_wrapping_ints_roundtrip ........   Passed    0.20 sec
       Start  5: t_recv_connect
- 5/26 Test  #5: t_recv_connect ...................   Passed    0.00 sec
+ 5/26 Test  #5: t_recv_connect ...................   Passed    0.01 sec
       Start  6: t_recv_transmit
- 6/26 Test  #6: t_recv_transmit ..................   Passed    0.17 sec
+ 6/26 Test  #6: t_recv_transmit ..................   Passed    0.19 sec
       Start  7: t_recv_window
- 7/26 Test  #7: t_recv_window ....................***Failed    0.00 sec
+ 7/26 Test  #7: t_recv_window ....................***Failed    0.01 sec
 _reassembler.unassembled_bytes() = 0
 seg.length_in_sequence_space() = 1
 old_written_bytes = 0
@@ -89,6 +89,7 @@ _reassembler.unassembled_bytes() = 0
 seg.length_in_sequence_space() = 16
 old_written_bytes = 0
 new_written_bytes = 15
+---------------------------
 _reassembler.unassembled_bytes() = 0
 seg.length_in_sequence_space() = 1
 old_written_bytes = 0
@@ -97,22 +98,32 @@ _reassembler.unassembled_bytes() = 0
 seg.length_in_sequence_space() = 15
 old_written_bytes = 0
 new_written_bytes = 0
+---------------------------
+_reassembler.unassembled_bytes() = 14
+seg.length_in_sequence_space() = 1
+old_written_bytes = 0
+new_written_bytes = 15
 Test Failure on expectation:
-	Expectation: ackno 3818200069
+	Expectation: ackno 201884700
 
 Failure message:
-	The TCPReceiver reported ackno `3818200070`, but it was expected to be `3818200069`
+	The TCPReceiver reported ackno `201884699`, but it was expected to be `201884700`
 
 List of steps that executed successfully:
 	Initialized with (capacity=4000)
 	Expectation: in state `waiting for SYN: ackno is empty`
-	Action:      segment arrives Header(flags=S,seqno=3818200068,ack=0,win=0)
+	Action:      segment arrives Header(flags=S,seqno=201884683,ack=0,win=0)
 	Expectation: in state `SYN received (ackno exists), and input to stream hasn't ended`
-	Action:      segment arrives Header(flags=F,seqno=3818200070,ack=0,win=0) with data "oodbye, CS144!"
+	Action:      segment arrives Header(flags=F,seqno=201884685,ack=0,win=0) with data "oodbye, CS144!"
 	Expectation: in state `SYN received (ackno exists), and input to stream hasn't ended`
 	Expectation: bytes available: ""
+	Expectation: ackno 201884684
+	Expectation: receiver.stream_out().input_ended() == false
+	Action:      segment arrives Header(flags=,seqno=201884684,ack=0,win=0) with data "G"
+	Expectation: in state `input to stream has ended`
+	Expectation: bytes available: "Goodbye, CS144!"
 
-The TCPReceiver reported ackno `3818200070`, but it was expected to be `3818200069`
+The TCPReceiver reported ackno `201884699`, but it was expected to be `201884700`
 
       Start 17: t_strm_reassem_single
 11/26 Test #17: t_strm_reassem_single ............   Passed    0.01 sec
@@ -121,13 +132,13 @@ The TCPReceiver reported ackno `3818200070`, but it was expected to be `38182000
       Start 19: t_strm_reassem_dup
 13/26 Test #19: t_strm_reassem_dup ...............   Passed    0.01 sec
       Start 20: t_strm_reassem_holes
-14/26 Test #20: t_strm_reassem_holes .............   Passed    0.01 sec
+14/26 Test #20: t_strm_reassem_holes .............   Passed    0.00 sec
       Start 21: t_strm_reassem_many
-15/26 Test #21: t_strm_reassem_many ..............   Passed    0.10 sec
+15/26 Test #21: t_strm_reassem_many ..............   Passed    0.11 sec
       Start 22: t_strm_reassem_overlapping
 16/26 Test #22: t_strm_reassem_overlapping .......   Passed    0.01 sec
       Start 23: t_strm_reassem_win
-17/26 Test #23: t_strm_reassem_win ...............   Passed    0.10 sec
+17/26 Test #23: t_strm_reassem_win ...............   Passed    0.11 sec
       Start 24: t_strm_reassem_cap
 18/26 Test #24: t_strm_reassem_cap ...............   Passed    0.10 sec
       Start 25: t_byte_stream_construction
@@ -137,19 +148,19 @@ The TCPReceiver reported ackno `3818200070`, but it was expected to be `38182000
       Start 27: t_byte_stream_two_writes
 21/26 Test #27: t_byte_stream_two_writes .........   Passed    0.00 sec
       Start 28: t_byte_stream_capacity
-22/26 Test #28: t_byte_stream_capacity ...........   Passed    0.56 sec
+22/26 Test #28: t_byte_stream_capacity ...........   Passed    0.57 sec
       Start 29: t_byte_stream_many_writes
 23/26 Test #29: t_byte_stream_many_writes ........   Passed    0.01 sec
       Start 52: t_address_dt
 24/26 Test #52: t_address_dt .....................   Passed    0.01 sec
       Start 53: t_parser_dt
-25/26 Test #53: t_parser_dt ......................   Passed    0.01 sec
+25/26 Test #53: t_parser_dt ......................   Passed    0.00 sec
       Start 54: t_socket_dt
 26/26 Test #54: t_socket_dt ......................   Passed    0.01 sec
 
 92% tests passed, 2 tests failed out of 26
 
-Total Test time (real) =   1.38 sec
+Total Test time (real) =   1.43 sec
 
 The following tests FAILED:
 	  7 - t_recv_window (Failed)
