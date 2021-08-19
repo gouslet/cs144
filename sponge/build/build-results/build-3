@@ -1,0 +1,84 @@
+Scanning dependencies of target sponge
+[  2%] Building CXX object libsponge/CMakeFiles/sponge.dir/stream_reassembler.cc.o
+[  4%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/address.cc.o
+[  6%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/buffer.cc.o
+[  8%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/eventloop.cc.o
+[ 10%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/file_descriptor.cc.o
+[ 12%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/parser.cc.o
+[ 14%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/socket.cc.o
+[ 17%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/tun.cc.o
+[ 19%] Building CXX object libsponge/CMakeFiles/sponge.dir/util/util.cc.o
+[ 21%] Linking CXX static library libsponge.a
+[ 23%] Built target sponge
+Scanning dependencies of target webget
+[ 25%] Building CXX object apps/CMakeFiles/webget.dir/webget.cc.o
+[ 27%] Linking CXX executable webget
+[ 27%] Built target webget
+Scanning dependencies of target spongechecks
+[ 29%] Building CXX object tests/CMakeFiles/spongechecks.dir/byte_stream_test_harness.cc.o
+[ 31%] Linking CXX static library libspongechecks.a
+[ 31%] Built target spongechecks
+Scanning dependencies of target fsm_stream_reassembler_holes
+[ 34%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_holes.dir/fsm_stream_reassembler_holes.cc.o
+[ 36%] Linking CXX executable fsm_stream_reassembler_holes
+[ 36%] Built target fsm_stream_reassembler_holes
+Scanning dependencies of target fsm_stream_reassembler_seq
+[ 38%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_seq.dir/fsm_stream_reassembler_seq.cc.o
+[ 40%] Linking CXX executable fsm_stream_reassembler_seq
+[ 40%] Built target fsm_stream_reassembler_seq
+Scanning dependencies of target byte_stream_construction
+[ 42%] Building CXX object tests/CMakeFiles/byte_stream_construction.dir/byte_stream_construction.cc.o
+[ 44%] Linking CXX executable byte_stream_construction
+[ 44%] Built target byte_stream_construction
+Scanning dependencies of target fsm_stream_reassembler_dup
+[ 46%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_dup.dir/fsm_stream_reassembler_dup.cc.o
+[ 48%] Linking CXX executable fsm_stream_reassembler_dup
+[ 48%] Built target fsm_stream_reassembler_dup
+Scanning dependencies of target fsm_stream_reassembler_single
+[ 51%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_single.dir/fsm_stream_reassembler_single.cc.o
+[ 53%] Linking CXX executable fsm_stream_reassembler_single
+[ 53%] Built target fsm_stream_reassembler_single
+Scanning dependencies of target fsm_stream_reassembler_win
+[ 55%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_win.dir/fsm_stream_reassembler_win.cc.o
+[ 57%] Linking CXX executable fsm_stream_reassembler_win
+[ 57%] Built target fsm_stream_reassembler_win
+Scanning dependencies of target byte_stream_one_write
+[ 59%] Building CXX object tests/CMakeFiles/byte_stream_one_write.dir/byte_stream_one_write.cc.o
+[ 61%] Linking CXX executable byte_stream_one_write
+[ 61%] Built target byte_stream_one_write
+Scanning dependencies of target fsm_stream_reassembler_many
+[ 63%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_many.dir/fsm_stream_reassembler_many.cc.o
+[ 65%] Linking CXX executable fsm_stream_reassembler_many
+[ 65%] Built target fsm_stream_reassembler_many
+Scanning dependencies of target fsm_stream_reassembler_overlapping
+[ 68%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_overlapping.dir/fsm_stream_reassembler_overlapping.cc.o
+[ 70%] Linking CXX executable fsm_stream_reassembler_overlapping
+[ 70%] Built target fsm_stream_reassembler_overlapping
+Scanning dependencies of target byte_stream_capacity
+[ 72%] Building CXX object tests/CMakeFiles/byte_stream_capacity.dir/byte_stream_capacity.cc.o
+[ 74%] Linking CXX executable byte_stream_capacity
+[ 74%] Built target byte_stream_capacity
+Scanning dependencies of target fsm_stream_reassembler_cap
+[ 76%] Building CXX object tests/CMakeFiles/fsm_stream_reassembler_cap.dir/fsm_stream_reassembler_cap.cc.o
+[ 78%] Linking CXX executable fsm_stream_reassembler_cap
+[ 78%] Built target fsm_stream_reassembler_cap
+Scanning dependencies of target byte_stream_two_writes
+[ 80%] Building CXX object tests/CMakeFiles/byte_stream_two_writes.dir/byte_stream_two_writes.cc.o
+[ 82%] Linking CXX executable byte_stream_two_writes
+[ 82%] Built target byte_stream_two_writes
+Scanning dependencies of target byte_stream_many_writes
+[ 85%] Building CXX object tests/CMakeFiles/byte_stream_many_writes.dir/byte_stream_many_writes.cc.o
+[ 87%] Linking CXX executable byte_stream_many_writes
+[ 87%] Built target byte_stream_many_writes
+Scanning dependencies of target socket_dt
+[ 89%] Building CXX object doctests/CMakeFiles/socket_dt.dir/socket_dt.cc.o
+[ 91%] Linking CXX executable socket_dt
+[ 91%] Built target socket_dt
+Scanning dependencies of target address_dt
+[ 93%] Building CXX object doctests/CMakeFiles/address_dt.dir/address_dt.cc.o
+[ 95%] Linking CXX executable address_dt
+[ 95%] Built target address_dt
+Scanning dependencies of target parser_dt
+[ 97%] Building CXX object doctests/CMakeFiles/parser_dt.dir/parser_dt.cc.o
+[100%] Linking CXX executable parser_dt
+[100%] Built target parser_dt
