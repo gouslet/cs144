@@ -105,14 +105,15 @@ class Out_Segment {
     TCPSegment _seg;
     uint64_t _ackno_absolute;
     size_t _restrans_time{0};// 发送次数
-    uint64_t _timeout;// 计时器
+    size_t _timeout;// 计时器
   
   public:
+
     Out_Segment(TCPSegment seg,uint64_t _ackno_ab, uint64_t timeout):_seg(seg) ,_ackno_absolute(_ackno_ab), _timeout(timeout) { };
 
     TCPSegment segment() { return _seg; }
     size_t &restrans_time() { return _restrans_time; }
-    uint64_t &timeout() { return _timeout; }
+    volatile size_t &timeout() { return _timeout; }
     uint64_t ackno() { return _ackno_absolute; }
     
 };

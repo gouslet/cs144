@@ -39,9 +39,17 @@ void TCPSender::fill_window() {
             size = size < TCPConfig::MAX_PAYLOAD_SIZE?size:TCPConfig::MAX_PAYLOAD_SIZE;
             auto str = _stream.read(size);
             if (next_seqno_absolute()) {
-                seg = make_segment(next_seqno(),false,false,str);
+                if (_stream.buffer_empty() && _stream.input_ended()) {
+                    seg = make_segment(next_seqno(),false,true,str);
+                } else {
+                    seg = make_segment(next_seqno(),false,false,str);
+                }
             } else {
-                seg = make_segment(next_seqno(),true,false,str);
+                if (_stream.buffer_empty() && _stream.input_ended()) {
+                    seg = make_segment(next_seqno(),true,true,str);
+                } else {
+                    seg = make_segment(next_seqno(),true,false,str);
+                }
             } 
             _segments_out.push(seg);
             Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
@@ -51,13 +59,19 @@ void TCPSender::fill_window() {
             _next_seqno += seg.length_in_sequence_space();
         } else {
             if (!next_seqno_absolute()) {
-                seg = make_segment(next_seqno(),true,false,"");
+                if (_stream.input_ended()) {
+                    seg = make_segment(next_seqno(),true,true,"");
+                } else {
+                    seg = make_segment(next_seqno(),true,false,"");
+                }
                 _segments_out.push(seg);
                 Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
                 out_segments.push_back(out_segment);
                 _window_size -= seg.length_in_sequence_space();
                 _bytes_in_flight += seg.length_in_sequence_space();
                 _next_seqno++;
+            } else if (_stream.input_ended()) {
+                    seg = make_segment(next_seqno(),false,true,"");
             } else {
                 break;
             }
@@ -73,7 +87,7 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
     _window_size = window_size;
     for (auto it = out_segments.begin();it != out_segments.end();) {
         auto nq = unwrap(ackno,_isn,_next_seqno);
-        if ((*it).ackno() < next_seqno_absolute()) {
+        if ((*it).ackno() < nq) {
             _consecutive_retransmissions = 0;
 
             _next_seqno = nq;
@@ -89,6 +103,7 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
 //! \param[in] ms_since_last_tick the number of milliseconds since the last call to this method
 void TCPSender::tick(const size_t ms_since_last_tick) { 
     for (auto it = out_segments.begin();it != out_segments.end();it++) {
+        // if (auto t = (*it).timeout();t > ms_since_last_tick) {
         if ((*it).timeout() > ms_since_last_tick) {
             (*it).timeout() -= ms_since_last_tick;
         } else {
@@ -106,6 +121,7 @@ unsigned int TCPSender::consecutive_retransmissions() const {
 
 void TCPSender::send_empty_segment() {
     TCPSegment seg = make_segment(next_seqno(),false,false,"");
+    
     _segments_out.push(seg);
 }
 
