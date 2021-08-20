@@ -54,9 +54,25 @@ TCP Sender有四个方法，每个方法都以发送一个TCP帧结束：
     - 接收到来自receiver的帧传递的窗口的新的left (= ackno)和right (=ackno + window size)
     - TCPSender应该查找已发送帧的集合，移除所有sequence number小于ackno的帧
     - TCPSender应该再次填充window，如果window有了新的空间
+    
 - void tick( const size t_ms_since_last_tick)
     - Time has passed — a certain number of milliseconds since the last time this method was called. 
     - The sender may need to retransmit an outstanding segment.
 
 - void send_empty_segment()
     -  TCPSender应该生成并发送一个占用sequence长度为0且sequence number正确的TCPSegment
+
+# 实现要点
+## 如何发送一个帧？
+压入_segments_out栈中
+## 如何在发送一个帧的同时记录已发送的帧？
+将其大的备份保存在一个数据结构中。因为帧的负荷是以引用计数式的只读字符串保存的，所以不会浪费空间
+## 在TCPSender收到ACK帧之前，window_size是多少？
+1
+## 如果一个ACK帧仅仅对一部分已发送帧作出了回应，是否需要剪掉这部分字节?
+可以但没必要。这里仅仅在一个已发送帧的全部字节都收到回应后再删除
+## 如果先发送了三个独立的帧，分别包含“a,” “b”,“c”三个字节，但是没有收到回应，之后重发时是否可以以一个包含“abc”三个字符的帧发送？
+可以，但此出不要这样做
+## 需要记录空的已发送帧吗？
+不需要
+## 如何构造一个TCP Segment
