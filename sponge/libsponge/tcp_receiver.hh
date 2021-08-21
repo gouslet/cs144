@@ -21,7 +21,9 @@ class TCPReceiver {
     size_t _capacity;
 
     WrappingInt32 isn;
+
     bool isn_set;
+
     WrappingInt32 next_seqn;
   public:
     //! \brief Construct a TCP receiver

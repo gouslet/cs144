@@ -41,7 +41,11 @@ class TCPSender {
     uint64_t _bytes_in_flight{0};
 
     unsigned int _consecutive_retransmissions{0};
+
+    bool fin_acked{false};
   
+    bool fin_sent{false};
+
   public:
     //! Initialize a TCPSender
     TCPSender(const size_t capacity = TCPConfig::DEFAULT_CAPACITY,

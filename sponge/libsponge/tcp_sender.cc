@@ -28,6 +28,11 @@ uint64_t TCPSender::bytes_in_flight() const {
 }
 
 void TCPSender::fill_window() {
+    
+    if (fin_acked || fin_sent) {
+        return;
+    }
+
     // std::cout << "_window_size = " << _window_size << std::endl;
     while (_window_size) {
         TCPSegment seg;
@@ -42,6 +47,7 @@ void TCPSender::fill_window() {
                     if (_stream.input_ended()) {
                         seg = make_segment(next_seqno(),false,true,str);
                         _segments_out.push(seg);
+                        fin_sent = true;
                         Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
                         out_segments.push_back(out_segment);
                         _window_size -= seg.length_in_sequence_space();
@@ -75,6 +81,7 @@ void TCPSender::fill_window() {
                         auto str = _stream.read(unread_size);
                         seg = make_segment(next_seqno(),true,true,str);
                         _segments_out.push(seg);
+                        fin_sent = true;
                         Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
                         out_segments.push_back(out_segment);
                         _window_size -= seg.length_in_sequence_space();
@@ -119,6 +126,7 @@ void TCPSender::fill_window() {
                 if (_stream.input_ended() && _window_size >= 2) {
                     seg = make_segment(next_seqno(),true,true,"");
                     _segments_out.push(seg);
+                    fin_sent = true;
                     Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
                     out_segments.push_back(out_segment);
                     _window_size -= seg.length_in_sequence_space();
@@ -137,6 +145,7 @@ void TCPSender::fill_window() {
             } else if (_stream.input_ended()) {
                     seg = make_segment(next_seqno(),false,true,"");
                     _segments_out.push(seg);
+                    fin_sent = true;
                     Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
                     out_segments.push_back(out_segment);
                     _window_size -= seg.length_in_sequence_space();
@@ -158,9 +167,12 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
     _window_size = window_size;
     for (auto it = out_segments.begin();it != out_segments.end();) {
         auto nq = unwrap(ackno,_isn,_next_seqno);
-        if ((*it).ackno() < nq) {
+        if ((*it).ackno() + (*it).segment().length_in_sequence_space() <= nq) {
             _consecutive_retransmissions = 0;
             _bytes_in_flight -= (*it).segment().length_in_sequence_space();
+            if ((*it).segment().header().fin) {
+                fin_acked = true;
+            }
             it = out_segments.erase(it);
         } else {
             if ((*it).ackno() > _next_seqno) {
