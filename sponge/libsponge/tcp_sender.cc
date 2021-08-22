@@ -28,41 +28,14 @@ uint64_t TCPSender::bytes_in_flight() const {
 }
 
 void TCPSender::fill_window() {
-    // if (!_window_size) {
-    //     if (fin_acked || fin_sent) {
-    //         return;
-    //     }
-    //     TCPSegment seg;
-    //     if (!next_seqno_absolute()) {
-    //         seg = make_segment(next_seqno(),true,false,"");
-    //         _segments_out.push(seg);
-    //         Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
-    //         out_segments.push_back(out_segment);
-    //         _bytes_in_flight += seg.length_in_sequence_space();
-    //         _next_seqno++;
-    //     } else {
-    //         if (!_stream.buffer_empty() && !_stream.input_ended()) {
-    //             auto str = _stream.read(1);
-    //             seg = make_segment(next_seqno(),false,false,str);
-    //             _segments_out.push(seg);
-    //             Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout};
-    //             out_segments.push_back(out_segment);
-    //             _bytes_in_flight += seg.length_in_sequence_space();
-    //             _next_seqno++;
-    //         } 
-    //     }
-    //     return;
-    // }
 
-    // std::cout << "_window_size = " << _window_size << std::endl;
     while (_window_size) {
         if (fin_acked || fin_sent) {
             return;
         }
 
         TCPSegment seg;
-        // std::cout << "_stream.buffer_empty() = " << _stream.buffer_empty() << std::endl;
-        // std::cout << "next_seqno_absolute() = " << next_seqno_absolute() << std::endl;
+
         if (!_stream.buffer_empty()) {
             if (next_seqno_absolute()) {    //SYN待发送
                 auto unread_size = _stream.buffer_size();
@@ -123,26 +96,23 @@ void TCPSender::fill_window() {
                         _bytes_in_flight += seg.length_in_sequence_space();
                         _next_seqno += seg.length_in_sequence_space();
                     }
-                } else if (unread_size < _window_size) {
-                        auto size = unread_size < TCPConfig::MAX_PAYLOAD_SIZE?unread_size:TCPConfig::MAX_PAYLOAD_SIZE;
-                        auto str = _stream.read(size);
-                        seg = make_segment(next_seqno(),true,false,str);
-                        _segments_out.push(seg);
-                        Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout,zero_window_wize};
-                        out_segments.push_back(out_segment);
-                        _window_size -= seg.length_in_sequence_space();
-                        _bytes_in_flight += seg.length_in_sequence_space();
-                        _next_seqno += seg.length_in_sequence_space();
                 } else {
-                        auto size = _window_size - 1 > TCPConfig::MAX_PAYLOAD_SIZE?TCPConfig::MAX_PAYLOAD_SIZE:_window_size - 1;
-                        auto str = _stream.read(size);
-                        seg = make_segment(next_seqno(),true,false,str);
-                        _segments_out.push(seg);
-                        Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout,zero_window_wize};
-                        out_segments.push_back(out_segment);
-                        _window_size -= seg.length_in_sequence_space();
-                        _bytes_in_flight += seg.length_in_sequence_space();
-                        _next_seqno += seg.length_in_sequence_space();
+                    if (unread_size < _window_size) {
+                            auto size = unread_size < TCPConfig::MAX_PAYLOAD_SIZE?unread_size:TCPConfig::MAX_PAYLOAD_SIZE;
+                            auto str = _stream.read(size);
+                            seg = make_segment(next_seqno(),true,false,str);
+
+                    } else {
+                            auto size = _window_size - 1 > TCPConfig::MAX_PAYLOAD_SIZE?TCPConfig::MAX_PAYLOAD_SIZE:_window_size - 1;
+                            auto str = _stream.read(size);
+                            seg = make_segment(next_seqno(),true,false,str);
+                    }
+                    _segments_out.push(seg);
+                    Out_Segment out_segment{seg,next_seqno_absolute(),_initial_retransmission_timeout,zero_window_wize};
+                    out_segments.push_back(out_segment);
+                    _window_size -= seg.length_in_sequence_space();
+                    _bytes_in_flight += seg.length_in_sequence_space();
+                    _next_seqno += seg.length_in_sequence_space();
                 }
             } 
 
@@ -184,9 +154,6 @@ void TCPSender::fill_window() {
         zero_window_wize = false;
     }
 
-
-    // std::cout << "sender.next_seqno_absolute() = " << next_seqno_absolute() << std::endl;
-    // std::cout << "bytes_in_flight() = " << bytes_in_flight() << std::endl;
 }
 
 //! \param ackno The remote receiver's ackno (acknowledgment number)
@@ -217,7 +184,6 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
             it++;
         }
     }
-    // fill_window();
 }
 
 //! \param[in] ms_since_last_tick the number of milliseconds since the last call to this method
@@ -225,25 +191,10 @@ void TCPSender::tick(const size_t ms_since_last_tick) {
     if (fin_acked) {
         return;
     }
-    
+
     auto oldest_seg = out_segments.begin();
-    // auto begin_timeout = (*oldest_seg).timeout();
+
     for (auto it = out_segments.begin();it != out_segments.end();it++) {
-        // if (auto t = (*it).timeout();t > ms_since_last_tick) {
-        // if ((*it).timeout() <= ms) {
-            // (*it).timeout() -= ms;
-        // } else if ((*it).timeout() == ms){
-        //     (*it).restrans_time()++;
-        //     _consecutive_retransmissions++;
-        //     (*it).timeout() = _initial_retransmission_timeout << (*it).restrans_time();
-        //     _segments_out.push((*it).segment());
-        // } else {
-        //     ms = ms_since_last_tick - (*it).timeout();
-        //     tick((*it).timeout());
-        //     tick(ms);
-        //     break;
-        // }
-        // } else {
             if (((*it).restrans_time() > (*oldest_seg).restrans_time())) {
                 oldest_seg = it;
             } else if ((*it).restrans_time() == (*oldest_seg).restrans_time()){
@@ -251,23 +202,18 @@ void TCPSender::tick(const size_t ms_since_last_tick) {
                     oldest_seg = it;
                 }
             }
-        // }
     }
-    // bool a = begin_timeout == (*out_segments.begin()).timeout();   //第一个元素没变
-    // bool b = out_segments.begin() != oldest_seg;  //不是第一个元素
+
     bool c = (*oldest_seg).timeout() <= ms_since_last_tick; 
     
     if (c) {
         (*oldest_seg).restrans_time()++;
         _consecutive_retransmissions++;
-        if (!(*oldest_seg).zero()) {
-            (*oldest_seg).timeout() = _initial_retransmission_timeout << (*oldest_seg).restrans_time();
-        } else {
-            (*oldest_seg).timeout() = _initial_retransmission_timeout;
-        }
+        auto new_timeout = (*oldest_seg).zero()?_initial_retransmission_timeout : _initial_retransmission_timeout << (*oldest_seg).restrans_time();
+        (*oldest_seg).timeout() = new_timeout;
         _segments_out.push((*oldest_seg).segment());
     } else {
-            (*oldest_seg).timeout() -= ms_since_last_tick;
+        (*oldest_seg).timeout() -= ms_since_last_tick;
     }
 }
 
@@ -282,19 +228,11 @@ void TCPSender::send_empty_segment() {
 }
 
 TCPSegment TCPSender::make_segment(const WrappingInt32 seqno,const bool syn,const bool fin,const string &payload) {
-    // vector<uint8_t> header_str(20, 0);
     TCPSegment seg{};
-    // uint32_t raw_seqn = seqno.raw_value();
-    // for (size_t i = 0;i < 4;i++) {
-    //     header_str[4+i] = raw_seqn >> 8*i;
-    // }
-    // NetParser p{string(header_str.begin(), header_str.end())};
     TCPHeader &header = seg.header();
     header.seqno = seqno;
     header.syn = syn;
     header.fin = fin;
-    // string &&s = move(const_cast<string &>(payload));
-    // if (!payload.empty()) {
     if (!payload.empty()) {
         seg.payload() = Buffer(string(move(payload)));
     }
