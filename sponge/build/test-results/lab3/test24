@@ -7,13 +7,13 @@ Test project /root/cs144/sponge/build
       Start  3: t_wrapping_ints_wrap
  3/33 Test  #3: t_wrapping_ints_wrap .............   Passed    0.01 sec
       Start  4: t_wrapping_ints_roundtrip
- 4/33 Test  #4: t_wrapping_ints_roundtrip ........   Passed    0.90 sec
+ 4/33 Test  #4: t_wrapping_ints_roundtrip ........   Passed    0.78 sec
       Start  5: t_recv_connect
  5/33 Test  #5: t_recv_connect ...................   Passed    0.01 sec
       Start  6: t_recv_transmit
- 6/33 Test  #6: t_recv_transmit ..................   Passed    0.13 sec
+ 6/33 Test  #6: t_recv_transmit ..................   Passed    0.14 sec
       Start  7: t_recv_window
- 7/33 Test  #7: t_recv_window ....................   Passed    0.01 sec
+ 7/33 Test  #7: t_recv_window ....................   Passed    0.02 sec
       Start  8: t_recv_reorder
  8/33 Test  #8: t_recv_reorder ...................   Passed    0.01 sec
       Start  9: t_recv_close
@@ -23,48 +23,29 @@ Test project /root/cs144/sponge/build
       Start 11: t_send_connect
 11/33 Test #11: t_send_connect ...................   Passed    0.01 sec
       Start 12: t_send_transmit
-12/33 Test #12: t_send_transmit ..................   Passed    0.18 sec
+12/33 Test #12: t_send_transmit ..................   Passed    0.16 sec
       Start 13: t_send_retx
 13/33 Test #13: t_send_retx ......................   Passed    0.01 sec
       Start 14: t_send_window
-14/33 Test #14: t_send_window ....................***Failed    0.18 sec
-Test Failure on expectation:
-	Expectation: segment sent with (F=1,"",...)
-
-Failure message:
-	The Sender should have produced a segment that existed, but it did not
-
-List of steps that executed successfully:
-	Initialized with (retx-timeout=1000) and called fill_window()
-	Expectation: segment sent with (A=0,R=0,S=1,F=0,seqno=3430548383,payload_size=0,...)
-	Action:      ack 3430548384 winsize 7
-	Expectation: no (more) segments
-	Action:      write bytes: "1234567"
-	Action:      close
-	Expectation: segment sent with (A=0,R=0,S=0,F=0,"1234567",...)
-	Expectation: no (more) segments
-	Action:      ack 3430548384 winsize 8
-
-The test "FIN flag occupies space in window (part II)" failed
-
+14/33 Test #14: t_send_window ....................   Passed    0.11 sec
       Start 15: t_send_ack
 15/33 Test #15: t_send_ack .......................   Passed    0.01 sec
       Start 16: t_send_close
 16/33 Test #16: t_send_close .....................   Passed    0.01 sec
       Start 17: t_send_extra
-17/33 Test #17: t_send_extra .....................***Failed    0.02 sec
+17/33 Test #17: t_send_extra .....................***Failed    0.01 sec
 Test Failure on expectation:
-	Expectation: segment sent with (A=0,R=0,S=0,F=0,seqno=2874254970,payload_size=1,"a",...)
+	Expectation: segment sent with (A=0,R=0,S=0,F=0,seqno=1635654756,payload_size=1,"a",...)
 
 Failure message:
 	The Sender should have produced a segment that existed, but it did not
 
 List of steps that executed successfully:
-	Initialized with (retx-timeout=9338) and called fill_window()
-	Expectation: segment sent with (A=0,R=0,S=1,F=0,seqno=2874254969,payload_size=0,...)
+	Initialized with (retx-timeout=3191) and called fill_window()
+	Expectation: segment sent with (A=0,R=0,S=1,F=0,seqno=1635654755,payload_size=0,...)
 	Action:      write bytes: "abc"
 	Expectation: no (more) segments
-	Action:      ack 2874254970 winsize 0
+	Action:      ack 1635654756 winsize 0
 	Expectation: in state `stream ongoing`
 
 The test "When filling window, treat a '0' window size as equal to '1' but don't back off RTO" failed
@@ -74,29 +55,31 @@ The test "When filling window, treat a '0' window size as equal to '1' but don't
       Start 19: t_strm_reassem_seq
 19/33 Test #19: t_strm_reassem_seq ...............   Passed    0.01 sec
       Start 20: t_strm_reassem_dup
-20/33 Test #20: t_strm_reassem_dup ...............   Passed    0.02 sec
+20/33 Test #20: t_strm_reassem_dup ...............   Passed    0.01 sec
       Start 21: t_strm_reassem_holes
 21/33 Test #21: t_strm_reassem_holes .............   Passed    0.01 sec
       Start 22: t_strm_reassem_many
-22/33 Test #22: t_strm_reassem_many ..............   Passed    0.76 sec
+22/33 Test #22: t_strm_reassem_many ..............   Passed    0.58 sec
       Start 23: t_strm_reassem_overlapping
 23/33 Test #23: t_strm_reassem_overlapping .......   Passed    0.01 sec
       Start 24: t_strm_reassem_win
-24/33 Test #24: t_strm_reassem_win ...............   Passed    0.91 sec
+24/33 Test #24: t_strm_reassem_win ...............***Failed    0.51 sec
+Exception: test 2 - content of RX bytes is incorrect
+
       Start 25: t_strm_reassem_cap
-25/33 Test #25: t_strm_reassem_cap ...............   Passed    0.24 sec
+25/33 Test #25: t_strm_reassem_cap ...............   Passed    0.22 sec
       Start 26: t_byte_stream_construction
 26/33 Test #26: t_byte_stream_construction .......   Passed    0.01 sec
       Start 27: t_byte_stream_one_write
 27/33 Test #27: t_byte_stream_one_write ..........   Passed    0.01 sec
       Start 28: t_byte_stream_two_writes
-28/33 Test #28: t_byte_stream_two_writes .........   Passed    0.00 sec
+28/33 Test #28: t_byte_stream_two_writes .........   Passed    0.01 sec
       Start 29: t_byte_stream_capacity
-29/33 Test #29: t_byte_stream_capacity ...........   Passed    1.94 sec
+29/33 Test #29: t_byte_stream_capacity ...........   Passed    1.40 sec
       Start 30: t_byte_stream_many_writes
 30/33 Test #30: t_byte_stream_many_writes ........   Passed    0.02 sec
       Start 53: t_address_dt
-31/33 Test #53: t_address_dt .....................   Passed    0.03 sec
+31/33 Test #53: t_address_dt .....................   Passed    0.01 sec
       Start 54: t_parser_dt
 32/33 Test #54: t_parser_dt ......................   Passed    0.01 sec
       Start 55: t_socket_dt
@@ -104,11 +87,11 @@ The test "When filling window, treat a '0' window size as equal to '1' but don't
 
 94% tests passed, 2 tests failed out of 33
 
-Total Test time (real) =   5.50 sec
+Total Test time (real) =   4.13 sec
 
 The following tests FAILED:
-	 14 - t_send_window (Failed)
 	 17 - t_send_extra (Failed)
+	 24 - t_strm_reassem_win (Failed)
 Errors while running CTest
 CMakeFiles/check_lab3.dir/build.make:57: recipe for target 'CMakeFiles/check_lab3' failed
 make[3]: *** [CMakeFiles/check_lab3] Error 8
