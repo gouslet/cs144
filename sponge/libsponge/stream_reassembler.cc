@@ -76,7 +76,6 @@ void StreamReassembler::string_2_buffer(const string& str,const size_t index,con
             auto s = (*it).second.first;
             auto s_hindex = s_index + s.length() - 1;
 
-
             if (ds_index < s_index) {
                 if (ds_hindex < s_index) {
                     buffer.emplace(ds_index,make_pair(ds,eof));
@@ -134,13 +133,17 @@ void StreamReassembler::buffer_2_stream() {
                 auto s_hindex = s_index + s.length() - 1;
                 if (s.empty()) {
                     auto s_eof = (*it).second.second;
-                    const string &ws = s;
-                    _output.write(ws);
-                    next_index++;
-                    if (s_eof) {
-                        eof = true;
+                    // const string &ws = s;
+                    if (s_index == next_index) {
+                        _output.write(s);
+                        next_index++;
+                        buffer.erase(it++);
+                        if (s_eof) {
+                            eof = true;
+                        }
+                    } else {
+                        it++;
                     }
-                    buffer.erase(it++);
                 }else if (s_index <= next_index) {
                     if (s_hindex < next_index) {
                         buffer.erase(it++);
@@ -149,7 +152,7 @@ void StreamReassembler::buffer_2_stream() {
                         auto len = s_hindex - next_index + 1;
                         auto wlen = len > rc?rc:len;
                         auto s_eof = (*it).second.second;
-                        const string &ws = s.substr(next_index - s_index,wlen);
+                        string ws = s.substr(next_index - s_index,wlen);
                         _output.write(ws);
                         
                         next_index += wlen;
