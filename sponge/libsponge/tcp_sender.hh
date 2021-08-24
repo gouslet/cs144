@@ -48,6 +48,8 @@ class TCPSender {
 
     bool zero_window_wize{false};
 
+    TCPSegment make_segment(const WrappingInt32 seqno,const bool syn,const bool fin,const string &payload);
+
   public:
     //! Initialize a TCPSender
     TCPSender(const size_t capacity = TCPConfig::DEFAULT_CAPACITY,
@@ -103,7 +105,6 @@ class TCPSender {
     //! \brief relative seqno for the next byte to be sent
     WrappingInt32 next_seqno() const { return wrap(_next_seqno, _isn); }
     //!@}
-    TCPSegment make_segment(const WrappingInt32 seqno,const bool syn,const bool fin,const string &payload);
 };
 
 class Out_Segment {

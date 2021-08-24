@@ -7,7 +7,7 @@ Test project /home/bc/cs144/sponge/build
         Start   3: t_wrapping_ints_wrap
   3/162 Test   #3: t_wrapping_ints_wrap .............   Passed    0.00 sec
         Start   4: t_wrapping_ints_roundtrip
-  4/162 Test   #4: t_wrapping_ints_roundtrip ........   Passed    0.21 sec
+  4/162 Test   #4: t_wrapping_ints_roundtrip ........   Passed    0.20 sec
         Start   5: t_recv_connect
   5/162 Test   #5: t_recv_connect ...................   Passed    0.00 sec
         Start   6: t_recv_transmit
@@ -43,13 +43,15 @@ Test project /home/bc/cs144/sponge/build
         Start  21: t_strm_reassem_holes
  21/162 Test  #21: t_strm_reassem_holes .............   Passed    0.00 sec
         Start  22: t_strm_reassem_many
- 22/162 Test  #22: t_strm_reassem_many ..............   Passed    0.21 sec
+ 22/162 Test  #22: t_strm_reassem_many ..............   Passed    0.17 sec
         Start  23: t_strm_reassem_overlapping
  23/162 Test  #23: t_strm_reassem_overlapping .......   Passed    0.00 sec
         Start  24: t_strm_reassem_win
- 24/162 Test  #24: t_strm_reassem_win ...............   Passed    0.21 sec
+ 24/162 Test  #24: t_strm_reassem_win ...............***Failed    0.18 sec
+Exception: test 2 - content of RX bytes is incorrect
+
         Start  25: t_strm_reassem_cap
- 25/162 Test  #25: t_strm_reassem_cap ...............   Passed    0.13 sec
+ 25/162 Test  #25: t_strm_reassem_cap ...............   Passed    0.10 sec
         Start  26: t_byte_stream_construction
  26/162 Test  #26: t_byte_stream_construction .......   Passed    0.00 sec
         Start  27: t_byte_stream_one_write
@@ -57,12 +59,11 @@ Test project /home/bc/cs144/sponge/build
         Start  28: t_byte_stream_two_writes
  28/162 Test  #28: t_byte_stream_two_writes .........   Passed    0.00 sec
         Start  29: t_byte_stream_capacity
- 29/162 Test  #29: t_byte_stream_capacity ...........   Passed    0.55 sec
+ 29/162 Test  #29: t_byte_stream_capacity ...........   Passed    0.57 sec
         Start  30: t_byte_stream_many_writes
  30/162 Test  #30: t_byte_stream_many_writes ........   Passed    0.01 sec
         Start  31: t_webget
- 31/162 Test  #31: t_webget .........................***Timeout  10.01 sec
-
+ 31/162 Test  #31: t_webget .........................   Passed    2.24 sec
         Start  34: t_tcp_parser
  32/162 Test  #34: t_tcp_parser .....................   Passed    0.00 sec
         Start  35: t_ipv4_parser
@@ -121,20 +122,7 @@ List of steps that executed successfully:
 The TCP should have produced a segment that existed, but it did not
 
         Start  40: t_connect
- 38/162 Test  #40: t_connect ........................***Failed    0.00 sec
-Test Failure on expectation:
-	exactly one segment sent with (A=0,S=1,)
-Failure message:
-	The TCP should have produced a segment that existed, but it did not
-
-List of steps that executed successfully:
-	Action:      connect
-	Action:      1ms pass
-
-Note:
-	test 1 failed: could not parse SYN segment or invalid flags
-
-The TCP should have produced a segment that existed, but it did not
+ 38/162 Test  #40: t_connect ........................***Exception: SegFault  0.31 sec
 
         Start  41: t_listen
  39/162 Test  #41: t_listen .........................***Failed    0.00 sec
@@ -152,13 +140,13 @@ The TCP was in state `sender=`waiting for stream to begin (no SYN sent)`, receiv
         Start  42: t_winsize
  40/162 Test  #42: t_winsize ........................***Failed    0.00 sec
 Test Failure on expectation:
-	exactly one segment sent with (A=1,ackno=1036399812,win=21602,)
+	exactly one segment sent with (A=1,ackno=370925320,win=19756,)
 Failure message:
 	The TCP should have produced a segment that existed, but it did not
 
 List of steps that executed successfully:
 	Action:      listen
-	Action:      packet arrives: Header(flags=S,seqno=1036399811,ack=0,win=137) with no payload
+	Action:      packet arrives: Header(flags=S,seqno=370925319,ack=0,win=137) with no payload
 
 Note:
 	test 1 failed: SYN/ACK invalid
@@ -168,7 +156,7 @@ The TCP should have produced a segment that existed, but it did not
         Start  43: t_retx
  41/162 Test  #43: t_retx ...........................***Failed    0.00 sec
 Test Failure on expectation:
-	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=3379499108,payload_size=0,)
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=3985850061,payload_size=0,)
 
 Failure message:
 	The TCP should have produced a segment that existed, but it did not
@@ -181,7 +169,7 @@ The TCP should have produced a segment that existed, but it did not
         Start  44: t_retx_win
  42/162 Test  #44: t_retx_win .......................***Failed    0.00 sec
 Test Failure on expectation:
-	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2199123751,payload_size=0,)
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2782727194,payload_size=0,)
 
 Failure message:
 	The TCP should have produced a segment that existed, but it did not
@@ -194,7 +182,7 @@ The TCP should have produced a segment that existed, but it did not
         Start  45: t_loopback
  43/162 Test  #45: t_loopback .......................***Failed    0.00 sec
 Test Failure on expectation:
-	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=4086892691,payload_size=0,)
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=3869889768,payload_size=0,)
 
 Failure message:
 	The TCP should have produced a segment that existed, but it did not
@@ -207,7 +195,7 @@ The TCP should have produced a segment that existed, but it did not
         Start  46: t_loopback_win
  44/162 Test  #46: t_loopback_win ...................***Failed    0.00 sec
 Test Failure on expectation:
-	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=196492115,payload_size=0,)
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=3342586087,payload_size=0,)
 
 Failure message:
 	The TCP should have produced a segment that existed, but it did not
@@ -220,7 +208,7 @@ The TCP should have produced a segment that existed, but it did not
         Start  47: t_reorder
  45/162 Test  #47: t_reorder ........................***Failed    0.00 sec
 Test Failure on expectation:
-	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=239043700,payload_size=0,)
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=1670768090,payload_size=0,)
 
 Failure message:
 	The TCP should have produced a segment that existed, but it did not
@@ -231,16 +219,16 @@ List of steps that executed successfully:
 The TCP should have produced a segment that existed, but it did not
 
         Start  48: t_address_dt
- 46/162 Test  #48: t_address_dt .....................   Passed    0.00 sec
+ 46/162 Test  #48: t_address_dt .....................   Passed    0.03 sec
         Start  49: t_parser_dt
  47/162 Test  #49: t_parser_dt ......................   Passed    0.00 sec
         Start  50: t_socket_dt
  48/162 Test  #50: t_socket_dt ......................   Passed    0.01 sec
         Start  51: t_udp_client_send
- 49/162 Test  #51: t_udp_client_send ................***Failed    0.14 sec
+ 49/162 Test  #51: t_udp_client_send ................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
-DEBUG: TCP connection finished cleanly.
-DEBUG: Waiting for clean shutdown... done.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
 Error in _rt_listen
 
         Start  52: t_udp_server_send
@@ -286,7 +274,7 @@ done.
 Error in _rt_listen
 
         Start  58: t_ucS_128K_8K
- 56/162 Test  #58: t_ucS_128K_8K ....................***Failed    0.12 sec
+ 56/162 Test  #58: t_ucS_128K_8K ....................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -295,8 +283,8 @@ Error in _rt_listen
         Start  59: t_ucS_16_1
  57/162 Test  #59: t_ucS_16_1 .......................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
-DEBUG: TCP connection finished cleanly.
-DEBUG: Waiting for clean shutdown... done.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
 Error in _rt_listen
 
         Start  60: t_ucS_32K_d
@@ -340,7 +328,7 @@ DEBUG: TCP connection finished cleanly.
 Error in _rt_listen
 
         Start  66: t_ucD_128K_8K
- 64/162 Test  #66: t_ucD_128K_8K ....................***Failed    0.12 sec
+ 64/162 Test  #66: t_ucD_128K_8K ....................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -356,21 +344,21 @@ Error in _rt_listen
         Start  68: t_ucD_32K_d
  66/162 Test  #68: t_ucD_32K_d ......................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
-DEBUG: TCP connection finished cleanly.
-DEBUG: Waiting for clean shutdown... done.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
 Error in _rt_listen
 
         Start  69: t_usS_1M_32k
  67/162 Test  #69: t_usS_1M_32k .....................***Failed    0.14 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
-DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  70: t_usS_128K_8K
  68/162 Test  #70: t_usS_128K_8K ....................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  71: t_usS_16_1
@@ -388,7 +376,7 @@ done.
 Error in _rt_listen
 
         Start  73: t_usR_1M_32k
- 71/162 Test  #73: t_usR_1M_32k .....................***Failed    0.18 sec
+ 71/162 Test  #73: t_usR_1M_32k .....................***Failed    0.14 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -419,18 +407,17 @@ Error in _rt_listen
  75/162 Test  #77: t_usD_1M_32k .....................***Failed    0.14 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
-DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  78: t_usD_128K_8K
- 76/162 Test  #78: t_usD_128K_8K ....................***Failed    0.12 sec
+ 76/162 Test  #78: t_usD_128K_8K ....................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  79: t_usD_16_1
- 77/162 Test  #79: t_usD_16_1 .......................***Failed    0.12 sec
+ 77/162 Test  #79: t_usD_16_1 .......................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -465,7 +452,7 @@ done.
 Error in _rt_listen
 
         Start  84: t_ucR_128K_8K_l
- 82/162 Test  #84: t_ucR_128K_8K_l ..................***Failed    0.13 sec
+ 82/162 Test  #84: t_ucR_128K_8K_l ..................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -479,7 +466,7 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  86: t_ucR_128K_8K_lL
- 84/162 Test  #86: t_ucR_128K_8K_lL .................***Failed    0.13 sec
+ 84/162 Test  #86: t_ucR_128K_8K_lL .................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -493,7 +480,7 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  88: t_ucD_128K_8K_L
- 86/162 Test  #88: t_ucD_128K_8K_L ..................***Failed    0.13 sec
+ 86/162 Test  #88: t_ucD_128K_8K_L ..................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -521,7 +508,7 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  92: t_usS_128K_8K_lL
- 90/162 Test  #92: t_usS_128K_8K_lL .................***Failed    0.13 sec
+ 90/162 Test  #92: t_usS_128K_8K_lL .................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -535,28 +522,28 @@ done.
 Error in _rt_listen
 
         Start  94: t_usR_128K_8K_L
- 92/162 Test  #94: t_usR_128K_8K_L ..................***Failed    0.12 sec
+ 92/162 Test  #94: t_usR_128K_8K_L ..................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
 Error in _rt_listen
 
         Start  95: t_usR_128K_8K_lL
- 93/162 Test  #95: t_usR_128K_8K_lL .................***Failed    0.12 sec
+ 93/162 Test  #95: t_usR_128K_8K_lL .................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
 Error in _rt_listen
 
         Start  96: t_usD_128K_8K_l
- 94/162 Test  #96: t_usD_128K_8K_l ..................***Failed    0.12 sec
+ 94/162 Test  #96: t_usD_128K_8K_l ..................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start  97: t_usD_128K_8K_L
- 95/162 Test  #97: t_usD_128K_8K_L ..................***Failed    0.12 sec
+ 95/162 Test  #97: t_usD_128K_8K_L ..................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -633,20 +620,20 @@ done.
 Error in _rt_listen
 
         Start 108: t_icS_32K_d
-106/162 Test #108: t_icS_32K_d ......................***Failed    0.13 sec
+106/162 Test #108: t_icS_32K_d ......................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 109: t_icR_1M_32k
-107/162 Test #109: t_icR_1M_32k .....................***Failed    0.16 sec
+107/162 Test #109: t_icR_1M_32k .....................***Failed    0.14 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 Error in _rt_listen
 
         Start 110: t_icR_128K_8K
-108/162 Test #110: t_icR_128K_8K ....................***Failed    0.12 sec
+108/162 Test #110: t_icR_128K_8K ....................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -662,18 +649,19 @@ Error in _rt_listen
         Start 112: t_icR_32K_d
 110/162 Test #112: t_icR_32K_d ......................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
-DEBUG: TCP connection finished cleanly.
-DEBUG: Waiting for clean shutdown... done.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
 Error in _rt_listen
 
         Start 113: t_icD_1M_32k
 111/162 Test #113: t_icD_1M_32k .....................***Failed    0.14 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 114: t_icD_128K_8K
-112/162 Test #114: t_icD_128K_8K ....................***Failed    0.13 sec
+112/162 Test #114: t_icD_128K_8K ....................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -687,7 +675,7 @@ done.
 Error in _rt_listen
 
         Start 116: t_icD_32K_d
-114/162 Test #116: t_icD_32K_d ......................***Failed    0.12 sec
+114/162 Test #116: t_icD_32K_d ......................***Failed    0.14 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -707,21 +695,21 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 119: t_isS_16_1
-117/162 Test #119: t_isS_16_1 .......................***Failed    0.12 sec
+117/162 Test #119: t_isS_16_1 .......................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
 Error in _rt_listen
 
         Start 120: t_isS_32K_d
-118/162 Test #120: t_isS_32K_d ......................***Failed    0.12 sec
+118/162 Test #120: t_isS_32K_d ......................***Failed    0.28 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
 Error in _rt_listen
 
         Start 121: t_isR_1M_32k
-119/162 Test #121: t_isR_1M_32k .....................***Failed    0.14 sec
+119/162 Test #121: t_isR_1M_32k .....................***Failed    0.15 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -752,6 +740,7 @@ Error in _rt_listen
 123/162 Test #125: t_isD_1M_32k .....................***Failed    0.14 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 126: t_isD_128K_8K
@@ -790,7 +779,7 @@ done.
 Error in _rt_listen
 
         Start 131: t_icS_128K_8K_lL
-129/162 Test #131: t_icS_128K_8K_lL .................***Failed    0.12 sec
+129/162 Test #131: t_icS_128K_8K_lL .................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -804,7 +793,7 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 133: t_icR_128K_8K_L
-131/162 Test #133: t_icR_128K_8K_L ..................***Failed    0.12 sec
+131/162 Test #133: t_icR_128K_8K_L ..................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -825,21 +814,21 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 136: t_icD_128K_8K_L
-134/162 Test #136: t_icD_128K_8K_L ..................***Failed    0.12 sec
+134/162 Test #136: t_icD_128K_8K_L ..................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 137: t_icD_128K_8K_lL
-135/162 Test #137: t_icD_128K_8K_lL .................***Failed    0.12 sec
+135/162 Test #137: t_icD_128K_8K_lL .................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 138: t_isS_128K_8K_l
-136/162 Test #138: t_isS_128K_8K_l ..................***Failed    0.13 sec
+136/162 Test #138: t_isS_128K_8K_l ..................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -853,14 +842,14 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 140: t_isS_128K_8K_lL
-138/162 Test #140: t_isS_128K_8K_lL .................***Failed    0.13 sec
+138/162 Test #140: t_isS_128K_8K_lL .................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 141: t_isR_128K_8K_l
-139/162 Test #141: t_isR_128K_8K_l ..................***Failed    0.12 sec
+139/162 Test #141: t_isR_128K_8K_l ..................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -888,7 +877,7 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 145: t_isD_128K_8K_L
-143/162 Test #145: t_isD_128K_8K_L ..................***Failed    0.12 sec
+143/162 Test #145: t_isD_128K_8K_L ..................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -903,47 +892,47 @@ Error in _rt_listen
 
         Start 147: t_icnS_128K_8K_l
 145/162 Test #147: t_icnS_128K_8K_l .................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:25421... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:5471... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 148: t_icnS_128K_8K_L
 146/162 Test #148: t_icnS_128K_8K_L .................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:25317... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:17168... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 149: t_icnS_128K_8K_lL
 147/162 Test #149: t_icnS_128K_8K_lL ................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:22256... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:29258... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 150: t_icnR_128K_8K_l
 148/162 Test #150: t_icnR_128K_8K_l .................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:8567... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:15615... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 151: t_icnR_128K_8K_L
 149/162 Test #151: t_icnR_128K_8K_L .................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:2021... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:12978... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 152: t_icnR_128K_8K_lL
 150/162 Test #152: t_icnR_128K_8K_lL ................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:19936... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:2181... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 153: t_icnD_128K_8K_l
 151/162 Test #153: t_icnD_128K_8K_l .................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:7344... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:5078... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 154: t_icnD_128K_8K_L
-152/162 Test #154: t_icnD_128K_8K_L .................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:29649... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+152/162 Test #154: t_icnD_128K_8K_L .................***Failed    0.15 sec
+DEBUG: Connecting to 169.254.144.1:19646... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 155: t_icnD_128K_8K_lL
 153/162 Test #155: t_icnD_128K_8K_lL ................***Failed    0.13 sec
-DEBUG: Connecting to 169.254.144.1:21616... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+DEBUG: Connecting to 169.254.144.1:12292... Exception: After TCPConnection::connect(), state was sender=`waiting for stream to begin (no SYN sent)`, receiver=`waiting for SYN: ackno is empty`, active=0, linger_after_streams_finish=0 but expected sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
 Error in _rt_connect
 
         Start 156: t_isnS_128K_8K_l
@@ -954,28 +943,28 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 157: t_isnS_128K_8K_L
-155/162 Test #157: t_isnS_128K_8K_L .................***Failed    0.13 sec
+155/162 Test #157: t_isnS_128K_8K_L .................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 158: t_isnS_128K_8K_lL
-156/162 Test #158: t_isnS_128K_8K_lL ................***Failed    0.12 sec
+156/162 Test #158: t_isnS_128K_8K_lL ................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 159: t_isnR_128K_8K_l
-157/162 Test #159: t_isnR_128K_8K_l .................***Failed    0.12 sec
+157/162 Test #159: t_isnR_128K_8K_l .................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
 Error in _rt_listen
 
         Start 160: t_isnR_128K_8K_L
-158/162 Test #160: t_isnR_128K_8K_L .................***Failed    0.12 sec
+158/162 Test #160: t_isnR_128K_8K_L .................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
 done.
@@ -989,7 +978,7 @@ done.
 Error in _rt_listen
 
         Start 162: t_isnD_128K_8K_l
-160/162 Test #162: t_isnD_128K_8K_l .................***Failed    0.12 sec
+160/162 Test #162: t_isnD_128K_8K_l .................***Failed    0.13 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -1003,7 +992,7 @@ DEBUG: Waiting for clean shutdown... done.
 Error in _rt_listen
 
         Start 164: t_isnD_128K_8K_lL
-162/162 Test #164: t_isnD_128K_8K_lL ................***Failed    0.13 sec
+162/162 Test #164: t_isnD_128K_8K_lL ................***Failed    0.12 sec
 DEBUG: Listening for incoming connection... new connection from 0.0.0.0:0.
 DEBUG: TCP connection finished cleanly.
 DEBUG: Waiting for clean shutdown... done.
@@ -1012,15 +1001,15 @@ Error in _rt_listen
 
 22% tests passed, 127 tests failed out of 162
 
-Total Test time (real) =  25.98 sec
+Total Test time (real) =  18.61 sec
 
 The following tests FAILED:
-	 31 - t_webget (Timeout)
+	 24 - t_strm_reassem_win (Failed)
 	 36 - t_active_close (Failed)
 	 37 - t_passive_close (Failed)
 	 38 - t_ack_rst (Failed)
 	 39 - t_ack_rst_win (Failed)
-	 40 - t_connect (Failed)
+	 40 - t_connect (SEGFAULT)
 	 41 - t_listen (Failed)
 	 42 - t_winsize (Failed)
 	 43 - t_retx (Failed)
