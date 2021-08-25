@@ -23,9 +23,11 @@ size_t TCPConnection::time_since_last_segment_received() const { return {}; }
 void TCPConnection::segment_received(const TCPSegment &seg) { 
     auto header = seg.header();
     _receiver.segment_received(seg);
+    _sender.fill_window();
 
     if (header.ack) {
-        if (ack_times == 3) {
+        syn_sent = true;
+        if (ack_times == 1) {
             _sender.ack_received(header.seqno,header.win);
             // if (header.fin) {
             //     _sender.send_empty_segment();            
@@ -35,23 +37,28 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
             // auto segments = _sender.segments_out();
 
         } else {
-            ack_times++;    
-            
             _sender.ack_received(_sender.next_seqno(),header.win);
-            // _sender.send_empty_segment();
-            // _sender.fill_window();
+        //     // _sender.send_empty_segment();
+        //     // _sender.fill_window();
         }
 
 
     }
-    _sender.fill_window();
 
     while (!_sender.segments_out().empty()) {
         auto s = _sender.segments_out().front();
+        // bool a = _sender.next_seqno_absolute() > 0 && _sender.next_seqno_absolute() == bytes_in_flight();
+        if (header.syn && !syn_sent) {
+            s.header().syn = true;
+        } else {
+        //     s.header().syn = true;
+        //     ack_times++;
+        // } else {
+                s.header().syn = false;
+        }
         if (_receiver.ackno().has_value()) {
             s.header().ackno = _receiver.ackno().value();
             s.header().ack = true;
-            s.header().syn = false;
         }
         s.header().win = _receiver.window_size();
         if (_written_finished && header.fin) {
@@ -62,6 +69,8 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
             _segments_out.push(s);
             _sender.segments_out().pop();
         }
+
+
     }
 }
 
@@ -89,8 +98,8 @@ void TCPConnection::end_input_stream() {
 void TCPConnection::connect() {
     _sender.fill_window();
     _segments_out = _sender.segments_out();
-    _active = true;
     connected = true;
+    syn_sent = true;
 }
 
 TCPConnection::~TCPConnection() {

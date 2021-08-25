@@ -1,0 +1,455 @@
+[100%] Testing the TCP connection...
+Test project /home/bc/cs144/sponge/build
+        Start   1: t_wrapping_ints_cmp
+  1/162 Test   #1: t_wrapping_ints_cmp ..............   Passed    0.00 sec
+        Start   2: t_wrapping_ints_unwrap
+  2/162 Test   #2: t_wrapping_ints_unwrap ...........   Passed    0.01 sec
+        Start   3: t_wrapping_ints_wrap
+  3/162 Test   #3: t_wrapping_ints_wrap .............   Passed    0.01 sec
+        Start   4: t_wrapping_ints_roundtrip
+  4/162 Test   #4: t_wrapping_ints_roundtrip ........   Passed    0.25 sec
+        Start   5: t_recv_connect
+  5/162 Test   #5: t_recv_connect ...................   Passed    0.01 sec
+        Start   6: t_recv_transmit
+  6/162 Test   #6: t_recv_transmit ..................   Passed    0.08 sec
+        Start   7: t_recv_window
+  7/162 Test   #7: t_recv_window ....................   Passed    0.01 sec
+        Start   8: t_recv_reorder
+  8/162 Test   #8: t_recv_reorder ...................   Passed    0.01 sec
+        Start   9: t_recv_close
+  9/162 Test   #9: t_recv_close .....................   Passed    0.01 sec
+        Start  10: t_recv_special
+ 10/162 Test  #10: t_recv_special ...................   Passed    0.01 sec
+        Start  11: t_send_connect
+ 11/162 Test  #11: t_send_connect ...................   Passed    0.01 sec
+        Start  12: t_send_transmit
+ 12/162 Test  #12: t_send_transmit ..................   Passed    0.08 sec
+        Start  13: t_send_retx
+ 13/162 Test  #13: t_send_retx ......................   Passed    0.01 sec
+        Start  14: t_send_window
+ 14/162 Test  #14: t_send_window ....................   Passed    0.05 sec
+        Start  15: t_send_ack
+ 15/162 Test  #15: t_send_ack .......................   Passed    0.01 sec
+        Start  16: t_send_close
+ 16/162 Test  #16: t_send_close .....................   Passed    0.01 sec
+        Start  17: t_send_extra
+ 17/162 Test  #17: t_send_extra .....................   Passed    0.02 sec
+        Start  18: t_strm_reassem_single
+ 18/162 Test  #18: t_strm_reassem_single ............   Passed    0.01 sec
+        Start  19: t_strm_reassem_seq
+ 19/162 Test  #19: t_strm_reassem_seq ...............   Passed    0.01 sec
+        Start  20: t_strm_reassem_dup
+ 20/162 Test  #20: t_strm_reassem_dup ...............   Passed    0.01 sec
+        Start  21: t_strm_reassem_holes
+ 21/162 Test  #21: t_strm_reassem_holes .............   Passed    0.01 sec
+        Start  22: t_strm_reassem_many
+ 22/162 Test  #22: t_strm_reassem_many ..............   Passed    0.24 sec
+        Start  23: t_strm_reassem_overlapping
+ 23/162 Test  #23: t_strm_reassem_overlapping .......   Passed    0.01 sec
+        Start  24: t_strm_reassem_win
+ 24/162 Test  #24: t_strm_reassem_win ...............   Passed    0.27 sec
+        Start  25: t_strm_reassem_cap
+ 25/162 Test  #25: t_strm_reassem_cap ...............   Passed    0.16 sec
+        Start  26: t_byte_stream_construction
+ 26/162 Test  #26: t_byte_stream_construction .......   Passed    0.01 sec
+        Start  27: t_byte_stream_one_write
+ 27/162 Test  #27: t_byte_stream_one_write ..........   Passed    0.01 sec
+        Start  28: t_byte_stream_two_writes
+ 28/162 Test  #28: t_byte_stream_two_writes .........   Passed    0.01 sec
+        Start  29: t_byte_stream_capacity
+ 29/162 Test  #29: t_byte_stream_capacity ...........   Passed    0.81 sec
+        Start  30: t_byte_stream_many_writes
+ 30/162 Test  #30: t_byte_stream_many_writes ........   Passed    0.01 sec
+        Start  31: t_webget
+ 31/162 Test  #31: t_webget .........................   Passed    1.71 sec
+        Start  34: t_tcp_parser
+ 32/162 Test  #34: t_tcp_parser .....................   Passed    0.01 sec
+        Start  35: t_ipv4_parser
+ 33/162 Test  #35: t_ipv4_parser ....................   Passed    0.01 sec
+        Start  36: t_active_close
+ 34/162 Test  #36: t_active_close ...................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  37: t_passive_close
+ 35/162 Test  #37: t_passive_close ..................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  38: t_ack_rst
+ 36/162 Test  #38: t_ack_rst ........................***Failed    0.01 sec
+Test 1
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  39: t_ack_rst_win
+ 37/162 Test  #39: t_ack_rst_win ....................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  40: t_connect
+ 38/162 Test  #40: t_connect ........................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,S=0,ackno=4264523419,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Action:      1ms pass
+	Expectation: exactly one segment sent with (A=0,S=1,)
+	Expectation: TCP in state sender=`stream started but nothing acknowledged`, receiver=`waiting for SYN: ackno is empty`, active=1, linger_after_streams_finish=1
+	Action:      packet arrives: Header(flags=SA,seqno=4264523418,ack=3450202404,win=137) with no payload
+	Action:      1ms pass
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`SYN received (ackno exists), and input to stream hasn't ended`, active=1, linger_after_streams_finish=1
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  41: t_listen
+ 39/162 Test  #41: t_listen .........................   Passed    0.01 sec
+        Start  42: t_winsize
+ 40/162 Test  #42: t_winsize ........................***Failed    0.01 sec
+Test Failure on expectation:
+	Action:      write (170110 bytes with 170110 accepted) [f5, 15, 1a, 86, c1, d3, ef, 80, 88, 91, 7a, a8, 5d, 80, c1, eb, ...]
+
+Failure message:
+	170110 bytes should have been written but 0 were
+
+List of steps that executed successfully:
+	Action:      listen
+	Action:      packet arrives: Header(flags=S,seqno=204439608,ack=0,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,ackno=204439609,win=19727,)
+	Action:      packet arrives: Header(flags=A,seqno=204439609,ack=3951385367,win=34022) with no payload
+	Expectation: no (more) segments sent
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`SYN received (ackno exists), and input to stream hasn't ended`, active=1, linger_after_streams_finish=1
+
+Warning: Unclean shutdown of TCPConnection
+170110 bytes should have been written but 0 were
+
+        Start  43: t_retx
+ 41/162 Test  #43: t_retx ...........................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2571911865,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2571911864,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2571911864,ack=2571911865,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  44: t_retx_win
+ 42/162 Test  #44: t_retx_win .......................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=22793124,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=22793123,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=22793123,ack=22793124,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  45: t_loopback
+ 43/162 Test  #45: t_loopback .......................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=80695980,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=80695979,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=80695979,ack=80695980,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  46: t_loopback_win
+ 44/162 Test  #46: t_loopback_win ...................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2271731188,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2271731187,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2271731187,ack=2271731188,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  47: t_reorder
+ 45/162 Test  #47: t_reorder ........................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=3814227505,payload_size=0,)
+
+Failure message:
+	The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2472937279,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=3814227504,ack=2472937280,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `syn = 1`, but syn was expected to be `0`
+
+        Start  48: t_address_dt
+ 46/162 Test  #48: t_address_dt .....................   Passed    0.01 sec
+        Start  49: t_parser_dt
+ 47/162 Test  #49: t_parser_dt ......................   Passed    0.01 sec
+        Start  50: t_socket_dt
+ 48/162 Test  #50: t_socket_dt ......................   Passed    0.01 sec
+        Start  51: t_udp_client_send
+ 49/162 Test  #51: t_udp_client_send ................***Failed    0.30 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:30276... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5549 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  52: t_udp_server_send
+ 50/162 Test  #52: t_udp_server_send ................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:13320... done.
+DEBUG: Outbound stream to 169.254.144.1:13320 finished (0 bytes still in flight).
+new connection from 169.254.144.1:59104.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  53: t_udp_client_recv
+ 51/162 Test  #53: t_udp_client_recv ................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:28603... done.
+DEBUG: Outbound stream to 169.254.144.1:28603 finished (0 bytes still in flight).
+new connection from 169.254.144.1:59603.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  54: t_udp_server_recv
+ 52/162 Test  #54: t_udp_server_recv ................***Failed    0.31 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:3964... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5652 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  55: t_udp_client_dupl
+ 53/162 Test  #55: t_udp_client_dupl ................***Failed    0.30 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:20687... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5671 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  56: t_udp_server_dupl
+ 54/162 Test  #56: t_udp_server_dupl ................***Failed    0.32 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:1249... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5690 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  57: t_ucS_1M_32k
+ 55/162 Test  #57: t_ucS_1M_32k .....................***Failed    0.45 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:28800... done.
+new connection from 169.254.144.1:58416.
+DEBUG: Outbound stream to 169.254.144.1:58416 finished (0 bytes still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5710 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  58: t_ucS_128K_8K
+ 56/162 Test  #58: t_ucS_128K_8K ....................***Failed    0.32 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:10358... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5731 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  59: t_ucS_16_1
+ 57/162 Test  #59: t_ucS_16_1 .......................***Failed    0.32 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:2503... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5751 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  60: t_ucS_32K_d
+ 58/162 Test  #60: t_ucS_32K_d ......................***Failed    0.37 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:9700... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5769 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  61: t_ucR_1M_32k
+ 59/162 Test  #61: t_ucR_1M_32k .....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:33226... done.
+DEBUG: Outbound stream to 169.254.144.1:33226 finished (0 bytes still in flight).
+new connection from 169.254.144.1:59324.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  62: t_ucR_128K_8K
+ 60/162 Test  #62: t_ucR_128K_8K ....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:17264... done.
+DEBUG: Outbound stream to 169.254.144.1:17264 finished (0 bytes still in flight).
+new connection from 169.254.144.1:32879.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  63: t_ucR_16_1
+ 61/162 Test  #63: t_ucR_16_1 .......................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:23442... done.
+DEBUG: Outbound stream to 169.254.144.1:23442 finished (0 bytes still in flight).
+new connection from 169.254.144.1:43459.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  64: t_ucR_32K_d
+ 62/162 Test  #64: t_ucR_32K_d ......................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:32906... done.
+DEBUG: Outbound stream to 169.254.144.1:32906 finished (0 bytes still in flight).
+new connection from 169.254.144.1:53045.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  65: t_ucD_1M_32k
+ 63/162 Test  #65: t_ucD_1M_32k .....................***Failed    0.52 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:32508... done.
+new connection from 169.254.144.1:41308.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5896 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  66: t_ucD_128K_8K
+ 64/162 Test  #66: t_ucD_128K_8K ....................***Failed    0.30 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:20641... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5919 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  67: t_ucD_16_1
+ 65/162 Test  #67: t_ucD_16_1 .......................***Failed    0.29 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:9550... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5940 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  68: t_ucD_32K_d
+ 66/162 Test  #68: t_ucD_32K_d ......................***Failed    0.33 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:5685... done.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/home/bc/cs144/sponge/txrx.sh: line 110:  5959 Aborted                 (core dumped) $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  69: t_usS_1M_32k
+ 67/162 Test  #69: t_usS_1M_32k .....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:5108... done.
+DEBUG: Outbound stream to 169.254.144.1:5108 finished (0 bytes still in flight).
+new connection from 169.254.144.1:44314.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  70: t_usS_128K_8K
+ 68/162 Test  #70: t_usS_128K_8K ....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:11552... done.
+DEBUG: Outbound stream to 169.254.144.1:11552 finished (0 bytes still in flight).
+new connection from 169.254.144.1:44497.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  71: t_usS_16_1
+CMakeFiles/check_lab4.dir/build.make:57: recipe for target 'CMakeFiles/check_lab4' failed
+make[3]: *** [CMakeFiles/check_lab4] Interrupt
+CMakeFiles/Makefile2:227: recipe for target 'CMakeFiles/check_lab4.dir/all' failed
+make[2]: *** [CMakeFiles/check_lab4.dir/all] Interrupt
+CMakeFiles/Makefile2:234: recipe for target 'CMakeFiles/check_lab4.dir/rule' failed
+make[1]: *** [CMakeFiles/check_lab4.dir/rule] Interrupt
+Makefile:194: recipe for target 'check_lab4' failed
+make: *** [check_lab4] Interrupt

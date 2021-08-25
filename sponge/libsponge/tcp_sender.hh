@@ -121,7 +121,7 @@ class Out_Segment {
 
     TCPSegment segment() { return _seg; }
     size_t &restrans_time() { return _restrans_time; }
-    volatile size_t &timeout() { return _timeout; }
+    size_t &timeout() { return _timeout; }
     uint64_t ackno() { return _ackno_absolute; }
     bool zero() { return _zero; }    
 

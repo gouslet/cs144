@@ -23,13 +23,15 @@ class TCPConnection {
 
     bool connected{false};
 
-    bool _active{false};
+    bool _active{true};
 
     bool _read_finished{false};
 
     bool _written_finished{false};
 
     size_t ack_times{0};
+
+    bool syn_sent{false};
   public:
     //! \name "Input" interface for the writer
     //!@{
