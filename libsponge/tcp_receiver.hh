@@ -26,10 +26,6 @@ class TCPReceiver {
 
     WrappingInt32 next_seqn;
 
-    size_t next_index{0};
-
-    bool flag{false};
-
   public:
     //! \brief Construct a TCP receiver
     //!

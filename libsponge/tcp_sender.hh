@@ -8,6 +8,7 @@
 
 #include <functional>
 #include <queue>
+using std::string;
 
 //! \brief The "sender" part of a TCP implementation.
 
@@ -15,6 +16,7 @@
 //! segments, keeps track of which segments are still in-flight,
 //! maintains the Retransmission Timer, and retransmits in-flight
 //! segments if the retransmission timer expires.
+class Out_Segment;
 class TCPSender {
   private:
     //! our initial sequence number, the number for our SYN.
@@ -31,6 +33,22 @@ class TCPSender {
 
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+
+    uint64_t _window_size{1};
+
+    std::vector<Out_Segment> out_segments{};
+
+    uint64_t _bytes_in_flight{0};
+
+    unsigned int _consecutive_retransmissions{0};
+
+    bool fin_acked{false};
+
+    bool fin_sent{false};
+
+    bool zero_window_wize{false};
+
+    TCPSegment make_segment(const WrappingInt32 seqno, const bool syn, const bool fin, const string &payload);
 
   public:
     //! Initialize a TCPSender
@@ -87,6 +105,25 @@ class TCPSender {
     //! \brief relative seqno for the next byte to be sent
     WrappingInt32 next_seqno() const { return wrap(_next_seqno, _isn); }
     //!@}
+};
+
+class Out_Segment {
+  private:
+    TCPSegment _seg;
+    uint64_t _ackno_absolute;
+    size_t _restrans_time{0};  // 发送次数
+    size_t _timeout;           // 计时器
+    bool _zero{false};         // 重发时timeout不加倍
+
+  public:
+    Out_Segment(TCPSegment seg, uint64_t _ackno_ab, uint64_t timeout, bool zero_window_size)
+        : _seg(seg), _ackno_absolute(_ackno_ab), _timeout(timeout), _zero(zero_window_size){};
+
+    TCPSegment segment() { return _seg; }
+    size_t &restrans_time() { return _restrans_time; }
+    size_t &timeout() { return _timeout; }
+    uint64_t ackno() { return _ackno_absolute; }
+    bool zero() { return _zero; }
 };
 
 #endif  // SPONGE_LIBSPONGE_TCP_SENDER_HH

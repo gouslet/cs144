@@ -22,10 +22,6 @@ void TCPReceiver::segment_received(const TCPSegment &seg) {
         isn_set = true;
         head_seqno = next_seqn = next_seqn + 1;
     }
-    cout << payload.size() << endl;
-    if (!payload.size()) {
-        flag = true;
-    }
     auto checkpoint = _capacity - window_size() - _reassembler.unassembled_bytes();
 
     if (header.fin) {
