@@ -1,2 +1,10 @@
-/build
+*.a
+*.o
+/sponge/build
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+compile_commands.json
 /.ccls-cache

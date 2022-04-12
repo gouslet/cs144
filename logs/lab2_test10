@@ -1,0 +1,148 @@
+[100%] Testing the TCP receiver...
+Test project /mnt/i/DIY/CS144/sponge/build
+      Start  1: t_wrapping_ints_cmp
+ 1/24 Test  #1: t_wrapping_ints_cmp ..............   Passed    0.07 sec
+      Start  2: t_wrapping_ints_unwrap
+ 2/24 Test  #2: t_wrapping_ints_unwrap ...........   Passed    0.03 sec
+      Start  3: t_wrapping_ints_wrap
+ 3/24 Test  #3: t_wrapping_ints_wrap .............   Passed    0.03 sec
+      Start  4: t_recv_connect
+ 4/24 Test  #4: t_recv_connect ...................***Failed    0.26 sec
+Test Failure on expectation:
+	Expectation: in state `input to stream has ended`
+
+Failure message:
+	The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `input to stream has ended`
+
+List of steps that executed successfully:
+	Initialized with (capacity=4000)
+	Action:      segment arrives Header(flags=SF,seqno=5,ack=0,win=0)
+
+The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `input to stream has ended`
+
+      Start  5: t_recv_transmit
+ 5/24 Test  #5: t_recv_transmit ..................***Failed    0.27 sec
+Test Failure on expectation:
+	Expectation: ackno 5
+
+Failure message:
+	The TCPReceiver reported ackno `1`, but it was expected to be `5`
+
+List of steps that executed successfully:
+	Initialized with (capacity=4000)
+	Action:      segment arrives Header(flags=S,seqno=0,ack=0,win=0)
+	Action:      segment arrives Header(flags=,seqno=1,ack=0,win=0) with data "abcd"
+
+The TCPReceiver reported ackno `1`, but it was expected to be `5`
+
+      Start  6: t_recv_window
+ 6/24 Test  #6: t_recv_window ....................***Failed    0.30 sec
+Test Failure on expectation:
+	Expectation: ackno 23457
+
+Failure message:
+	The TCPReceiver reported ackno `23453`, but it was expected to be `23457`
+
+List of steps that executed successfully:
+	Initialized with (capacity=4000)
+	Action:      segment arrives Header(flags=S,seqno=23452,ack=0,win=0)
+	Expectation: ackno 23453
+	Expectation: window 4000
+	Action:      segment arrives Header(flags=,seqno=23453,ack=0,win=0) with data "abcd"
+
+The TCPReceiver reported ackno `23453`, but it was expected to be `23457`
+
+      Start  7: t_recv_reorder
+ 7/24 Test  #7: t_recv_reorder ...................***Failed    0.20 sec
+Test Failure on expectation:
+	Expectation: ackno 2091536740
+
+Failure message:
+	The TCPReceiver reported ackno `2091536732`, but it was expected to be `2091536740`
+
+List of steps that executed successfully:
+	Initialized with (capacity=2358)
+	Action:      segment arrives Header(flags=S,seqno=2091536731,ack=0,win=0)
+	Expectation: ackno 2091536732
+	Action:      segment arrives Header(flags=,seqno=2091536736,ack=0,win=0) with data "efgh"
+	Expectation: ackno 2091536732
+	Expectation: bytes available: ""
+	Expectation: 4 unassembled bytes
+	Expectation: 0 assembled bytes, in total
+	Action:      segment arrives Header(flags=,seqno=2091536732,ack=0,win=0) with data "abcd"
+
+The TCPReceiver reported ackno `2091536732`, but it was expected to be `2091536740`
+
+      Start  8: t_recv_close
+ 8/24 Test  #8: t_recv_close .....................***Failed    0.27 sec
+Test Failure on expectation:
+	Expectation: in state `input to stream has ended`
+
+Failure message:
+	The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `input to stream has ended`
+
+List of steps that executed successfully:
+	Initialized with (capacity=4000)
+	Expectation: in state `waiting for SYN: ackno is empty`
+	Action:      segment arrives Header(flags=S,seqno=2836921443,ack=0,win=0)
+	Expectation: in state `SYN received (ackno exists), and input to stream hasn't ended`
+	Action:      segment arrives Header(flags=F,seqno=2836921444,ack=0,win=0)
+	Expectation: ackno 2836921445
+	Expectation: 0 unassembled bytes
+	Expectation: bytes available: ""
+	Expectation: 0 assembled bytes, in total
+
+The TCPReceiver was in state `SYN received (ackno exists), and input to stream hasn't ended`, but it was expected to be in state `input to stream has ended`
+
+      Start 15: t_strm_reassem_single
+ 9/24 Test #15: t_strm_reassem_single ............   Passed    0.12 sec
+      Start 16: t_strm_reassem_seq
+10/24 Test #16: t_strm_reassem_seq ...............   Passed    0.12 sec
+      Start 17: t_strm_reassem_dup
+11/24 Test #17: t_strm_reassem_dup ...............   Passed    0.19 sec
+      Start 18: t_strm_reassem_holes
+12/24 Test #18: t_strm_reassem_holes .............   Passed    0.16 sec
+      Start 19: t_strm_reassem_many
+13/24 Test #19: t_strm_reassem_many ..............   Passed    6.23 sec
+      Start 20: t_strm_reassem_overlapping
+14/24 Test #20: t_strm_reassem_overlapping .......   Passed    0.14 sec
+      Start 21: t_strm_reassem_win
+15/24 Test #21: t_strm_reassem_win ...............   Passed    5.28 sec
+      Start 22: t_strm_reassem_cap
+16/24 Test #22: t_strm_reassem_cap ...............   Passed    0.80 sec
+      Start 23: t_byte_stream_construction
+17/24 Test #23: t_byte_stream_construction .......   Passed    0.14 sec
+      Start 24: t_byte_stream_one_write
+18/24 Test #24: t_byte_stream_one_write ..........   Passed    0.14 sec
+      Start 25: t_byte_stream_two_writes
+19/24 Test #25: t_byte_stream_two_writes .........   Passed    0.13 sec
+      Start 26: t_byte_stream_capacity
+20/24 Test #26: t_byte_stream_capacity ...........   Passed    4.73 sec
+      Start 27: t_byte_stream_many_writes
+21/24 Test #27: t_byte_stream_many_writes ........   Passed    0.17 sec
+      Start 50: t_address_dt
+22/24 Test #50: t_address_dt .....................   Passed    5.97 sec
+      Start 51: t_parser_dt
+23/24 Test #51: t_parser_dt ......................   Passed    0.08 sec
+      Start 52: t_socket_dt
+24/24 Test #52: t_socket_dt ......................   Passed    0.15 sec
+
+79% tests passed, 5 tests failed out of 24
+
+Total Test time (real) =  26.89 sec
+
+The following tests FAILED:
+	  4 - t_recv_connect (Failed)
+	  5 - t_recv_transmit (Failed)
+	  6 - t_recv_window (Failed)
+	  7 - t_recv_reorder (Failed)
+	  8 - t_recv_close (Failed)
+Errors while running CTest
+CMakeFiles/check_lab2.dir/build.make:57: recipe for target 'CMakeFiles/check_lab2' failed
+make[3]: *** [CMakeFiles/check_lab2] Error 8
+CMakeFiles/Makefile2:227: recipe for target 'CMakeFiles/check_lab2.dir/all' failed
+make[2]: *** [CMakeFiles/check_lab2.dir/all] Error 2
+CMakeFiles/Makefile2:234: recipe for target 'CMakeFiles/check_lab2.dir/rule' failed
+make[1]: *** [CMakeFiles/check_lab2.dir/rule] Error 2
+Makefile:194: recipe for target 'check_lab2' failed
+make: *** [check_lab2] Error 2
