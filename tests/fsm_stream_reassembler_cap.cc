@@ -45,21 +45,6 @@ int main() {
         }
 
         {
-<<<<<<< HEAD
-=======
-            ReassemblerTestHarness test{2};
-
-            test.execute(SubmitSegment{"bX", 1});
-            test.execute(BytesAssembled(0));
-
-            test.execute(SubmitSegment{"a", 0});
-            test.execute(BytesAssembled(2));
-
-            test.execute(BytesAvailable("ab"));
-        }
-
-        {
->>>>>>> origin/lab2-startercode
             ReassemblerTestHarness test{1};
 
             test.execute(SubmitSegment{"ab", 0});
@@ -79,31 +64,6 @@ int main() {
         }
 
         {
-<<<<<<< HEAD
-=======
-            ReassemblerTestHarness test{8};
-
-            test.execute(SubmitSegment{"a", 0});
-            test.execute(BytesAssembled(1));
-            test.execute(BytesAvailable("a"));
-            test.execute(NotAtEof{});
-
-            test.execute(SubmitSegment{"bc", 1});
-            test.execute(BytesAssembled(3));
-            test.execute(NotAtEof{});
-
-            test.execute(SubmitSegment{"ghi", 6}.with_eof(true));
-            test.execute(BytesAssembled(3));
-            test.execute(NotAtEof{});
-
-            test.execute(SubmitSegment{"cdefg", 2});
-            test.execute(BytesAssembled(9));
-            test.execute(BytesAvailable{"bcdefghi"});
-            test.execute(AtEof{});
-        }
-
-        {
->>>>>>> origin/lab2-startercode
             ReassemblerTestHarness test{3};
             for (unsigned int i = 0; i < 99997; i += 3) {
                 const string segment = {char(i), char(i + 1), char(i + 2), char(i + 13), char(i + 47), char(i + 9)};

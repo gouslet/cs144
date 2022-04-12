@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <unordered_map>
 
 using std::map;
 using std::string;
@@ -19,13 +20,19 @@ class StreamReassembler {
     ByteStream _output;  //!< The reassembled in-order byte stream
     size_t _capacity;    //!< The maximum number of bytes
 
-    size_t _unassembled_bytes;  //未写入byte stream的字节数
+    // size_t _unassembled_bytes;  //未写入byte stream的字节数
 
-    size_t next_index;  //!< The next index of a byte which could get into the in-order ByteStream
+    // size_t next_index;  //!< The next index of a byte which could get into the in-order ByteStream
 
-    map<size_t, string> buffer;
+    // map<size_t, string> buffer;
 
-    bool _eof;  //是否已经收到eof=true的string
+    // bool _eof;  //是否已经收到eof=true的string
+
+    size_t _first_unread = 0;                 // 第1个还未被读取的字节索引
+    size_t _first_unasm = 0;                  // 第1个还未完成重组的字节索引
+    bool _eof = false;                        // 结束标志
+    size_t _end_idx = 0;                      // 字节流结束的索引
+    std::unordered_map<size_t, char> _map{};  // 使用unordered_map进行重组
 
   public:
     //! \brief Construct a `StreamReassembler` that will store up to `capacity` bytes.
