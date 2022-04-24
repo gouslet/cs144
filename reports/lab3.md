@@ -29,8 +29,7 @@
         - 失效是指时间将会以毫秒为单位耗尽
     5. 当所有发出的数据都收到了回应，停止重传计时器
     6. 如果调用了tick方法，而且重传计时器也失效了
-        - 重传最早发出的没有收到回应的帧（具有最小的
-        sequence number）
+        - 重传最早发出的没有收到回应的帧（具有最小的sequence number）
             - 可能需要存储已经发出的帧
         - 如果window size非0
             - 记录连续重发的次数，TCPConnection将会使用这个信息来决定是否要终止该连接(连续多次重发意味着无望)
@@ -50,8 +49,8 @@ TCP Sender有四个方法，每个方法都以发送一个TCP帧结束：
         - 可以使用TCPSegment::length_in_sequence_space()方法来计算一个帧占用sequence_number的总数
         - SYN和FIN标志也占各用一个sequence number,这意味着它们也占用window空间
 
-- void ack_received( const WrappingInt32 ackno, const uint16 t window size)
-    - 接收到来自receiver的帧传递的窗口的新的left (= ackno)和right (=ackno + window size)
+- void ack_received(const WrappingInt32 ackno, const uint16 t window size)
+    - 接收到来自receiver的帧传递的窗口的新的left (= ackno)和right (= ackno + window size)
     - TCPSender应该查找已发送帧的集合，移除所有sequence number小于ackno的帧
     - TCPSender应该再次填充window，如果window有了新的空间
     
@@ -72,7 +71,7 @@ TCP Sender有四个方法，每个方法都以发送一个TCP帧结束：
 ## 如果一个ACK帧仅仅对一部分已发送帧作出了回应，是否需要剪掉这部分字节?
 可以但没必要。这里仅仅在一个已发送帧的全部字节都收到回应后再删除
 ## 如果先发送了三个独立的帧，分别包含“a,” “b”,“c”三个字节，但是没有收到回应，之后重发时是否可以以一个包含“abc”三个字符的帧发送？
-可以，但此出不要这样做
+可以，但此处不要这样做
 ## 需要记录空的已发送帧吗？
 不需要
 ## 如何构造一个TCP Segment
