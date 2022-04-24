@@ -24,7 +24,7 @@ enum STATE {
     CLOSING
 };
 
-STATE connection_state;
+STATE connection_state = LISTEN;
 
 size_t TCPConnection::remaining_outbound_capacity() const { return _sender.stream_in().remaining_capacity(); }
 
@@ -36,19 +36,74 @@ size_t TCPConnection::time_since_last_segment_received() const { return {}; }
 
 void TCPConnection::segment_received(const TCPSegment &seg) {
     auto header = seg.header();
-    // _receiver.segment_received(seg);
+    _receiver.segment_received(seg);
     // _sender.fill_window();
 
-    _sender.ack_received(header.ackno, header.win);
     switch (connection_state) {
-        case SYN_SENT:
+        case LISTEN:
+            _sender.ack_received(header.ackno + 1, header.win);
             if (header.syn) {
+                _sender.send_empty_segment();
+                auto s = _sender.segments_out().front();
+                s.header().syn = true;
+                if (_receiver.ackno().has_value()) {
+                    s.header().ackno = _receiver.ackno().value();
+                    s.header().ack = true;
+                }
+                s.header().win = _receiver.window_size();
+                _segments_out.push(s);
+                _sender.segments_out().pop();
+                connection_state = SYN_RCVD;
+                syn_sent = true;
+            }
+            break;
+
+        case SYN_SENT:
+            _sender.ack_received(header.ackno, header.win);
+            if (header.syn) {
+                _sender.fill_window();
+                if (_sender.segments_out().empty()) {
+                    _sender.send_empty_segment();
+                }
+                auto s = _sender.segments_out().front();
                 if (header.ack) {
                     connection_state = ESTABLISHED;
                 } else {
                     connection_state = SYN_RCVD;
+                    // s.header().syn = true;
                 }
-                _sender.fill_window();
+                if (_receiver.ackno().has_value()) {
+                    s.header().ackno = _receiver.ackno().value();
+                    s.header().ack = true;
+                }
+                s.header().win = _receiver.window_size();
+                _segments_out.push(s);
+                _sender.segments_out().pop();
+            }
+            break;
+
+        case ESTABLISHED:
+            _sender.ack_received(header.ackno, header.win);
+            _sender.fill_window();
+            while (!_sender.segments_out().empty()) {
+                auto s = _sender.segments_out().front();
+                if (_receiver.ackno().has_value()) {
+                    s.header().ackno = _receiver.ackno().value();
+                    s.header().ack = true;
+                }
+                s.header().win = _receiver.window_size();
+                if (seg.length_in_sequence_space()) {
+                    //         _segments_out.push(s);
+                    //         _sender.segments_out().pop();
+                    _sender.segments_out().pop();
+                    _segments_out.push(s);
+                }
+            }
+            break;
+        case SYN_RCVD:
+            _sender.ack_received(header.ackno, header.win);
+            if (header.ack) {
+                connection_state = ESTABLISHED;
             }
             break;
         default:
@@ -134,7 +189,13 @@ void TCPConnection::end_input_stream() {
 
 void TCPConnection::connect() {
     _sender.fill_window();
-    _segments_out = _sender.segments_out();
+
+    // _segments_out = _sender.segments_out();
+    auto s = _sender.segments_out().front();
+    s.header().syn = true;
+    _segments_out.push(s);
+    _sender.segments_out().pop();
+
     connected = true;
     syn_sent = true;
     connection_state = SYN_SENT;
@@ -147,15 +208,15 @@ TCPConnection::~TCPConnection() {
 
             _sender.fill_window();
 
-            while (!_sender.segments_out().empty()) {
-                auto s = _sender.segments_out().front();
-                s.header().rst = true;
-                _segments_out.push(s);
-                _sender.segments_out().pop();
-            }
-            if (_sender.stream_in().error() && _receiver.stream_out().error()) {
-                _active = false;
-            }
+            // while (!_sender.segments_out().empty()) {
+            //     auto s = _sender.segments_out().front();
+            //     s.header().rst = true;
+            //     _segments_out.push(s);
+            //     _sender.segments_out().pop();
+            // }
+            // if (_sender.stream_in().error() && _receiver.stream_out().error()) {
+            //     _active = false;
+            // }
         }
         // Your code here: need to send a RST segment to the peer
     } catch (const exception &e) {
