@@ -41,9 +41,9 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
 
     switch (connection_state) {
         case LISTEN:
-            _sender.ack_received(header.ackno + 1, header.win);
+            _sender.ack_received(header.ackno, header.win);
             if (header.syn) {
-                _sender.send_empty_segment();
+                _sender.fill_window();
                 auto s = _sender.segments_out().front();
                 s.header().syn = true;
                 if (_receiver.ackno().has_value()) {
