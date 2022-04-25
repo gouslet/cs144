@@ -43,8 +43,6 @@ class TCPConnection {
 
     bool in_listen_state();
 
-    void must_generate_segment(bool);
-
   public:
     //! \name "Input" interface for the writer
     //!@{

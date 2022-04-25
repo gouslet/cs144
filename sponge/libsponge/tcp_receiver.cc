@@ -12,48 +12,55 @@
 using namespace std;
 
 void TCPReceiver::segment_received(const TCPSegment &seg) {
-    auto header = seg.header();
-    bool eof = false;
-    auto payload = seg.payload();
-    WrappingInt32 head_seqno = header.seqno;
-
-    if (header.syn && !isn_set) {
-        next_seqn = isn = header.seqno;
-        isn_set = true;
-        head_seqno = next_seqn = next_seqn + 1;
-    }
-    auto checkpoint = _capacity - window_size() - _reassembler.unassembled_bytes();
-
-    if (header.fin) {
-        eof = true;
+    TCPHeader header = seg.header();
+    size_t abs_seqno = 0;
+    if (header.syn) {
+        // already get a SYN, refuse other SYN
+        if (_syn_flag) {
+            return;
+        }
+        // haven't get SYN, set isn
+        _isn = header.seqno;
+        _syn_flag = true;
+        abs_seqno = 1;
     }
 
-    if (isn_set) {
-        uint64_t old_written_bytes =
-            _capacity - _reassembler.stream_out().remaining_capacity();  //本次接收帧之前已写入ByteStream的字节数
-        auto index = unwrap(head_seqno, isn, checkpoint) - 1;
-        _reassembler.push_substring(payload.copy(), index, eof);
-        uint64_t new_written_bytes =
-            _capacity - _reassembler.stream_out().remaining_capacity();  //本次接收帧之后已写入ByteStream的字节数
-        next_seqn = next_seqn + (new_written_bytes - old_written_bytes);
+    // before get a SYN, refuse any segment
+    if (!_syn_flag) {
+        return;
+    }
+
+    // NOT a SYN segment, compute abs_seqno
+    if (!header.syn) {
+        abs_seqno = unwrap(header.seqno, _isn, abs_seqno);
     }
 
     if (header.fin) {
-        if (_reassembler.unassembled_bytes() == 0) {
-            next_seqn = next_seqn + 1;
+        // already get a FIN, refuse other FIN
+        if (_fin_flag) {
+            return;
         }
-    } else {
-        if (_reassembler.stream_out().input_ended()) {
-            next_seqn = next_seqn + 1;
-        }
+        _fin_flag = true;
     }
+
+    if (abs_seqno == 0) {  // lab4测试特例, 0 - 1由于是无符号整数会变成一个超大数
+        return;
+    }
+    // 2. push reassembler
+    _reassembler.push_substring(seg.payload().copy(), abs_seqno - 1, header.fin);
 }
 
 optional<WrappingInt32> TCPReceiver::ackno() const {
-    if (!isn_set) {
+    if (!_syn_flag) {  // null if haven't recv SYN
         return nullopt;
     }
-    return make_optional<WrappingInt32>(next_seqn);
+    size_t first_unasm = _reassembler._first_unasm;  // stream_index
+    uint64_t abs_seqno = first_unasm + 1;
+    if (_reassembler.stream_out().input_ended()) {  // increase 1 if end
+        abs_seqno++;
+    }
+    WrappingInt32 seqno = wrap(abs_seqno, _isn);
+    return seqno;
 }
 
-size_t TCPReceiver::window_size() const { return _reassembler.stream_out().remaining_capacity(); }
+size_t TCPReceiver::window_size() const { return _capacity - _reassembler.stream_out().buffer_size(); }

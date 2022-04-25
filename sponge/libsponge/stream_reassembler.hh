@@ -29,7 +29,6 @@ class StreamReassembler {
     // bool _eof;  //是否已经收到eof=true的string
 
     size_t _first_unread = 0;                 // 第1个还未被读取的字节索引
-    size_t _first_unasm = 0;                  // 第1个还未完成重组的字节索引
     bool _eof = false;                        // 结束标志
     size_t _end_idx = 0;                      // 字节流结束的索引
     std::unordered_map<size_t, char> _map{};  // 使用unordered_map进行重组
@@ -38,6 +37,7 @@ class StreamReassembler {
     //! \brief Construct a `StreamReassembler` that will store up to `capacity` bytes.
     //! \note This capacity limits both the bytes that have been reassembled,
     //! and those that have not yet been reassembled.
+    size_t _first_unasm = 0;  // 第1个还未完成重组的字节索引
     StreamReassembler(const size_t capacity);
 
     //! \brief Receive a substring and write any newly contiguous bytes into the stream.

@@ -26,6 +26,45 @@ enum STATE {
 STATE connection_state = LISTEN;
 bool fin_rcvd{false};
 
+// 至少产生一个TCPSegment
+void TCPConnection::must_generate_segment(bool fin = false) {
+    _sender.fill_window();
+    if (_sender.segments_out().empty()) {
+        _sender.send_empty_segment();
+    }
+    if (fin) {
+        _sender.segments_out().back().header().fin = true;
+    }
+}
+
+// 把segment从sender的发送队列中取出，扔到网络里(也就是放到_segments_out里)
+void TCPConnection::send_segments() {
+    TCPSegment seg;
+    while (!_sender.segments_out().empty()) {
+        seg = _sender.segments_out().front();
+        // 加上ack和win_size
+        if (_receiver.ackno().has_value()) {
+            seg.header().ack = true;
+            seg.header().ackno = _receiver.ackno().value();
+            seg.header().win = _receiver.window_size();
+        }
+        // unclean shutdown
+        if (_sender.stream_in().error() || _receiver.stream_out().error()) {
+            seg.header().rst = true;
+        }
+        /**
+         cout << "send A =" << seg.header().ack  << " S = " << seg.header().syn << \
+         " F =" << seg.header().fin << " R = " << seg.header().rst << " seqno = " << \
+         seg.header().seqno << " ackno = " << seg.header().ackno << endl;
+         **/
+        cout << "Sent: \n" << seg.header().to_string() << endl;
+        // if (seg.length_in_sequence_space()) {
+        _segments_out.push(seg);
+        _sender.segments_out().pop();
+        // }
+    }
+}
+
 size_t TCPConnection::remaining_outbound_capacity() const { return _sender.stream_in().remaining_capacity(); }
 
 size_t TCPConnection::bytes_in_flight() const { return _sender.bytes_in_flight(); }
@@ -35,6 +74,8 @@ size_t TCPConnection::unassembled_bytes() const { return _receiver.unassembled_b
 size_t TCPConnection::time_since_last_segment_received() const { return _time_since_last_segment_received; }
 
 void TCPConnection::segment_received(const TCPSegment &seg) {
+    cout << "Received: \n" << seg.header().to_string() << endl;
+
     auto header = seg.header();
     if (header.rst) {
         _sender.stream_in().set_error();
@@ -42,252 +83,118 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
         _active = false;
         return;
     }
-    if (connection_state != TIME_WAIT) {
-        _time_since_last_segment_received = 0;
-    }
+    // if (connection_state != TIME_WAIT) {
+    //     _time_since_last_segment_received = 0;
+    // }
+    _time_since_last_segment_received = 0;
+
     if (connection_state != CLOSE_WAIT) {
         _receiver.segment_received(seg);
     }
     // auto data = seg.payload().copy();
 
     // _sender.fill_window();
+    _sender.ack_received(header.ackno, header.win);
 
     switch (connection_state) {
         case LISTEN:
-            _sender.ack_received(header.ackno, header.win);
             if (header.syn) {
-                _sender.fill_window();
-                auto s = _sender.segments_out().front();
-                s.header().syn = true;
-                if (_receiver.ackno().has_value()) {
-                    s.header().ackno = _receiver.ackno().value();
-                    s.header().ack = true;
-                }
-                s.header().win = _receiver.window_size();
-                _segments_out.push(s);
-                _sender.segments_out().pop();
+                must_generate_segment();
+
+                send_segments();
                 connection_state = SYN_RCVD;
                 syn_sent = true;
             }
             break;
 
         case SYN_SENT:
-            _sender.ack_received(header.ackno, header.win);
             if (header.syn) {
-                _sender.fill_window();
-                if (_sender.segments_out().empty()) {
-                    _sender.send_empty_segment();
-                }
-                auto s = _sender.segments_out().front();
+                must_generate_segment();
                 if (header.ack) {
                     connection_state = ESTABLISHED;
                 } else {
                     connection_state = SYN_RCVD;
                     // s.header().syn = true;
                 }
-                if (_receiver.ackno().has_value()) {
-                    s.header().ackno = _receiver.ackno().value();
-                    s.header().ack = true;
-                }
-                s.header().win = _receiver.window_size();
-                _segments_out.push(s);
-                _sender.segments_out().pop();
+                send_segments();
             }
             break;
 
         case ESTABLISHED:
-            _sender.ack_received(header.ackno, header.win);
             _sender.fill_window();
-            // bool fl{false};
-            // bool fin_st{false};
-            // _receiver.stream_out().write(data);
-            if (header.fin) {
-                if (_sender.segments_out().empty()) {
-                    _sender.send_empty_segment();
+            if (seg.payload().size())
+                if (header.fin) {
+                    if (_sender.segments_out().empty()) {
+                        _sender.send_empty_segment();
+                    }
+                    _linger_after_streams_finish = false;
+                    connection_state = CLOSE_WAIT;
                 }
-                _linger_after_streams_finish = false;
-                connection_state = CLOSE_WAIT;
-            }
-
-            while (!_sender.segments_out().empty()) {
-                auto s = _sender.segments_out().front();
-                if (_receiver.ackno().has_value()) {
-                    s.header().ackno = _receiver.ackno().value();
-                    s.header().ack = true;
-                }
-                s.header().win = _receiver.window_size();
-                if (seg.length_in_sequence_space()) {
-                    //         _segments_out.push(s);
-                    //         _sender.segments_out().pop();
-                    _sender.segments_out().pop();
-                    _segments_out.push(s);
-                }
-            }
+            send_segments();
             break;
 
         case SYN_RCVD:
-            _sender.ack_received(header.ackno, header.win);
             if (header.ack) {
                 connection_state = ESTABLISHED;
             }
             break;
 
         case CLOSE_WAIT:
-            _sender.ack_received(header.ackno, header.win);
             if (header.ack) {
                 if (header.fin) {
-                    _sender.fill_window();
-                    if (_sender.segments_out().empty()) {
-                        _sender.send_empty_segment();
-                    }
+                    must_generate_segment();
                 }
-                while (!_sender.segments_out().empty()) {
-                    auto s = _sender.segments_out().front();
-                    if (_receiver.ackno().has_value()) {
-                        s.header().ackno = _receiver.ackno().value();
-                        s.header().ack = true;
-                    }
-                    s.header().win = _receiver.window_size();
-                    if (seg.length_in_sequence_space()) {
-                        _sender.segments_out().pop();
-                        _segments_out.push(s);
-                    }
-                }
+                send_segments();
             }
 
             break;
 
         case LAST_ACK:
-            _sender.ack_received(header.ackno, header.win);
             if (header.ack && header.ackno == _sender.next_seqno()) {
                 _active = false;
             }
             break;
         case FIN_WAIT_1:
-            _sender.ack_received(header.ackno, header.win);
             if (header.ack) {
                 if (header.fin) {
-                    _sender.fill_window();
-                    if (_sender.segments_out().empty()) {
-                        _sender.send_empty_segment();
-                    }
-                    auto s = _sender.segments_out().front();
-                    if (_receiver.ackno().has_value()) {
-                        s.header().ackno = _receiver.ackno().value();
-                        s.header().ack = true;
-                    }
-                    s.header().win = _receiver.window_size();
-                    _segments_out.push(s);
-                    _sender.segments_out().pop();
+                    must_generate_segment();
+                    send_segments();
                     connection_state = TIME_WAIT;
                 } else {
                     connection_state = FIN_WAIT_2;
                 }
             } else {
                 if (header.fin) {
-                    _sender.fill_window();
-                    if (_sender.segments_out().empty()) {
-                        _sender.send_empty_segment();
-                    }
-                    auto s = _sender.segments_out().front();
-                    if (_receiver.ackno().has_value()) {
-                        s.header().ackno = _receiver.ackno().value();
-                        s.header().ack = true;
-                    }
-                    s.header().win = _receiver.window_size();
-                    _segments_out.push(s);
-                    _sender.segments_out().pop();
+                    must_generate_segment();
+                    send_segments();
                     connection_state = CLOSING;
                 }
             }
             break;
 
         case FIN_WAIT_2:
-            _sender.ack_received(header.ackno, header.win);
             if (header.fin) {
-                _sender.fill_window();
-                if (_sender.segments_out().empty()) {
-                    _sender.send_empty_segment();
-                }
-                auto s = _sender.segments_out().front();
-                if (_receiver.ackno().has_value()) {
-                    s.header().ackno = _receiver.ackno().value();
-                    s.header().ack = true;
-                }
-                s.header().win = _receiver.window_size();
-                _segments_out.push(s);
-                _sender.segments_out().pop();
+                must_generate_segment();
+                send_segments();
                 connection_state = TIME_WAIT;
             }
             break;
 
         case CLOSING:
-            _sender.ack_received(header.ackno, header.win);
             if (header.ack) {
                 connection_state = TIME_WAIT;
             }
             break;
         case TIME_WAIT:
-            _sender.ack_received(header.ackno, header.win);
             if (header.fin) {
-                _sender.fill_window();
-                if (_sender.segments_out().empty()) {
-                    _sender.send_empty_segment();
-                }
-                auto s = _sender.segments_out().front();
-                if (_receiver.ackno().has_value()) {
-                    s.header().ackno = _receiver.ackno().value();
-                    s.header().ack = true;
-                }
-                s.header().win = _receiver.window_size();
-                _segments_out.push(s);
-                _sender.segments_out().pop();
+                must_generate_segment();
+                send_segments();
             }
             break;
 
         default:
             cout << "0";
     }
-    // if (header.ack) {
-    //     syn_sent = true;
-    //     _sender.ack_received(header.ackno, header.win);
-    //     if (header.fin) {
-    //         _sender.send_empty_segment();
-    //     }
-    //     // auto next_seqno = _receiver.ackno();
-    //     // auto win_size = _receiver.window_size();
-    //     // auto segments = _sender.segments_out();
-
-    //     // _sender.ack_received(_sender.next_seqno(), header.win);
-    //     //     // _sender.send_empty_segment();
-    //     //     // _sender.fill_window();
-    // }
-
-    // while (!_sender.segments_out().empty()) {
-    //     auto s = _sender.segments_out().front();
-    //     // bool a = _sender.next_seqno_absolute() > 0 && _sender.next_seqno_absolute() == bytes_in_flight();
-    //     if (header.syn && !syn_sent) {
-    //         s.header().syn = true;
-    //     } else {
-    //         //     s.header().syn = true;
-    //         //     ack_times++;
-    //         // } else {
-    //         s.header().syn = false;
-    //     }
-    //     if (_receiver.ackno().has_value()) {
-    //         s.header().ackno = _receiver.ackno().value();
-    //         s.header().ack = true;
-    //     }
-    //     s.header().win = _receiver.window_size();
-    //     if (_written_finished && header.fin) {
-    //         s.header().fin = true;
-    //         _written_finished = true;
-    //     }
-    //     if (seg.length_in_sequence_space()) {
-    //         _segments_out.push(s);
-    //         _sender.segments_out().pop();
-    //     }
-    // }
 }
 
 bool TCPConnection::active() const { return _active; }
@@ -305,21 +212,8 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
         connection_state == LAST_ACK) {
         if (time_since_last_segment_received() < 10 * _cfg.rt_timeout) {
             if (time_since_last_segment_received() >= _cfg.rt_timeout) {
-                // _sender.fill_window();
-                // if (_sender.segments_out().empty()) {
-                _sender.send_empty_segment();
-                // }
-
-                auto s = _sender.segments_out().front();
-                if (_receiver.ackno().has_value()) {
-                    s.header().ackno = _receiver.ackno().value();
-                    s.header().ack = true;
-                }
-                s.header().fin = true;
-                s.header().win = _receiver.window_size();
-                _segments_out.push(s);
-                _sender.segments_out().pop();
-                cout << s.header().to_string() << endl;
+                must_generate_segment(true);
+                send_segments();
             }
         } else {
             _active = false;
@@ -334,21 +228,9 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
 void TCPConnection::end_input_stream() {
     _sender.stream_in().end_input();
     if (connection_state == ESTABLISHED || connection_state == SYN_RCVD || connection_state == CLOSE_WAIT) {
-        _sender.fill_window();
-        if (_sender.segments_out().empty()) {
-            _sender.send_empty_segment();
-        }
-        auto s = _sender.segments_out().front();
-        s.header().fin = true;
-        if (_receiver.ackno().has_value()) {
-            s.header().ackno = _receiver.ackno().value();
-            s.header().ack = true;
-        }
-        s.header().win = _receiver.window_size();
-        if (s.length_in_sequence_space()) {
-            _segments_out.push(s);
-            _sender.segments_out().pop();
-        }
+        must_generate_segment(true);
+        send_segments();
+
         _time_since_last_segment_received = 0;
         if (!_linger_after_streams_finish) {
             connection_state = LAST_ACK;

@@ -9,6 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/sponge/build/tests/${fileBasenameNoExtension}",
+            // "miDebuggerPath": "/usr/bin/gdb",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

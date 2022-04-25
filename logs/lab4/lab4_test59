@@ -1,0 +1,12 @@
+Scanning dependencies of target check_lab4
+[100%] Testing the TCP connection...
+[../tun.sh] Bringing up tunnels 144 145:
+please execute this script as a regular user, not as root
+CMakeFiles/check_lab4.dir/build.make:57: recipe for target 'CMakeFiles/check_lab4' failed
+make[3]: *** [CMakeFiles/check_lab4] Error 1
+CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/check_lab4.dir/all' failed
+make[2]: *** [CMakeFiles/check_lab4.dir/all] Error 2
+CMakeFiles/Makefile2:138: recipe for target 'CMakeFiles/check_lab4.dir/rule' failed
+make[1]: *** [CMakeFiles/check_lab4.dir/rule] Error 2
+Makefile:155: recipe for target 'check_lab4' failed
+make: *** [check_lab4] Error 2

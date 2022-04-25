@@ -1,0 +1,489 @@
+[100%] Testing the TCP connection...
+Test project /home/elon/cs144/sponge/build
+        Start   1: t_wrapping_ints_cmp
+  1/159 Test   #1: t_wrapping_ints_cmp ..............   Passed    0.00 sec
+        Start   2: t_wrapping_ints_unwrap
+  2/159 Test   #2: t_wrapping_ints_unwrap ...........   Passed    0.00 sec
+        Start   3: t_wrapping_ints_wrap
+  3/159 Test   #3: t_wrapping_ints_wrap .............   Passed    0.00 sec
+        Start   4: t_recv_connect
+  4/159 Test   #4: t_recv_connect ...................   Passed    0.00 sec
+        Start   5: t_recv_transmit
+  5/159 Test   #5: t_recv_transmit ..................   Passed    0.23 sec
+        Start   6: t_recv_window
+  6/159 Test   #6: t_recv_window ....................   Passed    0.00 sec
+        Start   7: t_recv_reorder
+  7/159 Test   #7: t_recv_reorder ...................   Passed    0.00 sec
+        Start   8: t_recv_close
+  8/159 Test   #8: t_recv_close .....................   Passed    0.00 sec
+        Start   9: t_send_connect
+  9/159 Test   #9: t_send_connect ...................   Passed    0.00 sec
+        Start  10: t_send_transmit
+ 10/159 Test  #10: t_send_transmit ..................   Passed    0.22 sec
+        Start  11: t_send_retx
+ 11/159 Test  #11: t_send_retx ......................   Passed    0.00 sec
+        Start  12: t_send_window
+ 12/159 Test  #12: t_send_window ....................   Passed    0.11 sec
+        Start  13: t_send_ack
+ 13/159 Test  #13: t_send_ack .......................   Passed    0.00 sec
+        Start  14: t_send_close
+ 14/159 Test  #14: t_send_close .....................   Passed    0.00 sec
+        Start  15: t_strm_reassem_single
+ 15/159 Test  #15: t_strm_reassem_single ............   Passed    0.00 sec
+        Start  16: t_strm_reassem_seq
+ 16/159 Test  #16: t_strm_reassem_seq ...............   Passed    0.00 sec
+        Start  17: t_strm_reassem_dup
+ 17/159 Test  #17: t_strm_reassem_dup ...............   Passed    0.01 sec
+        Start  18: t_strm_reassem_holes
+ 18/159 Test  #18: t_strm_reassem_holes .............   Passed    0.00 sec
+        Start  19: t_strm_reassem_many
+ 19/159 Test  #19: t_strm_reassem_many ..............   Passed    5.84 sec
+        Start  20: t_strm_reassem_overlapping
+ 20/159 Test  #20: t_strm_reassem_overlapping .......   Passed    0.01 sec
+        Start  21: t_strm_reassem_win
+ 21/159 Test  #21: t_strm_reassem_win ...............   Passed    5.57 sec
+        Start  22: t_strm_reassem_cap
+ 22/159 Test  #22: t_strm_reassem_cap ...............   Passed    0.37 sec
+        Start  23: t_byte_stream_construction
+ 23/159 Test  #23: t_byte_stream_construction .......   Passed    0.00 sec
+        Start  24: t_byte_stream_one_write
+ 24/159 Test  #24: t_byte_stream_one_write ..........   Passed    0.00 sec
+        Start  25: t_byte_stream_two_writes
+ 25/159 Test  #25: t_byte_stream_two_writes .........   Passed    0.00 sec
+        Start  26: t_byte_stream_capacity
+ 26/159 Test  #26: t_byte_stream_capacity ...........   Passed    3.40 sec
+        Start  27: t_byte_stream_many_writes
+ 27/159 Test  #27: t_byte_stream_many_writes ........   Passed    0.02 sec
+        Start  28: t_webget
+ 28/159 Test  #28: t_webget .........................   Passed    0.73 sec
+        Start  31: t_tcp_parser
+ 29/159 Test  #31: t_tcp_parser .....................   Passed    0.02 sec
+        Start  32: t_ipv4_parser
+ 30/159 Test  #32: t_ipv4_parser ....................   Passed    0.02 sec
+        Start  33: t_active_close
+ 31/159 Test  #33: t_active_close ...................***Failed    0.00 sec
+TCP source port: 0
+TCP dest port: 0
+TCP seqno: 2
+TCP ackno: 2
+TCP doff: 5
+Flags: urg: false ack: true psh: false rst: false syn: false fin: true
+TCP winsize: fa00
+TCP cksum: 0
+TCP uptr: 0
+
+TCP source port: 0
+TCP dest port: 0
+TCP seqno: 1
+TCP ackno: 2
+TCP doff: 5
+Flags: urg: false ack: true psh: false rst: false syn: false fin: true
+TCP winsize: fa00
+TCP cksum: 0
+TCP uptr: 0
+
+Test Failure on expectation:
+	Expectation: TCP in state sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1
+
+Failure message:
+	The TCP was in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=0, linger_after_streams_finish=0`, but it was expected to be in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+	Action:      close
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=1,ackno=1,seqno=1,)
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2,)
+	Action:      4000ms pass
+	Expectation: exactly one segment sent with (F=1,)
+	Expectation: TCP in state sender=`stream finished (FIN sent) but not fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1
+	Action:      packet arrives: Header(flags=A,seqno=2,ack=2,win=137) with no payload
+	Expectation: no (more) segments sent
+	Expectation: TCP in state sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1
+	Action:      9999ms pass
+
+The TCP was in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=0, linger_after_streams_finish=0`, but it was expected to be in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1`
+
+        Start  34: t_passive_close
+ 32/159 Test  #34: t_passive_close ..................***Failed    0.00 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2,)
+
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=1,win=137) with no payload
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not
+
+        Start  36: t_ack_rst
+ 33/159 Test  #36: t_ack_rst ........................***Failed    0.00 sec
+Test 1
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,ackno=2147483648,)
+
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483648,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483647,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483647,ack=2147483648,win=137) with 1 data bytes "<1>"
+	Expectation: TCP has 0 unassembled bytes
+
+Note:
+	test 1 failed: bad ACK
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not
+
+        Start  38: t_ack_rst_win
+ 34/159 Test  #38: t_ack_rst_win ....................***Failed    0.00 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (ackno=2147483648,)
+
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483648,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483647,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483647,ack=2147483648,win=137) with 1 data bytes "<1>"
+	Expectation: TCP has 0 unassembled bytes
+
+Note:
+	test 1 failed: no ack on early seqno
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not
+
+        Start  40: t_connect
+ 35/159 Test  #40: t_connect ........................   Passed    0.00 sec
+        Start  42: t_listen
+ 36/159 Test  #42: t_listen .........................   Passed    0.00 sec
+        Start  43: t_winsize
+ 37/159 Test  #43: t_winsize ........................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      listen
+	Action:      packet arrives: Header(flags=S,seqno=2638609548,ack=0,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,ackno=2638609549,win=6075,)
+	Action:      packet arrives: Header(flags=A,seqno=2638609549,ack=3936453199,win=33741) with no payload
+	Expectation: no (more) segments sent
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`SYN received (ackno exists), and input to stream hasn't ended`, active=1, linger_after_streams_finish=1
+	Action:      write (101223 bytes with 101223 accepted) [fa, 67, 16, fc, 9f, 2b, 9, aa, 9f, 9e, fe, f9, 8c, e6, d3, eb, ...]
+	Action:      1ms pass
+
+Note:
+	test 1 failed: nothing sent after write()
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  45: t_retx
+ 38/159 Test  #45: t_retx ...........................***Failed    0.00 sec
+  check_segment
+Test Failure on expectation:
+	Expectation: segment sent with (A=1,payload_size=4,data="asdf",)
+
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=1447225036,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=1447225036,ack=1447225037,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1447225037,payload_size=0,)
+	Action:      write (4 bytes) [61, 73, 64, 66]
+	Action:      1ms pass
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not (in check_segment called from line 36)
+
+        Start  46: t_retx_win
+ 39/159 Test  #46: t_retx_win .......................***Failed    0.00 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=4217258337,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=4217258337,ack=4217258338,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=4217258338,payload_size=0,)
+	Action:      write (4 bytes) [61, 73, 64, 66]
+	Action:      1ms pass
+	Action:      20ms pass
+	Action:      write (4 bytes) [71, 77, 65, 72]
+	Action:      1ms pass
+
+Note:
+	test 2 failed: cannot read after write()s
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  47: t_loopback
+ 40/159 Test  #47: t_loopback .......................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: TCP has 2149 bytes in flight
+
+Failure message:
+	The TCP has `bytes_in_flight = 0`, but bytes_in_flight was expected to be `2149`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=288899060,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=288899060,ack=288899061,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=288899061,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=288899061,ack=288899061,win=65000) with no payload
+	Action:      write (2149 bytes) [70, 1a, 49, 1f, 4a, 2b, b2, 74, 24, b7, 8f, 8e, 5e, 54, 56, d4, ...]
+	Action:      1ms pass
+
+Warning: Unclean shutdown of TCPConnection
+The TCP has `bytes_in_flight = 0`, but bytes_in_flight was expected to be `2149`
+
+        Start  48: t_loopback_win
+ 41/159 Test  #48: t_loopback_win ...................***Failed    0.01 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=78610284,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=78610284,ack=78610285,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=78610285,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=78610285,ack=78610285,win=65000) with no payload
+	Action:      write (3695 bytes) [9d, fd, 72, b1, 1, f3, 1d, 84, 13, 66, a2, 23, 2f, c0, a6, 8, ...]
+	Action:      1ms pass
+
+Note:
+	test 2 failed: cannot read after write()
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  49: t_reorder
+ 42/159 Test  #49: t_reorder ........................***Failed    0.01 sec
+Test Failure on expectation:
+	segment sent with (A=1,)
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=3543008624,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=1820558038,ack=3543008625,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1820558039,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=1820616044,ack=3543008625,win=137) with 73 data bytes "V<157><165><194><255>YwT<151>ua<151>)H#<155>..."
+
+Note:
+	test 1 failed: no ACK for datagram
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not
+
+        Start  50: t_address_dt
+ 43/159 Test  #50: t_address_dt .....................   Passed    0.00 sec
+        Start  51: t_parser_dt
+ 44/159 Test  #51: t_parser_dt ......................   Passed    0.00 sec
+        Start  52: t_socket_dt
+ 45/159 Test  #52: t_socket_dt ......................   Passed    0.01 sec
+        Start  53: t_udp_client_send
+ 46/159 Test  #53: t_udp_client_send ................   Passed    0.26 sec
+        Start  54: t_udp_server_send
+ 47/159 Test  #54: t_udp_server_send ................   Passed    0.26 sec
+        Start  55: t_udp_client_recv
+ 48/159 Test  #55: t_udp_client_recv ................   Passed    0.26 sec
+        Start  56: t_udp_server_recv
+ 49/159 Test  #56: t_udp_server_recv ................   Passed    0.25 sec
+        Start  57: t_udp_client_dupl
+ 50/159 Test  #57: t_udp_client_dupl ................   Passed    0.25 sec
+        Start  58: t_udp_server_dupl
+ 51/159 Test  #58: t_udp_server_dupl ................   Passed    0.25 sec
+        Start  59: t_ucS_1M_32k
+ 52/159 Test  #59: t_ucS_1M_32k .....................***Timeout  10.02 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:22663... done.
+new connection from 169.254.144.1:46097.
+DEBUG: Outbound stream to 169.254.144.1:46097 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:22663 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:46097 has been fully acknowledged.
+
+        Start  60: t_ucS_128K_8K
+ 53/159 Test  #60: t_ucS_128K_8K ....................***Timeout  10.02 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:9411... done.
+new connection from 169.254.144.1:50237.
+DEBUG: Outbound stream to 169.254.144.1:50237 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:9411 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:50237 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... 
+
+        Start  61: t_ucS_16_1
+ 54/159 Test  #61: t_ucS_16_1 .......................***Failed    0.26 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:3456... done.
+new connection from 169.254.144.1:37702.
+DEBUG: Outbound stream to 169.254.144.1:3456 finished (1 byte still in flight).
+DEBUG: Outbound stream to 169.254.144.1:37702 finished (1 byte still in flight).
+DEBUG: Waiting for clean shutdown... DEBUG: Inbound stream from 169.254.144.1:37702 finished cleanly.
+DEBUG: Inbound stream from 169.254.144.1:3456 finished cleanly.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:37702 has been fully acknowledged.
+DEBUG: TCP connection finished cleanly.
+done.
+DEBUG: TCP connection finished cleanly.
+done.
+ERROR: 036518f9375d8a198b2b7efc003729d6bb4491a45f33106ff089d4f0d32a2358 neq fd9528b920d6d3956e9e16114523e1889c751e8c1e040182116d4c906b43f558 or 
+
+        Start  62: t_ucS_32K_d
+ 55/159 Test  #62: t_ucS_32K_d ......................***Failed    0.27 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:32658... done.
+new connection from 169.254.144.1:47543.
+DEBUG: Outbound stream to 169.254.144.1:47543 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:32658 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:32658 finished (1001 bytes still in flight).
+DEBUG: Outbound stream to 169.254.144.1:47543 has been fully acknowledged.
+DEBUG: Inbound stream from 169.254.144.1:47543 finished cleanly.
+DEBUG: Waiting for lingering segments (e.g. retransmissions of FIN) from peer...
+DEBUG: Waiting for clean shutdown... DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:32658 has been fully acknowledged.
+DEBUG: TCP connection finished cleanly.
+done.
+DEBUG: TCP connection finished cleanly.
+done.
+ERROR: 7b21d0ded8f65866c6b54b2a255b028639b7aabebcadbe0076727b422573d0ed neq 327c77129d6dfc835d85bf591579df01cfaae5549b44b9c44a721adeb46f9d9e or 
+
+        Start  63: t_ucR_1M_32k
+ 56/159 Test  #63: t_ucR_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:10981... done.
+DEBUG: Outbound stream to 169.254.144.1:10981 finished (1 byte still in flight).
+new connection from 169.254.144.1:42853.
+DEBUG: Inbound stream from 169.254.144.1:42853 finished cleanly.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
+
+        Start  64: t_ucR_128K_8K
+ 57/159 Test  #64: t_ucR_128K_8K ....................***Timeout  10.02 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:20832... done.
+DEBUG: Outbound stream to 169.254.144.1:20832 finished (1 byte still in flight).
+new connection from 169.254.144.1:44864.
+DEBUG: Inbound stream from 169.254.144.1:44864 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:20832 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... 
+
+        Start  65: t_ucR_16_1
+ 58/159 Test  #65: t_ucR_16_1 .......................***Failed    0.27 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:19284... done.
+DEBUG: Outbound stream to 169.254.144.1:19284 finished (1 byte still in flight).
+new connection from 169.254.144.1:56062.
+DEBUG: Outbound stream to 169.254.144.1:56062 finished (1 byte still in flight).
+DEBUG: Waiting for clean shutdown... DEBUG: Inbound stream from 169.254.144.1:56062 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:19284 has been fully acknowledged.
+DEBUG: Inbound stream from 169.254.144.1:19284 finished cleanly.
+DEBUG: Waiting for lingering segments (e.g. retransmissions of FIN) from peer...
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
+DEBUG: TCP connection finished cleanly.
+done.
+ERROR: caf711f8133263984cc2ba9777e4b19dcab87e5bddf93fb020bef15309e7f62e neq 2f0fd1e89b8de1d57292742ec380ea47066e307ad645f5bc3adad8a06ff58608 or 
+
+        Start  66: t_ucR_32K_d
+ 59/159 Test  #66: t_ucR_32K_d ......................***Failed    0.38 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:30542... done.
+DEBUG: Outbound stream to 169.254.144.1:30542 finished (1 byte still in flight).
+new connection from 169.254.144.1:52701.
+DEBUG: Inbound stream from 169.254.144.1:52701 finished cleanly.
+DEBUG: Outbound stream to DEBUG: Waiting for clean shutdown... 169.254.144.1:30542 has been fully acknowledged.
+DEBUG: Outbound stream to 169.254.144.1:52701 finished (32769 bytes still in flight).
+DEBUG: Waiting for clean shutdown... DEBUG: Inbound stream from 169.254.144.1:30542 finished cleanly.
+DEBUG: Waiting for lingering segments (e.g. retransmissions of FIN) from peer...
+DEBUG: Outbound stream to 169.254.144.1:52701 has been fully acknowledged.
+DEBUG: TCP connection finished cleanly.
+done.
+DEBUG: TCP connection finished cleanly.
+done.
+ERROR: bcaf163a954fbf41a979530914ffa58a451de281e20698097812fa669f00c21e neq d10cbcf9c2b74741e0ce95d2b4734b7a1c6aa487a592f49deb832e16c9e0537a or 
+
+        Start  67: t_ucD_1M_32k
+ 60/159 Test  #67: t_ucD_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:24661... done.
+new connection from 169.254.144.1:39932.
+
+        Start  68: t_ucD_128K_8K
+ 61/159 Test  #68: t_ucD_128K_8K ....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:1616... done.
+new connection from 169.254.144.1:40613.
+
+        Start  69: t_ucD_16_1
+ 62/159 Test  #69: t_ucD_16_1 .......................***Failed    0.38 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:28097... done.
+new connection from 169.254.144.1:40438.
+DEBUG: Outbound stream to 169.254.144.1:28097 finished (1 byte still in flight).
+DEBUG: Outbound stream to 169.254.144.1:40438 finished (1 byte still in flight).
+DEBUG: Waiting for clean shutdown... DEBUG: Inbound stream from 169.254.144.1:40438 finished cleanly.
+DEBUG: Inbound stream from 169.254.144.1:28097 finished cleanly.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
+DEBUG: TCP connection finished cleanly.
+done.
+ERROR: 4eeff637c35dfe3dfdae96202df52fa78302de1b4347c386ffafc21a9e6ee909 neq 7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451 or 7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451
+
+        Start  70: t_ucD_32K_d
+ 63/159 Test  #70: t_ucD_32K_d ......................***Failed    0.48 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:7540... done.
+new connection from 169.254.144.1:48894.
+DEBUG: Outbound stream to 169.254.144.1:7540 finished (1001 bytes still in flight).
+DEBUG: Inbound stream from 169.254.144.1:48894 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:7540 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:48894 finished (32769 bytes still in flight).
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
+DEBUG: TCP connection finished cleanly.
+done.
+ERROR: 31cdba72b021b1cd37305a077904a5fcf5a234150b9eeb837f2b4f0e3aadb841 neq 9ade26c094d75c9ac543e1d9c6657f60b5f76486ddf6854a3864f46dd15f6a37 or 3f8aa6ffffff1736359bac0ab8e1c4372392c89d323acd4fd96fbd9d4641f117
+
+        Start  71: t_usS_1M_32k
+ 64/159 Test  #71: t_usS_1M_32k .....................***Timeout  10.03 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:4914... done.
+DEBUG: Outbound stream to 169.254.144.1:4914 finished (1 byte still in flight).
+new connection from 169.254.144.1:58778.
+DEBUG: Inbound stream from 169.254.144.1:58778 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:4914 has been fully acknowledged.
+
+        Start  72: t_usS_128K_8K
+CMakeFiles/check_lab4.dir/build.make:57: recipe for target 'CMakeFiles/check_lab4' failed
+make[3]: *** [CMakeFiles/check_lab4] Interrupt
+CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/check_lab4.dir/all' failed
+make[2]: *** [CMakeFiles/check_lab4.dir/all] Interrupt
+CMakeFiles/Makefile2:138: recipe for target 'CMakeFiles/check_lab4.dir/rule' failed
+make[1]: *** [CMakeFiles/check_lab4.dir/rule] Interrupt
+Makefile:155: recipe for target 'check_lab4' failed
+make: *** [check_lab4] Interrupt

@@ -3,6 +3,7 @@
         "*.cc": "cpp",
         "ostream": "cpp",
         "optional": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "*.hh_bak": "cpp"
     }
 }

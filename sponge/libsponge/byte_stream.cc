@@ -86,7 +86,7 @@ size_t ByteStream::buffer_size() const { return size; }
 
 bool ByteStream::buffer_empty() const { return cap > 0 && size == 0; }
 
-bool ByteStream::eof() const { return size <= 0 && i_ended; }
+bool ByteStream::eof() const { return buffer_empty() && i_ended; }
 
 size_t ByteStream::bytes_written() const { return b_written; }
 
