@@ -33,6 +33,16 @@ class TCPConnection {
 
     bool syn_sent{false};
 
+    long _time_since_last_segment_received{0};
+
+    void send_segments();
+
+    bool try_clean_shutdown();
+
+    void unclean_shutdown();
+
+    bool in_listen_state();
+
   public:
     //! \name "Input" interface for the writer
     //!@{
