@@ -25,6 +25,8 @@ enum STATE {
 };
 STATE connection_state = LISTEN;
 bool fin_rcvd{false};
+bool second_fin{false};
+bool fin_acked{false};
 
 // 至少产生一个TCPSegment
 void TCPConnection::must_generate_segment(bool fin = false) {
@@ -122,14 +124,14 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
 
         case ESTABLISHED:
             _sender.fill_window();
-            if (seg.payload().size())
-                if (header.fin) {
-                    if (_sender.segments_out().empty()) {
-                        _sender.send_empty_segment();
-                    }
-                    _linger_after_streams_finish = false;
-                    connection_state = CLOSE_WAIT;
+            if (header.fin) {
+                if (_sender.segments_out().empty()) {
+                    _sender.send_empty_segment();
                 }
+                fin_rcvd = true;
+                _linger_after_streams_finish = false;
+                connection_state = CLOSE_WAIT;
+            }
             send_segments();
             break;
 
@@ -187,8 +189,9 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
             break;
         case TIME_WAIT:
             if (header.fin) {
+                second_fin = true;
                 must_generate_segment();
-                send_segments();
+                // send_segments();
             }
             break;
 
@@ -208,10 +211,23 @@ size_t TCPConnection::write(const string &data) {
 void TCPConnection::tick(const size_t ms_since_last_tick) {
     _time_since_last_segment_received += ms_since_last_tick;
     _sender.tick(ms_since_last_tick);
+    if (connection_state == LISTEN || connection_state == SYN_RCVD || connection_state == ESTABLISHED ||
+        connection_state == SYN_SENT) {
+        return;
+    }
+
     if (connection_state == TIME_WAIT || connection_state == FIN_WAIT_1 || connection_state == CLOSING ||
         connection_state == LAST_ACK) {
         if (time_since_last_segment_received() < 10 * _cfg.rt_timeout) {
             if (time_since_last_segment_received() >= _cfg.rt_timeout) {
+                // cout << second_fin << endl;
+                if (connection_state == TIME_WAIT) {
+                    if (second_fin) {
+                        return;
+                    }
+                } else {
+                    fin_acked = true;
+                }
                 must_generate_segment(true);
                 send_segments();
             }
@@ -219,11 +235,11 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
             _active = false;
         }
     }
-
-    // if (!connected) {
-    //      _sender.fill_window();
-    // }
 }
+
+// if (!connected) {
+//      _sender.fill_window();
+// }
 
 void TCPConnection::end_input_stream() {
     _sender.stream_in().end_input();
