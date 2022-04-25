@@ -170,6 +170,11 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
         return;
     }
 
+    if (_nq < _next_seqno) {
+        _window_size = window_size;
+        return;
+    }
+
     for (auto it = out_segments.begin(); it != out_segments.end();) {
         auto nq = unwrap(ackno, _isn, _next_seqno);
         if ((*it).ackno() + (*it).segment().length_in_sequence_space() <= nq) {
