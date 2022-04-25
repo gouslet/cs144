@@ -1,0 +1,1366 @@
+[100%] Testing the TCP connection...
+Test project /mnt/i/DIY/CS144/sponge/build
+        Start   1: t_wrapping_ints_cmp
+  1/159 Test   #1: t_wrapping_ints_cmp ..............   Passed    0.02 sec
+        Start   2: t_wrapping_ints_unwrap
+  2/159 Test   #2: t_wrapping_ints_unwrap ...........   Passed    0.02 sec
+        Start   3: t_wrapping_ints_wrap
+  3/159 Test   #3: t_wrapping_ints_wrap .............   Passed    0.02 sec
+        Start   4: t_recv_connect
+  4/159 Test   #4: t_recv_connect ...................   Passed    0.04 sec
+        Start   5: t_recv_transmit
+  5/159 Test   #5: t_recv_transmit ..................   Passed    0.25 sec
+        Start   6: t_recv_window
+  6/159 Test   #6: t_recv_window ....................   Passed    0.06 sec
+        Start   7: t_recv_reorder
+  7/159 Test   #7: t_recv_reorder ...................   Passed    0.04 sec
+        Start   8: t_recv_close
+  8/159 Test   #8: t_recv_close .....................   Passed    0.04 sec
+        Start   9: t_send_connect
+  9/159 Test   #9: t_send_connect ...................   Passed    0.04 sec
+        Start  10: t_send_transmit
+ 10/159 Test  #10: t_send_transmit ..................   Passed    0.27 sec
+        Start  11: t_send_retx
+ 11/159 Test  #11: t_send_retx ......................   Passed    0.04 sec
+        Start  12: t_send_window
+ 12/159 Test  #12: t_send_window ....................   Passed    0.15 sec
+        Start  13: t_send_ack
+ 13/159 Test  #13: t_send_ack .......................   Passed    0.09 sec
+        Start  14: t_send_close
+ 14/159 Test  #14: t_send_close .....................   Passed    0.04 sec
+        Start  15: t_strm_reassem_single
+ 15/159 Test  #15: t_strm_reassem_single ............   Passed    0.02 sec
+        Start  16: t_strm_reassem_seq
+ 16/159 Test  #16: t_strm_reassem_seq ...............   Passed    0.02 sec
+        Start  17: t_strm_reassem_dup
+ 17/159 Test  #17: t_strm_reassem_dup ...............   Passed    0.03 sec
+        Start  18: t_strm_reassem_holes
+ 18/159 Test  #18: t_strm_reassem_holes .............   Passed    0.02 sec
+        Start  19: t_strm_reassem_many
+ 19/159 Test  #19: t_strm_reassem_many ..............   Passed    5.45 sec
+        Start  20: t_strm_reassem_overlapping
+ 20/159 Test  #20: t_strm_reassem_overlapping .......   Passed    0.02 sec
+        Start  21: t_strm_reassem_win
+ 21/159 Test  #21: t_strm_reassem_win ...............   Passed    5.65 sec
+        Start  22: t_strm_reassem_cap
+ 22/159 Test  #22: t_strm_reassem_cap ...............   Passed    0.36 sec
+        Start  23: t_byte_stream_construction
+ 23/159 Test  #23: t_byte_stream_construction .......   Passed    0.02 sec
+        Start  24: t_byte_stream_one_write
+ 24/159 Test  #24: t_byte_stream_one_write ..........   Passed    0.02 sec
+        Start  25: t_byte_stream_two_writes
+ 25/159 Test  #25: t_byte_stream_two_writes .........   Passed    0.02 sec
+        Start  26: t_byte_stream_capacity
+ 26/159 Test  #26: t_byte_stream_capacity ...........   Passed    3.33 sec
+        Start  27: t_byte_stream_many_writes
+ 27/159 Test  #27: t_byte_stream_many_writes ........   Passed    0.05 sec
+        Start  28: t_webget
+ 28/159 Test  #28: t_webget .........................   Passed    1.11 sec
+        Start  31: t_tcp_parser
+ 29/159 Test  #31: t_tcp_parser .....................   Passed    0.07 sec
+        Start  32: t_ipv4_parser
+ 30/159 Test  #32: t_ipv4_parser ....................   Passed    0.08 sec
+        Start  33: t_active_close
+ 31/159 Test  #33: t_active_close ...................***Failed    0.05 sec
+TCP source port: 0
+TCP dest port: 0
+TCP seqno: 2
+TCP ackno: 2
+TCP doff: 5
+Flags: urg: false ack: true psh: false rst: false syn: false fin: false
+TCP winsize: fa00
+TCP cksum: 0
+TCP uptr: 0
+
+TCP source port: 0
+TCP dest port: 0
+TCP seqno: 1
+TCP ackno: 2
+TCP doff: 5
+Flags: urg: false ack: true psh: false rst: false syn: false fin: true
+TCP winsize: fa00
+TCP cksum: 0
+TCP uptr: 0
+
+Test Failure on expectation:
+	Expectation: TCP in state sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1
+
+Failure message:
+	The TCP was in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=0, linger_after_streams_finish=0`, but it was expected to be in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+	Action:      close
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=1,ackno=1,seqno=1,)
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2,)
+	Action:      4000ms pass
+	Expectation: exactly one segment sent with (F=1,)
+	Expectation: TCP in state sender=`stream finished (FIN sent) but not fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1
+	Action:      packet arrives: Header(flags=A,seqno=2,ack=2,win=137) with no payload
+	Expectation: no (more) segments sent
+	Expectation: TCP in state sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1
+	Action:      9999ms pass
+
+The TCP was in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=0, linger_after_streams_finish=0`, but it was expected to be in state `sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1`
+
+        Start  34: t_passive_close
+ 32/159 Test  #34: t_passive_close ..................***Failed    0.04 sec
+TCP source port: 0
+TCP dest port: 0
+TCP seqno: 1
+TCP ackno: 2
+TCP doff: 5
+Flags: urg: false ack: true psh: false rst: false syn: false fin: false
+TCP winsize: fa00
+TCP cksum: 0
+TCP uptr: 0
+
+Test Failure on expectation:
+	exactly one segment sent with (F=1,)
+Failure message:
+	The TCP produced a segment with `fin = 0`, but fin was expected to be `1`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2,)
+	Action:      4000ms pass
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=0
+	Action:      close
+	Action:      1ms pass
+	Expectation: TCP in state sender=`stream finished (FIN sent) but not fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=0
+
+Note:
+	test 2 falied: bad seg or no FIN
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `fin = 0`, but fin was expected to be `1`
+
+        Start  36: t_ack_rst
+ 33/159 Test  #36: t_ack_rst ........................***Failed    0.04 sec
+Test 1
+Test Failure on expectation:
+	Expectation: TCP has 0 unassembled bytes
+
+Failure message:
+	The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483648,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483647,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483647,ack=2147483648,win=137) with 1 data bytes "<1>"
+
+Note:
+	test 1 failed: seg queued on early seqno
+
+Warning: Unclean shutdown of TCPConnection
+The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+        Start  38: t_ack_rst_win
+ 34/159 Test  #38: t_ack_rst_win ....................***Failed    0.04 sec
+Test Failure on expectation:
+	Expectation: TCP has 0 unassembled bytes
+
+Failure message:
+	The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483648,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483647,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483647,ack=2147483648,win=137) with 1 data bytes "<1>"
+
+Note:
+	test 1 failed: seg queued on early seqno
+
+Warning: Unclean shutdown of TCPConnection
+The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+        Start  40: t_connect
+ 35/159 Test  #40: t_connect ........................   Passed    0.04 sec
+        Start  42: t_listen
+ 36/159 Test  #42: t_listen .........................   Passed    0.04 sec
+        Start  43: t_winsize
+ 37/159 Test  #43: t_winsize ........................***Failed    0.05 sec
+Test Failure on expectation:
+	Action:      write (49704 bytes with 49704 accepted) [18, e2, b4, 71, d6, fd, 69, 5b, 13, 5c, 1d, 89, e7, bb, 7c, ae, ...]
+
+Failure message:
+	49704 bytes should have been written but 0 were
+
+List of steps that executed successfully:
+	Action:      listen
+	Action:      packet arrives: Header(flags=S,seqno=522065175,ack=0,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,ackno=522065176,win=31831,)
+	Action:      packet arrives: Header(flags=A,seqno=522065176,ack=2302432991,win=16568) with no payload
+	Expectation: no (more) segments sent
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`SYN received (ackno exists), and input to stream hasn't ended`, active=1, linger_after_streams_finish=1
+
+Warning: Unclean shutdown of TCPConnection
+49704 bytes should have been written but 0 were
+
+        Start  45: t_retx
+ 38/159 Test  #45: t_retx ...........................***Failed    0.05 sec
+  check_segment
+Test Failure on expectation:
+	Expectation: segment sent with (A=1,payload_size=4,data="asdf",)
+
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=3537909055,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=3537909055,ack=3537909056,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=3537909056,payload_size=0,)
+	Action:      write (4 bytes) [61, 73, 64, 66]
+	Action:      1ms pass
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not (in check_segment called from line 36)
+
+        Start  46: t_retx_win
+ 39/159 Test  #46: t_retx_win .......................***Failed    0.05 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=1118017390,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=1118017390,ack=1118017391,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1118017391,payload_size=0,)
+	Action:      write (4 bytes) [61, 73, 64, 66]
+	Action:      1ms pass
+	Action:      20ms pass
+	Action:      write (4 bytes) [71, 77, 65, 72]
+	Action:      1ms pass
+
+Note:
+	test 2 failed: cannot read after write()s
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  47: t_loopback
+ 40/159 Test  #47: t_loopback .......................***Failed    0.05 sec
+Test Failure on expectation:
+	Expectation: TCP has 826 bytes in flight
+
+Failure message:
+	The TCP has `bytes_in_flight = 0`, but bytes_in_flight was expected to be `826`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2447523039,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2447523039,ack=2447523040,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2447523040,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2447523040,ack=2447523040,win=65000) with no payload
+	Action:      write (826 bytes) [36, 59, a, 4e, 4e, a2, 82, 7e, 8d, d7, c0, b1, a8, c3, e3, db, ...]
+	Action:      1ms pass
+
+Warning: Unclean shutdown of TCPConnection
+The TCP has `bytes_in_flight = 0`, but bytes_in_flight was expected to be `826`
+
+        Start  48: t_loopback_win
+ 41/159 Test  #48: t_loopback_win ...................***Failed    0.05 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2907041335,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2907041335,ack=2907041336,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2907041336,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2907041336,ack=2907041336,win=65000) with no payload
+	Action:      write (431 bytes) [c1, dc, b, a3, ce, 3f, 1a, fb, 7f, 37, 88, d3, c4, 72, f8, 83, ...]
+	Action:      1ms pass
+
+Note:
+	test 2 failed: cannot read after write()
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  49: t_reorder
+ 42/159 Test  #49: t_reorder ........................***Failed    0.05 sec
+Test Failure on expectation:
+	segment sent with (A=1,)
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=694282442,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2284803555,ack=694282443,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2284803556,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2284812518,ack=694282443,win=137) with 911 data bytes "|N<156>/<130>-<17><196>Z<216><200>s<131>*<132>!..."
+
+Note:
+	test 1 failed: no ACK for datagram
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not
+
+        Start  50: t_address_dt
+ 43/159 Test  #50: t_address_dt .....................   Passed    0.05 sec
+        Start  51: t_parser_dt
+ 44/159 Test  #51: t_parser_dt ......................   Passed    0.02 sec
+        Start  52: t_socket_dt
+ 45/159 Test  #52: t_socket_dt ......................   Passed    0.03 sec
+        Start  53: t_udp_client_send
+ 46/159 Test  #53: t_udp_client_send ................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:17299... done.
+new connection from 169.254.144.1:41765.
+DEBUG: Outbound stream to 169.254.144.1:41765 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:17299 finished cleanly.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:41765 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 19919 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  54: t_udp_server_send
+ 47/159 Test  #54: t_udp_server_send ................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:1715... done.
+new connection from 169.254.144.1:43365.
+DEBUG: Outbound stream to 169.254.144.1:1715 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:43365 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:1715 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  55: t_udp_client_recv
+ 48/159 Test  #55: t_udp_client_recv ................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:11619... done.
+new connection from 169.254.144.1:60008.
+DEBUG: Outbound stream to 169.254.144.1:11619 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:60008 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:11619 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  56: t_udp_server_recv
+ 49/159 Test  #56: t_udp_server_recv ................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:24612... done.
+new connection from 169.254.144.1:43377.
+DEBUG: Outbound stream to 169.254.144.1:43377 finished (1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20008 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  57: t_udp_client_dupl
+ 50/159 Test  #57: t_udp_client_dupl ................***Failed    0.16 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:15241... done.
+new connection from 169.254.144.1:33595.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20027 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  58: t_udp_server_dupl
+ 51/159 Test  #58: t_udp_server_dupl ................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:5283... done.
+new connection from 169.254.144.1:58454.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20044 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20046 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  59: t_ucS_1M_32k
+ 52/159 Test  #59: t_ucS_1M_32k .....................***Failed    0.25 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:30736... done.
+new connection from 169.254.144.1:48048.
+DEBUG: Outbound stream to 169.254.144.1:48048 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:30736 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:48048 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20066 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  60: t_ucS_128K_8K
+ 53/159 Test  #60: t_ucS_128K_8K ....................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:23268... done.
+new connection from 169.254.144.1:41935.
+DEBUG: Outbound stream to 169.254.144.1:41935 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:23268 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:41935 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20086 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  61: t_ucS_16_1
+ 54/159 Test  #61: t_ucS_16_1 .......................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:6221... done.
+new connection from 169.254.144.1:35835.
+DEBUG: Outbound stream to 169.254.144.1:35835 finished (1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20106 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  62: t_ucS_32K_d
+ 55/159 Test  #62: t_ucS_32K_d ......................***Failed    0.20 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:28964... done.
+new connection from 169.254.144.1:51019.
+DEBUG: Outbound stream to 169.254.144.1:51019 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:28964 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:51019 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20124 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  63: t_ucR_1M_32k
+ 56/159 Test  #63: t_ucR_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:14211... done.
+new connection from 169.254.144.1:50452.
+DEBUG: Outbound stream to 169.254.144.1:14211 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:50452 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:14211 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  64: t_ucR_128K_8K
+ 57/159 Test  #64: t_ucR_128K_8K ....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:17716... done.
+new connection from 169.254.144.1:48568.
+DEBUG: Outbound stream to 169.254.144.1:17716 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:48568 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:17716 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  65: t_ucR_16_1
+ 58/159 Test  #65: t_ucR_16_1 .......................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:26775... done.
+new connection from 169.254.144.1:54182.
+DEBUG: Outbound stream to 169.254.144.1:26775 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:54182 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:26775 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  66: t_ucR_32K_d
+ 59/159 Test  #66: t_ucR_32K_d ......................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:20525... done.
+new connection from 169.254.144.1:40680.
+DEBUG: Outbound stream to 169.254.144.1:20525 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:40680 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:20525 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  67: t_ucD_1M_32k
+ 60/159 Test  #67: t_ucD_1M_32k .....................***Failed    0.26 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:1186... done.
+new connection from 169.254.144.1:58913.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20277 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20279 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  68: t_ucD_128K_8K
+ 61/159 Test  #68: t_ucD_128K_8K ....................***Failed    0.20 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:17747... done.
+new connection from 169.254.144.1:34308.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20300 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  69: t_ucD_16_1
+ 62/159 Test  #69: t_ucD_16_1 .......................***Failed    0.16 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:8733... done.
+new connection from 169.254.144.1:32956.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20321 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  70: t_ucD_32K_d
+ 63/159 Test  #70: t_ucD_32K_d ......................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:21569... done.
+new connection from 169.254.144.1:58008.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20340 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  71: t_usS_1M_32k
+ 64/159 Test  #71: t_usS_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:9457... done.
+new connection from 169.254.144.1:45876.
+DEBUG: Outbound stream to 169.254.144.1:9457 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:45876 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:9457 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  72: t_usS_128K_8K
+ 65/159 Test  #72: t_usS_128K_8K ....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:18221... done.
+new connection from 169.254.144.1:42721.
+DEBUG: Outbound stream to 169.254.144.1:18221 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:42721 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:18221 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  73: t_usS_16_1
+ 66/159 Test  #73: t_usS_16_1 .......................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:12311... done.
+new connection from 169.254.144.1:37695.
+DEBUG: Outbound stream to 169.254.144.1:12311 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:37695 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:12311 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  74: t_usS_32K_d
+ 67/159 Test  #74: t_usS_32K_d ......................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:25821... done.
+new connection from 169.254.144.1:42453.
+DEBUG: Outbound stream to 169.254.144.1:25821 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:42453 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:25821 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  75: t_usR_1M_32k
+ 68/159 Test  #75: t_usR_1M_32k .....................***Failed    0.30 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:9698... done.
+new connection from 169.254.144.1:35997.
+DEBUG: Outbound stream to 169.254.144.1:35997 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:9698 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:35997 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20502 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  76: t_usR_128K_8K
+ 69/159 Test  #76: t_usR_128K_8K ....................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:6041... done.
+new connection from 169.254.144.1:46396.
+DEBUG: Outbound stream to 169.254.144.1:46396 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:6041 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:46396 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20522 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  77: t_usR_16_1
+ 70/159 Test  #77: t_usR_16_1 .......................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:3192... done.
+new connection from 169.254.144.1:36746.
+DEBUG: Outbound stream to 169.254.144.1:36746 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:3192 finished cleanly.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:36746 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20545 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  78: t_usR_32K_d
+ 71/159 Test  #78: t_usR_32K_d ......................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:13576... done.
+new connection from 169.254.144.1:44004.
+DEBUG: Outbound stream to 169.254.144.1:44004 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:13576 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:44004 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20563 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  79: t_usD_1M_32k
+ 72/159 Test  #79: t_usD_1M_32k .....................***Failed    0.27 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:1962... done.
+new connection from 169.254.144.1:50241.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20582 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20584 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  80: t_usD_128K_8K
+ 73/159 Test  #80: t_usD_128K_8K ....................***Failed    0.20 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:30856... done.
+new connection from 169.254.144.1:35235.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20605 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 156: 20603 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+
+        Start  81: t_usD_16_1
+ 74/159 Test  #81: t_usD_16_1 .......................***Failed    0.16 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:31286... done.
+new connection from 169.254.144.1:60658.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20626 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  82: t_usD_32K_d
+ 75/159 Test  #82: t_usD_32K_d ......................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:24317... done.
+new connection from 169.254.144.1:50512.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20645 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  83: t_ucS_128K_8K_l
+ 76/159 Test  #83: t_ucS_128K_8K_l ..................***Failed    0.21 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:14380... done.
+new connection from 169.254.144.1:34310.
+DEBUG: Outbound stream to 169.254.144.1:34310 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:14380 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:34310 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20665 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  84: t_ucS_128K_8K_L
+ 77/159 Test  #84: t_ucS_128K_8K_L ..................***Failed    0.24 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:3567... done.
+new connection from 169.254.144.1:41091.
+DEBUG: Outbound stream to 169.254.144.1:41091 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:3567 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:41091 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20685 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  85: t_ucS_128K_8K_lL
+ 78/159 Test  #85: t_ucS_128K_8K_lL .................***Failed    0.21 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:11500... done.
+new connection from 169.254.144.1:38787.
+DEBUG: Outbound stream to 169.254.144.1:38787 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:11500 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:38787 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20705 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  86: t_ucR_128K_8K_l
+ 79/159 Test  #86: t_ucR_128K_8K_l ..................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:4984... done.
+new connection from 169.254.144.1:39261.
+DEBUG: Outbound stream to 169.254.144.1:4984 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:39261 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:4984 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  87: t_ucR_128K_8K_L
+ 80/159 Test  #87: t_ucR_128K_8K_L ..................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:30483... 
+
+        Start  88: t_ucR_128K_8K_lL
+ 81/159 Test  #88: t_ucR_128K_8K_lL .................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:5202... 
+
+        Start  89: t_ucD_128K_8K_l
+ 82/159 Test  #89: t_ucD_128K_8K_l ..................***Failed    0.22 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:28910... done.
+new connection from 169.254.144.1:44393.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20828 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20830 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  90: t_ucD_128K_8K_L
+ 83/159 Test  #90: t_ucD_128K_8K_L ..................***Failed    0.23 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:24092... done.
+new connection from 169.254.144.1:56657.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20849 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20851 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  91: t_ucD_128K_8K_lL
+ 84/159 Test  #91: t_ucD_128K_8K_lL .................***Failed    0.20 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:21978... done.
+new connection from 169.254.144.1:54800.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20870 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20872 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  92: t_usS_128K_8K_l
+ 85/159 Test  #92: t_usS_128K_8K_l ..................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:14441... done.
+new connection from 169.254.144.1:58563.
+DEBUG: Outbound stream to 169.254.144.1:14441 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:58563 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:14441 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  93: t_usS_128K_8K_L
+ 86/159 Test  #93: t_usS_128K_8K_L ..................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:16822... done.
+new connection from 169.254.144.1:54042.
+DEBUG: Outbound stream to 169.254.144.1:16822 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:54042 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:16822 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start  94: t_usS_128K_8K_lL
+ 87/159 Test  #94: t_usS_128K_8K_lL .................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:26939... 
+
+        Start  95: t_usR_128K_8K_l
+ 88/159 Test  #95: t_usR_128K_8K_l ..................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:20168... done.
+new connection from 169.254.144.1:60836.
+DEBUG: Outbound stream to 169.254.144.1:60836 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:20168 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:60836 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 20993 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  96: t_usR_128K_8K_L
+ 89/159 Test  #96: t_usR_128K_8K_L ..................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:7020... done.
+new connection from 169.254.144.1:51223.
+DEBUG: Outbound stream to 169.254.144.1:51223 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:7020 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:51223 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21013 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  97: t_usR_128K_8K_lL
+ 90/159 Test  #97: t_usR_128K_8K_lL .................***Failed    0.20 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:3424... done.
+new connection from 169.254.144.1:37437.
+DEBUG: Outbound stream to 169.254.144.1:37437 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:3424 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:37437 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21033 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start  98: t_usD_128K_8K_l
+ 91/159 Test  #98: t_usD_128K_8K_l ..................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:23141... done.
+new connection from 169.254.144.1:55427.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21054 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 156: 21052 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+
+        Start  99: t_usD_128K_8K_L
+ 92/159 Test  #99: t_usD_128K_8K_L ..................***Failed    0.23 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:2676... done.
+new connection from 169.254.144.1:57238.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21073 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21075 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 100: t_usD_128K_8K_lL
+ 93/159 Test #100: t_usD_128K_8K_lL .................***Failed    0.22 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:28405... done.
+new connection from 169.254.144.1:50522.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21096 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 101: t_ipv4_client_send
+ 94/159 Test #101: t_ipv4_client_send ...............***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:25427... done.
+new connection from 169.254.144.9:34786.
+DEBUG: Outbound stream to 169.254.144.9:34786 finished (1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21114 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 102: t_ipv4_server_send
+ 95/159 Test #102: t_ipv4_server_send ...............***Failed    0.30 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:4579... done.
+DEBUG: Outbound stream to 169.254.144.9:4579 finished (1 byte still in flight).
+new connection from 169.254.145.9:5754.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21130 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+ERROR: 3f9cf6dd0e2fbc268d40b3fe1dacea0d851a7ed4b681368b96b69e7be4caae9f neq fd238d73161ea0478ad44dab3c90fcc934ffb17edceb55f10be42405c5c8f507 or 
+
+        Start 103: t_ipv4_client_recv
+ 96/159 Test #103: t_ipv4_client_recv ...............***Failed    0.30 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:7984... done.
+DEBUG: Outbound stream to new connection from 169.254.144.9:12433.
+169.254.145.9:7984 finished (1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21154 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+ERROR: 19df47250a8e276d55d847d4f7cbcd73c283dd034c298d22835665be748e1030 neq beaed84d2be4f9369f0ffde47d9470dc198bb8e333841fdbbb7e5f13f5bbf293 or 
+
+        Start 104: t_ipv4_server_recv
+ 97/159 Test #104: t_ipv4_server_recv ...............***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:23046... done.
+new connection from 169.254.145.9:58711.
+DEBUG: Outbound stream to 169.254.145.9:58711 finished (1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21177 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 105: t_ipv4_client_dupl
+ 98/159 Test #105: t_ipv4_client_dupl ...............***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:2480... done.
+new connection from 169.254.144.9:31581.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21196 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 106: t_ipv4_server_dupl
+ 99/159 Test #106: t_ipv4_server_dupl ...............***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:33478... done.
+new connection from 169.254.145.9:17418.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21215 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 107: t_icS_1M_32k
+100/159 Test #107: t_icS_1M_32k .....................***Failed    0.25 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:25247... done.
+new connection from 169.254.144.9:35934.
+DEBUG: Outbound stream to 169.254.144.9:35934 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.145.9:25247 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:35934 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21235 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 108: t_icS_128K_8K
+101/159 Test #108: t_icS_128K_8K ....................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:14139... done.
+new connection from 169.254.144.9:51531.
+DEBUG: Outbound stream to 169.254.144.9:51531 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.145.9:14139 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:51531 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21255 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 109: t_icS_16_1
+102/159 Test #109: t_icS_16_1 .......................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:14856... done.
+new connection from 169.254.144.9:15315.
+DEBUG: Outbound stream to 169.254.144.9:15315 finished (1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21275 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 110: t_icS_32K_d
+103/159 Test #110: t_icS_32K_d ......................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:3262... done.
+new connection from 169.254.144.9:61974.
+DEBUG: Outbound stream to 169.254.144.9:61974 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.145.9:3262 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:61974 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21293 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 111: t_icR_1M_32k
+104/159 Test #111: t_icR_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:29260... done.
+new connection from DEBUG: Outbound stream to 169.254.144.9:52019.
+169.254.145.9:29260 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.9:52019 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:29260 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 112: t_icR_128K_8K
+105/159 Test #112: t_icR_128K_8K ....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:7679... done.
+DEBUG: Outbound stream to 169.254.145.9:7679 finished (1 byte still in flight).
+new connection from 169.254.144.9:6756.
+DEBUG: Inbound stream from 169.254.144.9:6756 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:7679 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 113: t_icR_16_1
+106/159 Test #113: t_icR_16_1 .......................***Failed    0.31 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:2956... done.
+DEBUG: Outbound stream to 169.254.145.9:2956 finished (new connection from 1169.254.144.9:49665.
+ byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21379 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+ERROR: 4d1153ed7ecdbca665480b053394224cc83e4b7bb5f92626ba793d6d0af84494 neq 3441e78943983a8e70cc3a3e32b3e3bf2df4370fae49e201a4bcea0e1254212e or 
+
+        Start 114: t_icR_32K_d
+107/159 Test #114: t_icR_32K_d ......................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:19289... done.
+DEBUG: Outbound stream to new connection from 169.254.145.9:19289 finished (169.254.144.9:334081.
+ byte still in flight).
+DEBUG: Inbound stream from 169.254.144.9:33408 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:19289 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 115: t_icD_1M_32k
+108/159 Test #115: t_icD_1M_32k .....................***Failed    0.29 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:27406... done.
+new connection from 169.254.144.9:25140.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21437 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 116: t_icD_128K_8K
+109/159 Test #116: t_icD_128K_8K ....................***Failed    0.21 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:15960... done.
+new connection from 169.254.144.9:29122.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21456 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21458 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 117: t_icD_16_1
+110/159 Test #117: t_icD_16_1 .......................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:33654... done.
+new connection from 169.254.144.9:18237.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21477 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21479 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 118: t_icD_32K_d
+111/159 Test #118: t_icD_32K_d ......................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:22893... done.
+new connection from 169.254.144.9:17446.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21498 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 119: t_isS_1M_32k
+112/159 Test #119: t_isS_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:16710... done.
+DEBUG: Outbound stream to new connection from 169.254.144.9:16710 finished (169.254.145.9:7630.
+1 byte still in flight).
+DEBUG: Inbound stream from 169.254.145.9:7630 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:16710 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 120: t_isS_128K_8K
+113/159 Test #120: t_isS_128K_8K ....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:29084... done.
+DEBUG: Outbound stream to 169.254.144.9:29084 finished (1 byte still in flight).
+new connection from 169.254.145.9:61895.
+DEBUG: Inbound stream from 169.254.145.9:61895 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:29084 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 121: t_isS_16_1
+114/159 Test #121: t_isS_16_1 .......................***Failed    0.28 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:11147... done.
+DEBUG: Outbound stream to 169.254.144.9:11147 finished (1 byte still in flight).
+new connection from 169.254.145.9:44699.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21584 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+ERROR: e789b5d8383f55643d8dfdfc94f650dd4d2ddf8e6da4e3a26f29f824f1177c43 neq 9e0bb6c533c9c4493946139248d39350137914dc203616abf1cecc43e9d8f5ce or 
+
+        Start 122: t_isS_32K_d
+115/159 Test #122: t_isS_32K_d ......................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:28949... done.
+new connection from 169.254.145.9:22224.
+DEBUG: Outbound stream to 169.254.144.9:28949 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.145.9:22224 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:28949 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 123: t_isR_1M_32k
+116/159 Test #123: t_isR_1M_32k .....................***Failed    0.26 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:10055... done.
+new connection from 169.254.145.9:15365.
+DEBUG: Outbound stream to 169.254.145.9:15365 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.9:10055 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:15365 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21641 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 124: t_isR_128K_8K
+117/159 Test #124: t_isR_128K_8K ....................***Failed    0.19 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:2508... done.
+new connection from 169.254.145.9:25191.
+DEBUG: Outbound stream to 169.254.145.9:25191 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.9:2508 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:25191 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21661 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 125: t_isR_16_1
+118/159 Test #125: t_isR_16_1 .......................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:1346... done.
+new connection from 169.254.145.9:55442.
+DEBUG: Outbound stream to 169.254.145.9:55442 finished (1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21681 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 126: t_isR_32K_d
+119/159 Test #126: t_isR_32K_d ......................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:2879... done.
+new connection from 169.254.145.9:3899.
+DEBUG: Outbound stream to 169.254.145.9:3899 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.9:2879 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:3899 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21699 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 127: t_isD_1M_32k
+120/159 Test #127: t_isD_1M_32k .....................***Failed    0.27 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:30988... done.
+new connection from 169.254.145.9:19495.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21718 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21723 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 128: t_isD_128K_8K
+121/159 Test #128: t_isD_128K_8K ....................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:23012... done.
+new connection from 169.254.145.9:37134.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21744 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 129: t_isD_16_1
+122/159 Test #129: t_isD_16_1 .......................***Failed    0.17 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:12169... done.
+new connection from 169.254.145.9:8428.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21765 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 130: t_isD_32K_d
+123/159 Test #130: t_isD_32K_d ......................***Failed    0.18 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:31988... done.
+new connection from 169.254.145.9:12690.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21784 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 131: t_icS_128K_8K_l
+124/159 Test #131: t_icS_128K_8K_l ..................***Failed    0.21 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:11860... done.
+new connection from 169.254.144.9:35387.
+DEBUG: Outbound stream to 169.254.144.9:35387 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.145.9:11860 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:35387 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 21804 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 132: t_icS_128K_8K_L
+125/159 Test #132: t_icS_128K_8K_L ..................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:12640... 
+
+        Start 133: t_icS_128K_8K_lL
+126/159 Test #133: t_icS_128K_8K_lL .................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:32727... 
+
+        Start 134: t_icR_128K_8K_l
+127/159 Test #134: t_icR_128K_8K_l ..................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:24856... done.
+new connection from 169.254.144.9:23079.
+DEBUG: Outbound stream to 169.254.145.9:24856 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.9:23079 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:24856 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 135: t_icR_128K_8K_L
+128/159 Test #135: t_icR_128K_8K_L ..................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:30646... done.
+DEBUG: Outbound stream to 169.254.145.9:30646 finished (1 byte still in flight).
+new connection from 169.254.144.9:38932.
+DEBUG: Inbound stream from 169.254.144.9:38932 finished cleanly.
+DEBUG: Outbound stream to 169.254.145.9:30646 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 136: t_icR_128K_8K_lL
+129/159 Test #136: t_icR_128K_8K_lL .................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:1470... 
+
+        Start 137: t_icD_128K_8K_l
+130/159 Test #137: t_icD_128K_8K_l ..................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:18871... 
+
+        Start 138: t_icD_128K_8K_L
+131/159 Test #138: t_icD_128K_8K_L ..................***Failed    0.20 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:19119... done.
+new connection from 169.254.144.9:31094.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 22034 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 22036 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 139: t_icD_128K_8K_lL
+132/159 Test #139: t_icD_128K_8K_lL .................***Failed    0.21 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.145.9:16677... done.
+new connection from 169.254.144.9:48454.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 22055 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 22057 Aborted                 $3 $4 ${SERVER_PORT} > "$1" < "$2"
+Error in _rt_connect
+
+        Start 140: t_isS_128K_8K_l
+133/159 Test #140: t_isS_128K_8K_l ..................***Failed    0.32 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:3837... done.
+new connection from DEBUG: Outbound stream to 169.254.144.9:3837 finished (169.254.145.9:54078.
+1 byte still in flight).
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 22086 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+ERROR: 80f26f68f5ef953bd2ab15f3da778ce20f651956891ee23853fb4d48613a804b neq 0919de03a9b9addae55d2f92cfc35b6a8deae13a2cc8523818b1ba69e951fb83 or 
+
+        Start 141: t_isS_128K_8K_L
+134/159 Test #141: t_isS_128K_8K_L ..................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:2872... done.
+DEBUG: Outbound stream to 169.254.144.9:2872 finished (1 byte still in flight).
+new connection from 169.254.145.9:2425.
+DEBUG: Inbound stream from 169.254.145.9:2425 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.9:2872 has been fully acknowledged.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+
+        Start 142: t_isS_128K_8K_lL
+135/159 Test #142: t_isS_128K_8K_lL .................***Failed    0.30 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.9:4459... done.
+new connection from DEBUG: Outbound stream to 169.254.144.9:4459 finished (169.254.145.9:313.
+1 byte still in flight).
+DEBUG: Inbound stream from 169.254.145.9:313 finished cleanly.
+Exception in TCPConnection runner thread: TCPConnection::write() accepted less than advertised length
+terminate called after throwing an instance of 'std::exception'
+  what():  std::exception
+DEBUG: TCP connection finished cleanly.
+DEBUG: Waiting for clean shutdown... done.
+/mnt/i/DIY/CS144/sponge/txrx.sh: line 110: 22150 Aborted                 coproc COPROC $3 -l $4 ${SERVER_PORT} > "$1" < "$2"
+ERROR: 266abba59c1c72cc62103c497726eb93453be1339d6d3e0f1544c22689613171 neq 312cc2a7ba03e0420739dfa074450612dd1d6fa3eb043a7cfdff574eef42ec14 or 
+
+        Start 143: t_isR_128K_8K_l
+CMakeFiles/check_lab4.dir/build.make:57: recipe for target 'CMakeFiles/check_lab4' failed
+make[3]: *** [CMakeFiles/check_lab4] Interrupt
+CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/check_lab4.dir/all' failed
+make[2]: *** [CMakeFiles/check_lab4.dir/all] Interrupt
+CMakeFiles/Makefile2:138: recipe for target 'CMakeFiles/check_lab4.dir/rule' failed
+make[1]: *** [CMakeFiles/check_lab4.dir/rule] Interrupt
+Makefile:155: recipe for target 'check_lab4' failed
+make: *** [check_lab4] Interrupt

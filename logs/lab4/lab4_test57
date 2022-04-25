@@ -1,0 +1,791 @@
+[100%] Testing the TCP connection...
+Test project /mnt/i/DIY/CS144/sponge/build
+        Start   1: t_wrapping_ints_cmp
+  1/159 Test   #1: t_wrapping_ints_cmp ..............   Passed    0.02 sec
+        Start   2: t_wrapping_ints_unwrap
+  2/159 Test   #2: t_wrapping_ints_unwrap ...........   Passed    0.01 sec
+        Start   3: t_wrapping_ints_wrap
+  3/159 Test   #3: t_wrapping_ints_wrap .............   Passed    0.01 sec
+        Start   4: t_recv_connect
+  4/159 Test   #4: t_recv_connect ...................   Passed    0.03 sec
+        Start   5: t_recv_transmit
+  5/159 Test   #5: t_recv_transmit ..................   Passed    0.26 sec
+        Start   6: t_recv_window
+  6/159 Test   #6: t_recv_window ....................   Passed    0.05 sec
+        Start   7: t_recv_reorder
+  7/159 Test   #7: t_recv_reorder ...................   Passed    0.03 sec
+        Start   8: t_recv_close
+  8/159 Test   #8: t_recv_close .....................   Passed    0.03 sec
+        Start   9: t_send_connect
+  9/159 Test   #9: t_send_connect ...................   Passed    0.04 sec
+        Start  10: t_send_transmit
+ 10/159 Test  #10: t_send_transmit ..................   Passed    0.26 sec
+        Start  11: t_send_retx
+ 11/159 Test  #11: t_send_retx ......................   Passed    0.03 sec
+        Start  12: t_send_window
+ 12/159 Test  #12: t_send_window ....................   Passed    0.17 sec
+        Start  13: t_send_ack
+ 13/159 Test  #13: t_send_ack .......................   Passed    0.06 sec
+        Start  14: t_send_close
+ 14/159 Test  #14: t_send_close .....................   Passed    0.03 sec
+        Start  15: t_strm_reassem_single
+ 15/159 Test  #15: t_strm_reassem_single ............   Passed    0.02 sec
+        Start  16: t_strm_reassem_seq
+ 16/159 Test  #16: t_strm_reassem_seq ...............   Passed    0.03 sec
+        Start  17: t_strm_reassem_dup
+ 17/159 Test  #17: t_strm_reassem_dup ...............   Passed    0.03 sec
+        Start  18: t_strm_reassem_holes
+ 18/159 Test  #18: t_strm_reassem_holes .............   Passed    0.02 sec
+        Start  19: t_strm_reassem_many
+ 19/159 Test  #19: t_strm_reassem_many ..............   Passed    5.49 sec
+        Start  20: t_strm_reassem_overlapping
+ 20/159 Test  #20: t_strm_reassem_overlapping .......   Passed    0.04 sec
+        Start  21: t_strm_reassem_win
+ 21/159 Test  #21: t_strm_reassem_win ...............   Passed    7.17 sec
+        Start  22: t_strm_reassem_cap
+ 22/159 Test  #22: t_strm_reassem_cap ...............   Passed    0.37 sec
+        Start  23: t_byte_stream_construction
+ 23/159 Test  #23: t_byte_stream_construction .......   Passed    0.05 sec
+        Start  24: t_byte_stream_one_write
+ 24/159 Test  #24: t_byte_stream_one_write ..........   Passed    0.02 sec
+        Start  25: t_byte_stream_two_writes
+ 25/159 Test  #25: t_byte_stream_two_writes .........   Passed    0.02 sec
+        Start  26: t_byte_stream_capacity
+ 26/159 Test  #26: t_byte_stream_capacity ...........   Passed    3.39 sec
+        Start  27: t_byte_stream_many_writes
+ 27/159 Test  #27: t_byte_stream_many_writes ........   Passed    0.07 sec
+        Start  28: t_webget
+ 28/159 Test  #28: t_webget .........................   Passed    2.38 sec
+        Start  31: t_tcp_parser
+ 29/159 Test  #31: t_tcp_parser .....................   Passed    0.07 sec
+        Start  32: t_ipv4_parser
+ 30/159 Test  #32: t_ipv4_parser ....................   Passed    0.12 sec
+        Start  33: t_active_close
+ 31/159 Test  #33: t_active_close ...................***Failed    0.06 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,ackno=2,)
+
+Failure message:
+	The TCP produced a segment with `ackno = 3`, but ackno was expected to be `2`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+	Action:      close
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=1,ackno=1,seqno=1,)
+	Action:      packet arrives: Header(flags=A,seqno=1,ack=2,win=137) with no payload
+	Expectation: TCP in state sender=`stream finished and fully acknowledged`, receiver=`SYN received (ackno exists), and input to stream hasn't ended`, active=1, linger_after_streams_finish=1
+	Action:      5ms pass
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=2,win=137) with no payload
+	Expectation: TCP in state sender=`stream finished and fully acknowledged`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=1
+	Expectation: Most recent incoming segment was 0 ms ago
+	Action:      1ms pass
+	Expectation: Most recent incoming segment was 1 ms ago
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2,)
+	Action:      9990ms pass
+	Expectation: Most recent incoming segment was 9991 ms ago
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=2,win=137) with no payload
+	Expectation: Most recent incoming segment was 0 ms ago
+	Action:      1ms pass
+
+Note:
+	test 5 failed: no ACK for 2nd FIN
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `ackno = 3`, but ackno was expected to be `2`
+
+        Start  34: t_passive_close
+ 32/159 Test  #34: t_passive_close ..................***Failed    0.05 sec
+Test Failure on expectation:
+	Expectation: exactly one segment sent with (A=1,ackno=2,)
+
+Failure message:
+	The TCP produced a segment with `ackno = 3`, but ackno was expected to be `2`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=0,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=0,ack=1,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1,payload_size=0,)
+	Action:      4000ms pass
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`SYN received (ackno exists), and input to stream hasn't ended`, active=1, linger_after_streams_finish=1
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=0,win=137) with no payload
+	Action:      1ms pass
+	Expectation: exactly one segment sent with (A=1,ackno=2,)
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`input to stream has ended`, active=1, linger_after_streams_finish=0
+	Action:      packet arrives: Header(flags=AF,seqno=1,ack=0,win=137) with no payload
+	Action:      1ms pass
+
+Note:
+	test 3 falied: bad response to 2nd FIN
+
+Warning: Unclean shutdown of TCPConnection
+The TCP produced a segment with `ackno = 3`, but ackno was expected to be `2`
+
+        Start  36: t_ack_rst
+ 33/159 Test  #36: t_ack_rst ........................***Failed    0.04 sec
+Test 1
+Test Failure on expectation:
+	Expectation: TCP has 0 unassembled bytes
+
+Failure message:
+	The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483648,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483647,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483647,ack=2147483648,win=137) with 1 data bytes "<1>"
+
+Note:
+	test 1 failed: seg queued on early seqno
+
+Warning: Unclean shutdown of TCPConnection
+The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+        Start  38: t_ack_rst_win
+ 34/159 Test  #38: t_ack_rst_win ....................***Failed    0.04 sec
+Test Failure on expectation:
+	Expectation: TCP has 0 unassembled bytes
+
+Failure message:
+	The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2147483647,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2147483647,ack=2147483648,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2147483648,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483648,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483648,ack=2147483647,win=137) with no payload
+	Expectation: no (more) segments sent
+	Action:      packet arrives: Header(flags=A,seqno=2147483647,ack=2147483648,win=137) with 1 data bytes "<1>"
+
+Note:
+	test 1 failed: seg queued on early seqno
+
+Warning: Unclean shutdown of TCPConnection
+The TCP has `unassembled_bytes = 1`, but unassembled_bytes was expected to be `0`
+
+        Start  40: t_connect
+ 35/159 Test  #40: t_connect ........................   Passed    0.05 sec
+        Start  42: t_listen
+ 36/159 Test  #42: t_listen .........................   Passed    0.06 sec
+        Start  43: t_winsize
+ 37/159 Test  #43: t_winsize ........................***Failed    0.09 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      listen
+	Action:      packet arrives: Header(flags=S,seqno=4101982007,ack=0,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,ackno=4101982008,win=2581,)
+	Action:      packet arrives: Header(flags=A,seqno=4101982008,ack=2147371202,win=31113) with no payload
+	Expectation: no (more) segments sent
+	Expectation: TCP in state sender=`stream ongoing`, receiver=`SYN received (ackno exists), and input to stream hasn't ended`, active=1, linger_after_streams_finish=1
+	Action:      write (155565 bytes with 155565 accepted) [47, 68, a1, 17, 8c, ef, 46, b7, 8a, 5d, 9f, bc, 3e, 19, 48, ba, ...]
+	Action:      1ms pass
+
+Note:
+	test 1 failed: nothing sent after write()
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  45: t_retx
+ 38/159 Test  #45: t_retx ...........................***Failed    0.05 sec
+  check_segment
+Test Failure on expectation:
+	Expectation: segment sent with (A=1,payload_size=4,data="asdf",)
+
+Failure message:
+	The TCP should have produced a segment that existed, but it did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=2455721634,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=2455721634,ack=2455721635,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=2455721635,payload_size=0,)
+	Action:      write (4 bytes) [61, 73, 64, 66]
+	Action:      1ms pass
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produced a segment that existed, but it did not (in check_segment called from line 36)
+
+        Start  46: t_retx_win
+ 39/159 Test  #46: t_retx_win .......................***Failed    0.05 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=4085886762,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=4085886762,ack=4085886763,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=4085886763,payload_size=0,)
+	Action:      write (4 bytes) [61, 73, 64, 66]
+	Action:      1ms pass
+	Action:      20ms pass
+	Action:      write (4 bytes) [71, 77, 65, 72]
+	Action:      1ms pass
+
+Note:
+	test 2 failed: cannot read after write()s
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  47: t_loopback
+ 40/159 Test  #47: t_loopback .......................***Failed    0.06 sec
+Test Failure on expectation:
+	Expectation: TCP has 1131 bytes in flight
+
+Failure message:
+	The TCP has `bytes_in_flight = 0`, but bytes_in_flight was expected to be `1131`
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=3262432828,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=3262432828,ack=3262432829,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=3262432829,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=3262432829,ack=3262432829,win=65000) with no payload
+	Action:      write (1131 bytes) [5, ba, 14, 6f, 81, 1f, f8, 68, 40, e8, ef, 41, e2, fb, c1, 4a, ...]
+	Action:      1ms pass
+
+Warning: Unclean shutdown of TCPConnection
+The TCP has `bytes_in_flight = 0`, but bytes_in_flight was expected to be `1131`
+
+        Start  48: t_loopback_win
+ 41/159 Test  #48: t_loopback_win ...................***Failed    0.07 sec
+Test Failure on expectation:
+	Expectation: segment sent
+
+Failure message:
+	The TCP should have produces a segment, but did not
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=1105807189,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=1105807189,ack=1105807190,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=1105807190,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=1105807190,ack=1105807190,win=65000) with no payload
+	Action:      write (2363 bytes) [b3, da, 55, e7, 68, 3e, 3c, c9, 66, e, d3, 7, 26, 6d, b2, 45, ...]
+	Action:      1ms pass
+
+Note:
+	test 2 failed: cannot read after write()
+
+Warning: Unclean shutdown of TCPConnection
+The TCP should have produces a segment, but did not
+
+        Start  49: t_reorder
+ 42/159 Test  #49: t_reorder ........................***Failed    5.96 sec
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Warning: Unclean shutdown of TCPConnection
+Test Failure on expectation:
+	Expectation: data available (65000 bytes starting with "<20><244><8><220>z<217><200>w<167>m<147>B<177><232><169><17>...")
+
+Failure message:
+	27893 bytes, but should have produced 65000 bytes
+
+List of steps that executed successfully:
+	Action:      connect
+	Expectation: exactly one segment sent with (A=0,R=0,S=1,F=0,seqno=4008852316,payload_size=0,)
+	Action:      packet arrives: Header(flags=SA,seqno=3838380146,ack=4008852317,win=137) with no payload
+	Expectation: exactly one segment sent with (A=1,R=0,S=0,F=0,ackno=3838380147,payload_size=0,)
+	Action:      packet arrives: Header(flags=A,seqno=3838437698,ack=4008852317,win=137) with 751 data bytes "<240>8sO_<157><13><211>2<175><8><198><26><195><198>T..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838383559,ack=4008852317,win=137) with 897 data bytes "1<175><172><3><221><241><222><130><205>H3X(<192><168>4..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838401105,ack=4008852317,win=137) with 430 data bytes "<176><202>TOI<232><6>Y6<136>g<0><164><238><6>\..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838382461,ack=4008852317,win=137) with 449 data bytes "cA<238><24>C<221>~<133><9>k<222><248><159><243>5<142>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838432138,ack=4008852317,win=137) with 397 data bytes "<167><26><239><26><200><145><5>W<179><217><212>O<156>~<165><173>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838380162,ack=4008852317,win=137) with 664 data bytes "<17>?<178><238>X<164><192><244>}<147><254>RSl/<161>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838396036,ack=4008852317,win=137) with 671 data bytes "<5><159><221>v*|<204><17>r<161><186>ag<174>~$..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838390258,ack=4008852317,win=137) with 996 data bytes "<241><144>;<145>]<29><217>u!<150>F3Ue=<198>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838403255,ack=4008852317,win=137) with 994 data bytes "<181><5><145><234><130>#<183>a<181><206>86<178>!-<16>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838435160,ack=4008852317,win=137) with 987 data bytes "<6><143><210><24><14>7V<211><156>k<204><230>XKld..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838431474,ack=4008852317,win=137) with 916 data bytes "E<235><25>6<15><216><212>n<173><182><142>f;<158><252><150>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838410783,ack=4008852317,win=137) with 850 data bytes "><8>;<239><10><132><19>e<209><200><231>I<185><146><204><31>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838384326,ack=4008852317,win=137) with 145 data bytes "<251><2><225><140><134><215>scg<248><213><18><146><191><135>G..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838404860,ack=4008852317,win=137) with 774 data bytes "A<169>&<164>`<164>W<193><222>^+<173><20><131><248><175>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838389760,ack=4008852317,win=137) with 393 data bytes "<24>x<144><6>J<132><11>F<199>v<130><148>o<138>L6..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838425798,ack=4008852317,win=137) with 766 data bytes "?<167>F<167><229><30><146><239><181><208>g<15><251><246><247>G..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838418057,ack=4008852317,win=137) with 449 data bytes "&Au9<144><229><166><28>_|<135>a<165><159>N<208>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838412417,ack=4008852317,win=137) with 916 data bytes "<186>W<144>:<133><203><251><191><13>UZ<11><1>+<207><255>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838401511,ack=4008852317,win=137) with 929 data bytes "-lrQaj<168><133>C<192><146><244><30><243><213>r..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838398116,ack=4008852317,win=137) with 624 data bytes "<236><19><242><233>(L<217><132>Cn<4><2>v<221><251>G..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838430267,ack=4008852317,win=137) with 711 data bytes "<169><195>%<173>&S<230><223>t<139><184><7><17>l<149><174>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838420494,ack=4008852317,win=137) with 775 data bytes "<144><227><10><246>'<157><208>YG,<135><23><210><162>tM..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838414112,ack=4008852317,win=137) with 992 data bytes "<226><150><212>5<157><247>R<<174><20><167><212><220>"<130>8..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838416281,ack=4008852317,win=137) with 895 data bytes "<183>A[`<219><175><215>&:<212>z<252>(<169>V<9>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838400617,ack=4008852317,win=137) with 874 data bytes "<228>+<220><232>j&?]qD<140><206><7>J<195>]..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838388981,ack=4008852317,win=137) with 345 data bytes "<186><140><223><232><217><253><161><252>S <150>X<239>E<209>,..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838416681,ack=4008852317,win=137) with 849 data bytes ",<31><200>[<178>k<oN<130><142><190>g<217><207>Q..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838384522,ack=4008852317,win=137) with 812 data bytes "<207><157><246>r<208><203><139>J1?o<157><7><198><217><245>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838395677,ack=4008852317,win=137) with 982 data bytes "YEP<177>A<206><192>z*?]<17><141>v`<9>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838387612,ack=4008852317,win=137) with 115 data bytes "<134>l<253><127><231><1><154><185>_6<229><189><150>w%<190>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838437472,ack=4008852317,win=137) with 939 data bytes "<131>1<12><229><2><212>V<228>7><216><165><21><3>?<5>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838402322,ack=4008852317,win=137) with 935 data bytes "@<235>Y<5><28>C<130><18>en<206><17><246><145>@<215>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838414965,ack=4008852317,win=137) with 671 data bytes "y<25><144>x<227><143><235>y]C<138>K<140><241><13><155>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838409681,ack=4008852317,win=137) with 501 data bytes "<191><19><192><206>r<185><141><211><156><141><129><1>5<31><206><149>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838402143,ack=4008852317,win=137) with 438 data bytes "<225>*<219><212><9E<17><164>)<139>ry<165><245>u..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838418014,ack=4008852317,win=137) with 976 data bytes "<206><156><236><153><253>r<153><150>+<218><174><192><3>6<140><18>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838393162,ack=4008852317,win=137) with 910 data bytes "^<245><142>\<153><183><24><194><230><142> W<237>T<138><24>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838385770,ack=4008852317,win=137) with 846 data bytes "<188><180>x<195><246><141><215><234><244>jfz`<185>a<26>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838432565,ack=4008852317,win=137) with 110 data bytes "<236>_(<173><247>7{'4<149><170><159>1pH<241>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838393486,ack=4008852317,win=137) with 734 data bytes "<18><221><245><203>{<192>5<127><216><149><133>!de<162>#..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838404997,ack=4008852317,win=137) with 731 data bytes "<8><238>r8>z2<9><156><<139>9O<159>b<178>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838386595,ack=4008852317,win=137) with 782 data bytes "<133><208>~<240>A<201><14><202>q<6>33<25><216><137><227>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838421626,ack=4008852317,win=137) with 893 data bytes ",A{<219> .`Y<140><193>6<134>Ie<193>E..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838411470,ack=4008852317,win=137) with 957 data bytes "<209>~Us{<11><154><239><230>tS]<216>_?<179>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838440567,ack=4008852317,win=137) with 995 data bytes "<5><206>y<212><204><237>Y<5><134><181><230>S<211><130>\p..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838389184,ack=4008852317,win=137) with 642 data bytes "A<145><177>f<178><29><208>v<6>+<137><133>=<223><233><172>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838380816,ack=4008852317,win=137) with 582 data bytes "<229>0<134><252>><243><139><130><165>|<227><150>I<254><213>l..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838419621,ack=4008852317,win=137) with 913 data bytes "<223><189>w<193>l<160><151><26>h$<188>cA<194><146><221>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838391221,ack=4008852317,win=137) with 865 data bytes "<7><156><232><241><179><185><255><31><132>o<29>%<223>Bt"..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838387984,ack=4008852317,win=137) with 810 data bytes "*<249><241>)<30><132><209><227><204><133>Z<193><214><235>V<203>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838432099,ack=4008852317,win=137) with 738 data bytes "9<159><0>O~O`<26>*+<13>Lc<130>vE..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838424990,ack=4008852317,win=137) with 33 data bytes "+,<0><239><174><196><239><188>d<218><239><159>O<227><145><228>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838433241,ack=4008852317,win=137) with 782 data bytes "<187><198><210><222><<179><247><144><141>\<164><236><172><251>t<151>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838381240,ack=4008852317,win=137) with 370 data bytes "<182><246><19><162><253><13>_<153>R<189>Q<252><204><207><12>b..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838438828,ack=4008852317,win=137) with 499 data bytes "<254>N^<21><128>Z<234>#<251>n<255><231><155><20><145>+..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838415514,ack=4008852317,win=137) with 779 data bytes "\f<198><129>x<28><141><218><193><173>2<24><195><213><214>B..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838442696,ack=4008852317,win=137) with 876 data bytes "<161><140><236>fXG<196>;<246>Y<12><239><136>P<227><199>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838443310,ack=4008852317,win=137) with 758 data bytes "<128><181>a<187>\<187><188>~C<29>b<26><212>^<210><170>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838432936,ack=4008852317,win=137) with 692 data bytes "F=<237><190><240><5>&=<26><166><222><9<152><209>h..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838439838,ack=4008852317,win=137) with 377 data bytes ")<137><15><7><129><184><224><211>Q<Q<234><4><205><200>M..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838417143,ack=4008852317,win=137) with 961 data bytes "lunm<211><141><140><236><170><166><5><163>D<3><255><140>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838410462,ack=4008852317,win=137) with 679 data bytes "h8<226><250><13><174><14><235><248><162>\<28>D^n<237>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838429463,ack=4008852317,win=137) with 884 data bytes ""<136>v<0><191><144><154>Z<129><201><211> fK<175><19>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838396446,ack=4008852317,win=137) with 700 data bytes "<204><142>w3j<238><230><155>"<15><10>o<127><149><200><182>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838429066,ack=4008852317,win=137) with 481 data bytes "G<12><146><222>`<237>]@Ft<28><248>=<17>t%..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838403789,ack=4008852317,win=137) with 930 data bytes "<170>R>9<237><160><242>yP%<210><220><196>kFx..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838444038,ack=4008852317,win=137) with 866 data bytes "<232><148><238><152><221><174><209>P<194><236>6]<248><227>F<5>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838411223,ack=4008852317,win=137) with 460 data bytes "<165>O<209><232><168><16><223><225><249>6<199><6>,<224>7<167>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838389959,ack=4008852317,win=137) with 302 data bytes "<25><254><223><144>mL<233><143><246><239><8>b<163><246><132>y..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838431246,ack=4008852317,win=137) with 465 data bytes "<129><12><19><182><143><210><22><237>H<166>+ <159><219>g<136>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838397758,ack=4008852317,win=137) with 975 data bytes "<154><205><247><149><215>~L<26><190><31>.&<226><184>q<1>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838424302,ack=4008852317,win=137) with 699 data bytes "<243><191><163><169><208>C<237><198><149><158><203><145>P<218><164>,..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838436010,ack=4008852317,win=137) with 928 data bytes "t<142>j<235>+<241>Y9<224><17>EP\4Z<176>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838394729,ack=4008852317,win=137) with 987 data bytes "<5><176>a<226>f<222>3<15><151>i<223><5><28>sBM..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838398737,ack=4008852317,win=137) with 993 data bytes "<233><174>m%<8><139>Q"<163>|<157><201><212><158><223><169>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838385077,ack=4008852317,win=137) with 720 data bytes "<165><178><183><181><26><206>s@!<135><255><168><247>?<133>-..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838413705,ack=4008852317,win=137) with 665 data bytes "<211><128>C<145><222><166><30>G<158>/<128><191><218>{<140>?..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838382810,ack=4008852317,win=137) with 843 data bytes "<19>p<195><199><11><224><15>}<218><19>l]Fgmi..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838405702,ack=4008852317,win=137) with 944 data bytes "E<238><162>|<27><166><178><181><196><234><161> k<5>1%..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838442262,ack=4008852317,win=137) with 542 data bytes "<214><130><196>O<152><183><222><29><145>V<141><241><142><252>8<17>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838384411,ack=4008852317,win=137) with 851 data bytes "'<137>i!EH<140><7>k<236>2<149>r<247>@<29>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838425191,ack=4008852317,win=137) with 889 data bytes "<10><173><27>`<212>J<240>P=<29>:<207>K<156>R<217>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838387725,ack=4008852317,win=137) with 144 data bytes "<186>4<192><142><240><165>NK<151><189><187><246><158><228>S<174>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838413328,ack=4008852317,win=137) with 910 data bytes "<178><26><199><180>=<177><137>$<181><238><169><127>=4<234>p..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838421344,ack=4008852317,win=137) with 722 data bytes "QZ~9<9><5><172>O<158>G<213>}<253>sZ<203>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838426407,ack=4008852317,win=137) with 984 data bytes "E<231>%<155><155><187><182><230><252><251>7<168><231>8<2><5>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838387421,ack=4008852317,win=137) with 593 data bytes "<202><212><255>!f<146><167><186><4><6>N<158><213><15><181>v..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838399617,ack=4008852317,win=137) with 959 data bytes "<209>=if<138><240>Q<14>K <197><201><132><151><140><164>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838443359,ack=4008852317,win=137) with 617 data bytes "<205><195><19><31>l<14><254><177><161>3T<29>Ev<241><138>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838424893,ack=4008852317,win=137) with 777 data bytes "<190> K<129>!<23><184><190>=<255>o<143><251><17>Y<151>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838400478,ack=4008852317,win=137) with 269 data bytes "M<182><10>_<180><187><11><137> A<216><132>]<183><161>h..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838436735,ack=4008852317,win=137) with 909 data bytes "<228>r<193>7<209><9><23><167>m<147><167>,<7>+I<243>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838433709,ack=4008852317,win=137) with 836 data bytes "<23><235><16>(He<145><238><219><25>1<144><236>D}r..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838392350,ack=4008852317,win=137) with 838 data bytes "<211>7<204><253>.v<223><234><253><169>SGSa1<165>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838440029,ack=4008852317,win=137) with 860 data bytes "<177>4<167>t<0><206><203><169><3>]!<231>H;@&..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838406638,ack=4008852317,win=137) with 210 data bytes "<210><154><249><154>1|<199><175><148><194><181><219>_<25>'<242>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838438404,ack=4008852317,win=137) with 604 data bytes "B~dJG<200><243><140><222><245>M<0>6<195><22>"..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838410807,ack=4008852317,win=137) with 933 data bytes "<14><145><165><30>8ne<145>g<24><192>K<145>\<24>+..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838427033,ack=4008852317,win=137) with 987 data bytes "<151>Szn<213>[<8><184>k<231><190><248><238><163>/<139>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838441559,ack=4008852317,win=137) with 684 data bytes "<0><200><136>"<245>v<211>~-<144><153><215><248>}<160><161>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838401665,ack=4008852317,win=137) with 932 data bytes "<25><208>*<237><152>^<133><14>=<31>E`<190>|<135><222>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838410120,ack=4008852317,win=137) with 895 data bytes "<242>+<209><216><219><205>f<223>S<138><169><12><205>e<225><135>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838420985,ack=4008852317,win=137) with 657 data bytes "<168><223>(<157><229><138>k<240><17><130><239>N<4><23><218><21>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838387043,ack=4008852317,win=137) with 610 data bytes "<144><23><12><183><166><127><19><208><180>A<134><219>jt<157>j..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838404527,ack=4008852317,win=137) with 816 data bytes "<5><6><198>U<134><235><243><29><209>j,Y!%<145><133>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838428658,ack=4008852317,win=137) with 875 data bytes "<219><240>A<203><149><255>|<3>*$<190><222>@D<151><28>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838432255,ack=4008852317,win=137) with 564 data bytes "<188><7><241>n<135><136><19><2>Z<9><220><210><241><241><19>{..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838388113,ack=4008852317,win=137) with 912 data bytes " <215>[3<14><26>x<198><173> <251><225>+<152>$f..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838406782,ack=4008852317,win=137) with 809 data bytes "<23>><151>,q<175><202>z<166>qL<155>V<10><228><221>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838434365,ack=4008852317,win=137) with 812 data bytes "><222>,V3M_/<141><251><20>5:<221>t<180>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838432283,ack=4008852317,win=137) with 295 data bytes "c<8><130>x<218>l<255><8><142>1Xh<14><22><153>G..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838382287,ack=4008852317,win=137) with 735 data bytes "V~<182>l0<128><217><139><212>~<11>c-Q<24><251>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838394160,ack=4008852317,win=137) with 605 data bytes ";<129><20><127>i<133><225>~<232><208>W<135><15>i<225>(..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838422500,ack=4008852317,win=137) with 670 data bytes "yW<132><242>qpA<221>t<154><238><207><161><242><212>e..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838431203,ack=4008852317,win=137) with 487 data bytes "{<11>0<140><131>'n<19>l<158>w<169>c<245><179><2>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838432426,ack=4008852317,win=137) with 574 data bytes "<18><139>g^<201><12><184><227>v<185>z<212>\<176>><226>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838418886,ack=4008852317,win=137) with 948 data bytes "<220>k<236>[<2>[<210>`<140><7>qI<127><7><186><127>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838444438,ack=4008852317,win=137) with 709 data bytes "N<229><249><210><227>9<219><3><226>:<194><198><214><3><18>Y..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838418209,ack=4008852317,win=137) with 459 data bytes "c<3>(,7}<129><191><160><5>7<250>hH1_..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838427628,ack=4008852317,win=137) with 916 data bytes "N7s<162><239><194><188>)<19>;<12>h5<163>N<224>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838381572,ack=4008852317,win=137) with 945 data bytes "<208>_<8><0>W<166><13><179><148><5>)\<200>}<191><11>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838430560,ack=4008852317,win=137) with 776 data bytes "[<165>o<238>b<146><16><144>/<161><214><27><24>dyL..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838423198,ack=4008852317,win=137) with 942 data bytes "<196><166>@<146><159><7><166>|MV<140><242>gH<147><23>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838436068,ack=4008852317,win=137) with 618 data bytes "<220>W}<<186><221>C<166><222><212><5><178><214><17><227><254>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838441965,ack=4008852317,win=137) with 415 data bytes "G<236><20>)<140>p_}<253><226><137><155><227>3<147><222>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838408208,ack=4008852317,win=137) with 922 data bytes "<147>k<18>Y<165><174><163><181><127><142><145>]<9>5ie..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838409075,ack=4008852317,win=137) with 926 data bytes "<4><231><206>]<218><25>2<167><250>o<233><207><1><210><0><229>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838428394,ack=4008852317,win=137) with 283 data bytes "h<167><13>o<145><143>\<254>{<210>S\<137>b<250><164>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838424038,ack=4008852317,win=137) with 603 data bytes "<173><197><193><251><127><210><231>recW<194><241><218>x;..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838423053,ack=4008852317,win=137) with 782 data bytes "<233>v<139>K<139>K<202><135>w<206><219>z<139><224><30><142>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838439417,ack=4008852317,win=137) with 621 data bytes "<149>U`<198><210><208>4F<150><25><157>'<216><179><155><152>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838439168,ack=4008852317,win=137) with 468 data bytes "<244>PO<14><246><128>'c><134><138><223><161><0><133><198>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838391713,ack=4008852317,win=137) with 490 data bytes "p<239>2)c<25><195><175><132>N<167><30>Y<2><137><207>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838391868,ack=4008852317,win=137) with 576 data bytes "Y?<137><2><<200><167><145><161><254><193>W<204>N^,..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838396992,ack=4008852317,win=137) with 986 data bytes "EN<19><11>.j<127><197>b<5>C<151><168><209><159>R..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838407408,ack=4008852317,win=137) with 848 data bytes "5<251>bv<190><160><24><130><127>Y<27><205><191><248><10><209>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838423048,ack=4008852317,win=137) with 697 data bytes "u<231>K<241><145><233>v<139>K<139>K<202><135>w<206><219>..."
+	Expectation: segment sent with (A=1,)
+	Action:      packet arrives: Header(flags=A,seqno=3838380147,ack=4008852317,win=137) with 393 data bytes "<20><244><8><220>z<217><200>w<167>m<147>B<177><232><169><17>..."
+	Expectation: segment sent with (A=1,)
+	Action:      1ms pass
+
+Note:
+	test 1 failed: got back the wrong data
+
+Warning: Unclean shutdown of TCPConnection
+27893 bytes, but should have produced 65000 bytes
+
+        Start  50: t_address_dt
+ 43/159 Test  #50: t_address_dt .....................   Passed    0.03 sec
+        Start  51: t_parser_dt
+ 44/159 Test  #51: t_parser_dt ......................   Passed    0.02 sec
+        Start  52: t_socket_dt
+ 45/159 Test  #52: t_socket_dt ......................   Passed    0.13 sec
+        Start  53: t_udp_client_send
+ 46/159 Test  #53: t_udp_client_send ................   Passed    0.31 sec
+        Start  54: t_udp_server_send
+ 47/159 Test  #54: t_udp_server_send ................   Passed    0.30 sec
+        Start  55: t_udp_client_recv
+ 48/159 Test  #55: t_udp_client_recv ................   Passed    0.28 sec
+        Start  56: t_udp_server_recv
+ 49/159 Test  #56: t_udp_server_recv ................   Passed    0.29 sec
+        Start  57: t_udp_client_dupl
+ 50/159 Test  #57: t_udp_client_dupl ................   Passed    0.29 sec
+        Start  58: t_udp_server_dupl
+ 51/159 Test  #58: t_udp_server_dupl ................   Passed    0.29 sec
+        Start  59: t_ucS_1M_32k
+ 52/159 Test  #59: t_ucS_1M_32k .....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:32075... done.
+new connection from 169.254.144.1:53843.
+DEBUG: Outbound stream to 169.254.144.1:53843 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:32075 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:53843 has been fully acknowledged.
+
+        Start  60: t_ucS_128K_8K
+ 53/159 Test  #60: t_ucS_128K_8K ....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:18956... done.
+new connection from 169.254.144.1:58497.
+DEBUG: Outbound stream to 169.254.144.1:58497 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:18956 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:58497 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... 
+
+        Start  61: t_ucS_16_1
+ 54/159 Test  #61: t_ucS_16_1 .......................   Passed    0.33 sec
+        Start  62: t_ucS_32K_d
+ 55/159 Test  #62: t_ucS_32K_d ......................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:15392... done.
+new connection from 169.254.144.1:39983.
+DEBUG: Outbound stream to 169.254.144.1:39983 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:15392 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:39983 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:15392 finished (1001 bytes still in flight).
+DEBUG: Inbound stream from 169.254.144.1:39983 finished cleanly.
+DEBUG: Waiting for lingering segments (e.g. retransmissions of FIN) from peer...
+DEBUG: Outbound stream to 169.254.144.1:15392 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
+
+        Start  63: t_ucR_1M_32k
+ 56/159 Test  #63: t_ucR_1M_32k .....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:2930... done.
+new connection from 169.254.144.1:43682.
+DEBUG: Outbound stream to 169.254.144.1:2930 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:43682 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:2930 has been fully acknowledged.
+
+        Start  64: t_ucR_128K_8K
+ 57/159 Test  #64: t_ucR_128K_8K ....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:20622... done.
+new connection from 169.254.144.1:49096.
+DEBUG: Outbound stream to 169.254.144.1:20622 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:49096 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:20622 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... 
+
+        Start  65: t_ucR_16_1
+ 58/159 Test  #65: t_ucR_16_1 .......................   Passed    0.34 sec
+        Start  66: t_ucR_32K_d
+ 59/159 Test  #66: t_ucR_32K_d ......................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:1137... done.
+new connection from 169.254.144.1:32984.
+DEBUG: Outbound stream to 169.254.144.1:1137 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:32984 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:1137 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:32984 finished (1001 bytes still in flight).
+DEBUG: Inbound stream from 169.254.144.1:1137 finished cleanly.
+DEBUG: Waiting for lingering segments (e.g. retransmissions of FIN) from peer...
+DEBUG: Outbound stream to 169.254.144.1:32984 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
+
+        Start  67: t_ucD_1M_32k
+ 60/159 Test  #67: t_ucD_1M_32k .....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:20248... done.
+new connection from 169.254.144.1:43427.
+
+        Start  68: t_ucD_128K_8K
+ 61/159 Test  #68: t_ucD_128K_8K ....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:5875... done.
+new connection from 169.254.144.1:40546.
+
+        Start  69: t_ucD_16_1
+ 62/159 Test  #69: t_ucD_16_1 .......................   Passed    0.31 sec
+        Start  70: t_ucD_32K_d
+ 63/159 Test  #70: t_ucD_32K_d ......................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:25072... done.
+new connection from 169.254.144.1:45737.
+DEBUG: Outbound stream to 169.254.144.1:45737 finished (1001 bytes still in flight).
+DEBUG: Outbound stream to 169.254.144.1:25072 finished (32769 bytes still in flight).
+DEBUG: Inbound stream from 169.254.144.1:25072 finished cleanly.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:45737 has been fully acknowledged.
+DEBUG: Inbound stream from 169.254.144.1:45737 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:25072 has been fully acknowledged.
+DEBUG: TCP connection finished cleanly.
+done.
+DEBUG: Waiting for clean shutdown... 
+
+        Start  71: t_usS_1M_32k
+ 64/159 Test  #71: t_usS_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:17928... done.
+new connection from 169.254.144.1:43674.
+DEBUG: Outbound stream to 169.254.144.1:17928 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:43674 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:17928 has been fully acknowledged.
+
+        Start  72: t_usS_128K_8K
+ 65/159 Test  #72: t_usS_128K_8K ....................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:28035... done.
+new connection from 169.254.144.1:50315.
+DEBUG: Outbound stream to 169.254.144.1:28035 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:50315 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:28035 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... 
+
+        Start  73: t_usS_16_1
+ 66/159 Test  #73: t_usS_16_1 .......................   Passed    0.36 sec
+        Start  74: t_usS_32K_d
+ 67/159 Test  #74: t_usS_32K_d ......................***Timeout  10.00 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:18574... done.
+new connection from 169.254.144.1:46845.
+DEBUG: Outbound stream to 169.254.144.1:18574 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:46845 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:18574 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... DEBUG: Outbound stream to 169.254.144.1:46845 finished (1001 bytes still in flight).
+DEBUG: Inbound stream from 169.254.144.1:18574 finished cleanly.
+DEBUG: Waiting for lingering segments (e.g. retransmissions of FIN) from peer...
+DEBUG: Outbound stream to 169.254.144.1:46845 has been fully acknowledged.
+DEBUG: Waiting for clean shutdown... DEBUG: TCP connection finished cleanly.
+done.
+
+        Start  75: t_usR_1M_32k
+ 68/159 Test  #75: t_usR_1M_32k .....................***Timeout  10.01 sec
+DEBUG: Listening for incoming connection... DEBUG: Connecting to 169.254.144.1:14013... done.
+new connection from 169.254.144.1:36266.
+DEBUG: Outbound stream to 169.254.144.1:36266 finished (1 byte still in flight).
+DEBUG: Inbound stream from 169.254.144.1:14013 finished cleanly.
+DEBUG: Outbound stream to 169.254.144.1:36266 has been fully acknowledged.
+
+        Start  76: t_usR_128K_8K
+CMakeFiles/check_lab4.dir/build.make:57: recipe for target 'CMakeFiles/check_lab4' failed
+make[3]: *** [CMakeFiles/check_lab4] Interrupt
+CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/check_lab4.dir/all' failed
+make[2]: *** [CMakeFiles/check_lab4.dir/all] Interrupt
+CMakeFiles/Makefile2:138: recipe for target 'CMakeFiles/check_lab4.dir/rule' failed
+make[1]: *** [CMakeFiles/check_lab4.dir/rule] Interrupt
+Makefile:155: recipe for target 'check_lab4' failed
+make: *** [check_lab4] Interrupt

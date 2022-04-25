@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.cc": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "optional": "cpp",
+        "system_error": "cpp"
     }
 }
