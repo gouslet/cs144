@@ -171,13 +171,13 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
     }
     _window_size = window_size;
 
-    if (_nq < _next_seqno) {
-        return;
-    }
+    // if (_nq < _next_seqno) {
+    //     return;
+    // }
 
     for (auto it = out_segments.begin(); it != out_segments.end();) {
         auto nq = unwrap(ackno, _isn, _next_seqno);
-        if ((*it).ackno() + (*it).segment().length_in_sequence_space() <= nq) {
+        if (it->ackno_absolute + it->seg.length_in_sequence_space() <= nq) {
             if (window_size != 0) {
                 _window_size = window_size;
             } else {
@@ -185,16 +185,16 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
                 zero_window_wize = true;
             }
             _consecutive_retransmissions = 0;
-            _bytes_in_flight -= (*it).segment().length_in_sequence_space();
-            if ((*it).segment().header().fin) {
+            _bytes_in_flight -= it->seg.length_in_sequence_space();
+            if (it->seg.header().fin) {
                 fin_acked = true;
             }
             it = out_segments.erase(it);
         } else {
-            if ((*it).ackno() > _next_seqno) {
-                _next_seqno = (*it).ackno();
+            if (it->ackno_absolute > _next_seqno) {
+                _next_seqno = it->ackno_absolute;
             }
-            if ((*it).ackno() == nq) {
+            if (it->ackno_absolute == nq) {
                 _window_size = window_size;
             }
             it++;
@@ -211,26 +211,26 @@ void TCPSender::tick(const size_t ms_since_last_tick) {
     auto oldest_seg = out_segments.begin();
 
     for (auto it = out_segments.begin(); it != out_segments.end(); it++) {
-        if (((*it).restrans_time() > (*oldest_seg).restrans_time())) {
+        if ((it->restrans_times > oldest_seg->restrans_times)) {
             oldest_seg = it;
-        } else if ((*it).restrans_time() == (*oldest_seg).restrans_time()) {
-            if ((*it).timeout() < (*oldest_seg).timeout()) {
+        } else if (it->restrans_times == oldest_seg->restrans_times) {
+            if (it->timeout < oldest_seg->timeout) {
                 oldest_seg = it;
             }
         }
     }
 
-    bool c = (*oldest_seg).timeout() <= ms_since_last_tick;
+    bool c = oldest_seg->timeout <= ms_since_last_tick;
 
     if (c) {
-        (*oldest_seg).restrans_time()++;
+        oldest_seg->restrans_times++;
         _consecutive_retransmissions++;
-        auto new_timeout = (*oldest_seg).zero() ? _initial_retransmission_timeout
-                                                : _initial_retransmission_timeout << (*oldest_seg).restrans_time();
-        (*oldest_seg).timeout() = new_timeout;
-        _segments_out.push((*oldest_seg).segment());
+        auto new_timeout = oldest_seg->zero ? _initial_retransmission_timeout
+                                            : _initial_retransmission_timeout << oldest_seg->restrans_times;
+        oldest_seg->timeout = new_timeout;
+        _segments_out.push(oldest_seg->seg);
     } else {
-        (*oldest_seg).timeout() -= ms_since_last_tick;
+        oldest_seg->timeout -= ms_since_last_tick;
     }
 }
 
