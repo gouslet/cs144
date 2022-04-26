@@ -4,6 +4,7 @@
         "ostream": "cpp",
         "optional": "cpp",
         "system_error": "cpp",
-        "*.hh_bak": "cpp"
+        "*.hh_bak": "cpp",
+        "iostream": "cpp"
     }
 }
