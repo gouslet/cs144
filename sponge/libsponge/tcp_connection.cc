@@ -122,8 +122,9 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
             break;
 
         case ESTABLISHED:
-            if (seg.length_in_sequence_space() > 0)
+            if (seg.length_in_sequence_space() > 0 || !_sender.stream_in().buffer_empty()) {
                 must_generate_segment();
+            }
             if (header.fin) {
                 _linger_after_streams_finish = false;
                 connection_state = CLOSE_WAIT;
@@ -200,7 +201,9 @@ bool TCPConnection::active() const { return _active; }
 
 size_t TCPConnection::write(const string &data) {
     // DUMMY_CODE(data);
-    return _sender.stream_in().write(data);
+    auto len = _sender.stream_in().write(data);
+    _sender.fill_window();
+    return len;
 }
 
 //! \param[in] ms_since_last_tick number of milliseconds since the last call to this method
@@ -211,7 +214,16 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
         return;
     }
     if (connection_state == ESTABLISHED) {
+        if (_sender.consecutive_retransmissions() > _cfg.MAX_RETX_ATTEMPTS) {
+            _sender.stream_in().set_error();
+            _receiver.stream_out().set_error();
+            _active = false;
+        }
+        //  else {
+        //     send_segments();
+        // }
         send_segments();
+
         return;
     }
 
