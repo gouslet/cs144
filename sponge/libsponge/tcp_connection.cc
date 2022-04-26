@@ -24,7 +24,6 @@ enum STATE {
     CLOSING
 };
 STATE connection_state = LISTEN;
-bool fin_rcvd{false};
 bool second_fin{false};
 bool fin_acked{false};
 
@@ -123,12 +122,9 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
             break;
 
         case ESTABLISHED:
-            _sender.fill_window();
+            if (seg.length_in_sequence_space() > 0)
+                must_generate_segment();
             if (header.fin) {
-                if (_sender.segments_out().empty()) {
-                    _sender.send_empty_segment();
-                }
-                fin_rcvd = true;
                 _linger_after_streams_finish = false;
                 connection_state = CLOSE_WAIT;
             }
@@ -211,8 +207,11 @@ size_t TCPConnection::write(const string &data) {
 void TCPConnection::tick(const size_t ms_since_last_tick) {
     _time_since_last_segment_received += ms_since_last_tick;
     _sender.tick(ms_since_last_tick);
-    if (connection_state == LISTEN || connection_state == SYN_RCVD || connection_state == ESTABLISHED ||
-        connection_state == SYN_SENT) {
+    if (connection_state == LISTEN || connection_state == SYN_RCVD || connection_state == SYN_SENT) {
+        return;
+    }
+    if (connection_state == ESTABLISHED) {
+        send_segments();
         return;
     }
 
