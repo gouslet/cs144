@@ -157,8 +157,8 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
                 send_segments();
                 return;
             } else if (seg.length_in_sequence_space() > 0 || !_sender.stream_in().buffer_empty()) {
-                // must_generate_segment();
-                _sender.fill_window();
+                must_generate_segment();
+                // _sender.fill_window();
                 // can_ack_send = true;
                 // }
             }
