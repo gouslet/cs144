@@ -56,12 +56,12 @@ void TCPConnection::send_segments() {
             seg.header().rst = true;
         }
         /**
-         cout << "send A =" << seg.header().ack  << " S = " << seg.header().syn << \
+         cerr << "send A =" << seg.header().ack  << " S = " << seg.header().syn << \
          " F =" << seg.header().fin << " R = " << seg.header().rst << " seqno = " << \
          seg.header().seqno << " ackno = " << seg.header().ackno << endl;
          **/
-        cout << "Sent: \n" << seg.header().to_string() << "data length: " << seg.payload().size() << endl;
-        cout << "----------------------------\n";
+        cerr << "Sent: \n" << seg.header().to_string() << "data length: " << seg.payload().size() << endl;
+        cerr << "----------------------------\n";
         // if (seg.length_in_sequence_space()) {
         _segments_out.push(seg);
         _sender.segments_out().pop();
@@ -100,9 +100,9 @@ size_t TCPConnection::unassembled_bytes() const { return _receiver.unassembled_b
 size_t TCPConnection::time_since_last_segment_received() const { return _time_since_last_segment_received; }
 
 void TCPConnection::segment_received(const TCPSegment &seg) {
-    cout << "On state: " << connection_state << endl;
-    cout << "Received: \n" << seg.header().to_string() << "data length: " << seg.payload().size() << endl;
-    cout << "----------------------------\n";
+    cerr << "On state: " << connection_state << endl;
+    cerr << "Received: \n" << seg.header().to_string() << "data length: " << seg.payload().size() << endl;
+    cerr << "----------------------------\n";
 
     auto header = seg.header();
     if (header.rst) {
@@ -230,7 +230,7 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
             break;
 
         default:
-            cout << "0";
+            cerr << "0";
     }
 }
 
