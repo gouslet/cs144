@@ -169,9 +169,9 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
     if (_nq > _next_seqno) {
         return;
     }
+    _window_size = window_size;
 
     if (_nq < _next_seqno) {
-        _window_size = window_size;
         return;
     }
 

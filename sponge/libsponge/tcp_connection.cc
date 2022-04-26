@@ -58,7 +58,7 @@ void TCPConnection::send_segments() {
          " F =" << seg.header().fin << " R = " << seg.header().rst << " seqno = " << \
          seg.header().seqno << " ackno = " << seg.header().ackno << endl;
          **/
-        cout << "Sent: \n" << seg.header().to_string() << endl;
+        cout << "Sent: \n" << seg.header().to_string() << "length: " << seg.length_in_sequence_space() << endl;
         // if (seg.length_in_sequence_space()) {
         _segments_out.push(seg);
         _sender.segments_out().pop();
