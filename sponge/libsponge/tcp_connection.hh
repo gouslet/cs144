@@ -37,13 +37,15 @@ class TCPConnection {
 
     void send_segments();
 
-    bool try_clean_shutdown();
+    void clean_shutdown();
 
     void unclean_shutdown();
 
     bool in_listen_state();
 
     void must_generate_segment(bool);
+
+    void send_empty_segment();
 
   public:
     //! \name "Input" interface for the writer

@@ -68,6 +68,28 @@ void TCPConnection::send_segments() {
         // }
     }
 }
+void TCPConnection::send_empty_segment() {
+    _sender.send_empty_segment();
+    send_segments();
+}
+
+void TCPConnection::unclean_shutdown() {
+    _sender.stream_in().set_error();
+    _receiver.stream_out().set_error();
+    _active = false;
+}
+
+void TCPConnection::clean_shutdown() {
+    if (_receiver.stream_out().input_ended() && !_sender.stream_in().eof()) {
+        _linger_after_streams_finish = false;
+    }
+
+    if (_receiver.stream_out().input_ended() && _sender.stream_in().eof() && _sender.bytes_in_flight() == 0) {
+        if (!_linger_after_streams_finish || time_since_last_segment_received() >= 10 * _cfg.rt_timeout) {
+            _active = false;
+        }
+    }
+}
 
 size_t TCPConnection::remaining_outbound_capacity() const { return _sender.stream_in().remaining_capacity(); }
 
@@ -84,11 +106,10 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
 
     auto header = seg.header();
     if (header.rst) {
-        _sender.stream_in().set_error();
-        _receiver.stream_out().set_error();
-        _active = false;
+        unclean_shutdown();
         return;
     }
+
     // if (connection_state != TIME_WAIT) {
     //     _time_since_last_segment_received = 0;
     // }
@@ -97,9 +118,7 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
     if (connection_state != CLOSE_WAIT) {
         _receiver.segment_received(seg);
     }
-    // auto data = seg.payload().copy();
 
-    // _sender.fill_window();
     _sender.ack_received(header.ackno, header.win);
 
     switch (connection_state) {
@@ -138,7 +157,8 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
                 send_segments();
                 return;
             } else if (seg.length_in_sequence_space() > 0 || !_sender.stream_in().buffer_empty()) {
-                must_generate_segment();
+                // must_generate_segment();
+                _sender.fill_window();
                 // can_ack_send = true;
                 // }
             }
@@ -232,21 +252,9 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
     }
     if (connection_state == ESTABLISHED) {
         if (_sender.consecutive_retransmissions() > _cfg.MAX_RETX_ATTEMPTS) {
-            _sender.stream_in().set_error();
-            _receiver.stream_out().set_error();
+            unclean_shutdown();
             _active = false;
-        } else {
-            // if (time_since_last_segment_received() >= _cfg.rt_timeout &&
-            //     time_since_last_segment_received() <= _cfg.rt_timeout) {
-            //     can_ack_send = true;
-            // } else {
-            //     return;
-            // }
         }
-
-        //  else {
-        //     send_segments();
-        // }
         send_segments();
 
         return;
@@ -256,7 +264,6 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
         connection_state == LAST_ACK) {
         if (time_since_last_segment_received() < 10 * _cfg.rt_timeout) {
             if (time_since_last_segment_received() >= _cfg.rt_timeout) {
-                // cout << second_fin << endl;
                 if (connection_state == TIME_WAIT) {
                     if (second_fin) {
                         return;
@@ -269,6 +276,7 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
             }
         } else {
             _active = false;
+            send_empty_segment();
         }
     }
 }
@@ -313,11 +321,7 @@ void TCPConnection::connect() {
     _sender.fill_window();
 
     // _segments_out = _sender.segments_out();
-    auto s = _sender.segments_out().front();
-    s.header().syn = true;
-    _segments_out.push(s);
-    _sender.segments_out().pop();
-
+    send_segments();
     connected = true;
     syn_sent = true;
     connection_state = SYN_SENT;
@@ -327,7 +331,8 @@ TCPConnection::~TCPConnection() {
     try {
         if (active()) {
             cerr << "Warning: Unclean shutdown of TCPConnection\n";
-
+            unclean_shutdown();
+            send_empty_segment();
             // while (!_sender.segments_out().empty()) {
             //     auto s = _sender.segments_out().front();
             //     s.header().rst = true;
