@@ -1,6 +1,6 @@
 *.a
 *.o
-/sponge/build
+/sponge/build/
 CMakeCache.txt
 CMakeFiles
 Makefile

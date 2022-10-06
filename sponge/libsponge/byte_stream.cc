@@ -1,6 +1,6 @@
 #include "byte_stream.hh"
 
-#include <iostream>
+#include <algorithm>
 
 // Dummy implementation of a flow-controlled in-memory byte stream.
 
@@ -9,87 +9,75 @@
 
 // You will need to add private members to the class declaration in `byte_stream.hh`
 
-// template <typename... Targs>
-// void DUMMY_CODE(Targs &&... /* unused */) {}
+template <typename... Targs>
+void DUMMY_CODE(Targs &&.../* unused */) {}
 
 using namespace std;
 
-ByteStream::ByteStream(const size_t capacity)
-    : bas{}, cap{capacity}, size{}, b_read{}, b_written{}, i_ended{false}, o_ended{false}, _error{false} {}
+ByteStream::ByteStream(const size_t capa)
+    : buffer(), capacity(capa), end_write(false), end_read(false), written_bytes(0), read_bytes(0) {}
 
 size_t ByteStream::write(const string &data) {
-    size_t i = 0;
-    for (auto it = data.begin(); it != data.end(); ++it) {
-        if (!_error && !i_ended && size < cap) {
-            bas.push_back(*it);
-            i++;
-            size++;
-        } else {
-            break;
-        }
+    size_t canWrite = capacity - buffer.size();
+    size_t realWrite = min(canWrite, data.length());
+    for (size_t i = 0; i < realWrite; i++) {
+        buffer.push_back(data[i]);
     }
-    b_written += i;
-    return i;
+    written_bytes += realWrite;
+    return realWrite;
 }
 
 //! \param[in] len bytes will be copied from the output side of the buffer
 string ByteStream::peek_output(const size_t len) const {
-    string s;
-    // if (!_error) {
-    for (size_t i = 0; i < (size > len ? len : size); i++) {
-        s.push_back(bas.at(i));
+    size_t canPeek = min(len, buffer.size());
+    string out = "";
+    for (size_t i = 0; i < canPeek; i++) {
+        out += buffer[i];
     }
-    return s;
-    // }
-    // return nullptr;
+    return out;
 }
 
 //! \param[in] len bytes will be removed from the output side of the buffer
 void ByteStream::pop_output(const size_t len) {
-    if (_error) {
-        return;
-    }
-    if (len > size) {
+    if (len > buffer.size()) {
         set_error();
         return;
     }
     for (size_t i = 0; i < len; i++) {
-        bas.pop_front();
+        buffer.pop_front();
     }
-    b_read += len;
-    size -= len;
+    read_bytes += len;
 }
 
 //! Read (i.e., copy and then pop) the next "len" bytes of the stream
 //! \param[in] len bytes will be popped and returned
 //! \returns a string
 std::string ByteStream::read(const size_t len) {
-    string s;
-    for (size_t i = 0; i < len; i++) {
-        if (!_error && !o_ended && size > 0) {
-            s.push_back(move(bas.front()));
-            bas.pop_front();
-            b_read++;
-            size--;
-        } else {
-            break;
-        }
+    string out = "";
+    if (len > buffer.size()) {
+        set_error();
+        return out;
     }
-    return s;
+    for (size_t i = 0; i < len; i++) {
+        out += buffer.front();
+        buffer.pop_front();
+    }
+    read_bytes += len;
+    return out;
 }
 
-void ByteStream::end_input() { i_ended = true; }
+void ByteStream::end_input() { end_write = true; }
 
-bool ByteStream::input_ended() const { return i_ended; }
+bool ByteStream::input_ended() const { return end_write; }
 
-size_t ByteStream::buffer_size() const { return size; }
+size_t ByteStream::buffer_size() const { return buffer.size(); }
 
-bool ByteStream::buffer_empty() const { return cap > 0 && size == 0; }
+bool ByteStream::buffer_empty() const { return buffer.empty(); }
 
-bool ByteStream::eof() const { return buffer_empty() && i_ended; }
+bool ByteStream::eof() const { return buffer.empty() && end_write; }
 
-size_t ByteStream::bytes_written() const { return b_written; }
+size_t ByteStream::bytes_written() const { return written_bytes; }
 
-size_t ByteStream::bytes_read() const { return b_read; }
+size_t ByteStream::bytes_read() const { return read_bytes; }
 
-size_t ByteStream::remaining_capacity() const { return cap - size; }
+size_t ByteStream::remaining_capacity() const { return capacity - buffer.size(); }

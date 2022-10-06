@@ -1,9 +1,0 @@
-[100%] Testing webget...
-Test project /mnt/i/DIY/CS144/sponge/build
-    Start 31: t_webget
-1/1 Test #31: t_webget .........................   Passed    1.04 sec
-
-100% tests passed, 0 tests failed out of 1
-
-Total Test time (real) =   1.18 sec
-[100%] Built target check_webget

@@ -1,25 +1,25 @@
-[100%] Testing Lab 0...
-Test project /mnt/i/DIY/CS144/sponge/build
+Testing Lab 0...
+Test project /workspaces/cs144/sponge/build
     Start 23: t_byte_stream_construction
-1/9 Test #23: t_byte_stream_construction .......   Passed    0.02 sec
+1/9 Test #23: t_byte_stream_construction .......   Passed    0.00 sec
     Start 24: t_byte_stream_one_write
-2/9 Test #24: t_byte_stream_one_write ..........   Passed    0.02 sec
+2/9 Test #24: t_byte_stream_one_write ..........   Passed    0.00 sec
     Start 25: t_byte_stream_two_writes
-3/9 Test #25: t_byte_stream_two_writes .........   Passed    0.02 sec
+3/9 Test #25: t_byte_stream_two_writes .........   Passed    0.00 sec
     Start 26: t_byte_stream_capacity
-4/9 Test #26: t_byte_stream_capacity ...........   Passed    0.63 sec
+4/9 Test #26: t_byte_stream_capacity ...........   Passed    0.39 sec
     Start 27: t_byte_stream_many_writes
-5/9 Test #27: t_byte_stream_many_writes ........   Passed    0.02 sec
+5/9 Test #27: t_byte_stream_many_writes ........   Passed    0.01 sec
     Start 28: t_webget
-6/9 Test #28: t_webget .........................   Passed    2.17 sec
+6/9 Test #28: t_webget .........................   Passed    1.04 sec
     Start 50: t_address_dt
-7/9 Test #50: t_address_dt .....................   Passed    0.08 sec
+7/9 Test #50: t_address_dt .....................   Passed    0.01 sec
     Start 51: t_parser_dt
-8/9 Test #51: t_parser_dt ......................   Passed    0.02 sec
+8/9 Test #51: t_parser_dt ......................   Passed    0.00 sec
     Start 52: t_socket_dt
-9/9 Test #52: t_socket_dt ......................   Passed    0.03 sec
+9/9 Test #52: t_socket_dt ......................   Passed    0.00 sec
 
 100% tests passed, 0 tests failed out of 9
 
-Total Test time (real) =   3.48 sec
-[100%] Built target check_lab0
+Total Test time (real) =   1.46 sec
+Built target check_lab0

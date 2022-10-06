@@ -11,84 +11,6 @@ template <typename... Targs>
 void DUMMY_CODE(Targs &&.../* unused */) {}
 
 using namespace std;
-enum STATE {
-    LISTEN,
-    SYN_SENT,
-    SYN_RCVD,
-    ESTABLISHED,
-    CLOSE_WAIT,
-    FIN_WAIT_1,
-    FIN_WAIT_2,
-    LAST_ACK,
-    TIME_WAIT,
-    CLOSING
-};
-STATE connection_state = LISTEN;
-bool second_fin{false};
-bool can_ack_send{true};
-
-// 至少产生一个TCPSegment
-void TCPConnection::must_generate_segment(bool fin = false) {
-    _sender.fill_window();
-    if (_sender.segments_out().empty()) {
-        _sender.send_empty_segment();
-    }
-    if (fin) {
-        _sender.segments_out().back().header().fin = true;
-    }
-}
-
-// 把segment从sender的发送队列中取出，扔到网络里(也就是放到_segments_out里)
-void TCPConnection::send_segments() {
-    TCPSegment seg;
-    while (!_sender.segments_out().empty()) {
-        seg = _sender.segments_out().front();
-        // 加上ack和win_size
-        if (_receiver.ackno().has_value()) {
-            seg.header().ack = true;
-            seg.header().ackno = _receiver.ackno().value();
-            if (_receiver.window_size() >= numeric_limits<uint16_t>::max())
-                seg.header().win = numeric_limits<uint16_t>::max();
-            else
-                seg.header().win = _receiver.window_size();
-        }
-        // unclean shutdown
-        if (_sender.stream_in().error() || _receiver.stream_out().error()) {
-            seg.header().rst = true;
-        }
-        /**
-         cerr << "send A =" << seg.header().ack  << " S = " << seg.header().syn << \
-         " F =" << seg.header().fin << " R = " << seg.header().rst << " seqno = " << \
-         seg.header().seqno << " ackno = " << seg.header().ackno << endl;
-         **/
-        // cerr << "Sent: \n" << seg.header().to_string() << "data length: " << seg.payload().size() << endl;
-        // cerr << "----------------------------\n";
-        _segments_out.push(seg);
-        _sender.segments_out().pop();
-    }
-}
-void TCPConnection::send_empty_segment() {
-    _sender.send_empty_segment();
-    send_segments();
-}
-
-void TCPConnection::unclean_shutdown() {
-    _sender.stream_in().set_error();
-    _receiver.stream_out().set_error();
-    _active = false;
-}
-
-void TCPConnection::clean_shutdown() {
-    if (_receiver.stream_out().input_ended() && !_sender.stream_in().eof()) {
-        _linger_after_streams_finish = false;
-    }
-
-    if (_receiver.stream_out().input_ended() && _sender.stream_in().eof() && _sender.bytes_in_flight() == 0) {
-        if (!_linger_after_streams_finish || time_since_last_segment_received() >= 10 * _cfg.rt_timeout) {
-            _active = false;
-        }
-    }
-}
 
 size_t TCPConnection::remaining_outbound_capacity() const { return _sender.stream_in().remaining_capacity(); }
 
@@ -96,200 +18,165 @@ size_t TCPConnection::bytes_in_flight() const { return _sender.bytes_in_flight()
 
 size_t TCPConnection::unassembled_bytes() const { return _receiver.unassembled_bytes(); }
 
-size_t TCPConnection::time_since_last_segment_received() const { return _time_since_last_segment_received; }
+size_t TCPConnection::time_since_last_segment_received() const { return _time_since_last_segment_received_counter; }
+
+bool TCPConnection::real_send() {
+    bool isSend = false;
+    while (!_sender.segments_out().empty()) {
+        isSend = true;
+        TCPSegment segment = _sender.segments_out().front();
+        _sender.segments_out().pop();
+        set_ack_and_windowsize(segment);
+        _segments_out.push(segment);
+    }
+    return isSend;
+}
 
 void TCPConnection::segment_received(const TCPSegment &seg) {
-    // cerr << "On state: " << connection_state << endl;
-    // cerr << "Received: \n" << seg.header().to_string() << "data length: " << seg.payload().size() << endl;
-    // cerr << "----------------------------\n";
-
-    auto header = seg.header();
-    if (header.rst) {
-        unclean_shutdown();
+    _time_since_last_segment_received_counter = 0;
+    // check if the RST has been set
+    if (seg.header().rst) {
+        _sender.stream_in().set_error();
+        _receiver.stream_out().set_error();
+        _active = false;
         return;
     }
 
-    _time_since_last_segment_received = 0;
+    // give the segment to receiver
+    _receiver.segment_received(seg);
 
-    if (connection_state != CLOSE_WAIT) {
-        _receiver.segment_received(seg);
+    // check if need to linger
+    if (check_inbound_ended() && !_sender.stream_in().eof()) {
+        _linger_after_streams_finish = false;
     }
 
-    _sender.ack_received(header.ackno, header.win);
-
-    switch (connection_state) {
-        case LISTEN:
-            if (header.syn) {
-                must_generate_segment();
-
-                send_segments();
-                connection_state = SYN_RCVD;
-            }
-            break;
-
-        case SYN_SENT:
-            if (header.syn) {
-                must_generate_segment();
-                if (header.ack) {
-                    connection_state = ESTABLISHED;
-                } else {
-                    connection_state = SYN_RCVD;
-                }
-                send_segments();
-            }
-            break;
-
-        case ESTABLISHED:
-
-            if (header.fin) {
-                _linger_after_streams_finish = false;
-                connection_state = CLOSE_WAIT;
-                must_generate_segment();
-                send_segments();
-                return;
-            } else if (seg.length_in_sequence_space() > 0 || !_sender.stream_in().buffer_empty()) {
-                must_generate_segment();
-            }
-
-            send_segments();
-            break;
-
-        case SYN_RCVD:
-            if (header.ack) {
-                connection_state = ESTABLISHED;
-            }
-            break;
-
-        case CLOSE_WAIT:
-            if (header.ack) {
-                if (header.fin) {
-                    must_generate_segment();
-                }
-                send_segments();
-            }
-
-            break;
-
-        case LAST_ACK:
-            if (header.ack && header.ackno == _sender.next_seqno()) {
-                _active = false;
-            }
-            break;
-        case FIN_WAIT_1:
-            if (header.ack) {
-                if (header.fin) {
-                    must_generate_segment();
-                    send_segments();
-                    connection_state = TIME_WAIT;
-                } else {
-                    connection_state = FIN_WAIT_2;
-                }
-            } else {
-                if (header.fin) {
-                    must_generate_segment();
-                    send_segments();
-                    connection_state = CLOSING;
-                }
-            }
-            break;
-
-        case FIN_WAIT_2:
-            if (header.fin) {
-                must_generate_segment();
-                send_segments();
-                connection_state = TIME_WAIT;
-            }
-            break;
-
-        case CLOSING:
-            if (header.ack) {
-                connection_state = TIME_WAIT;
-            }
-            break;
-        case TIME_WAIT:
-            if (header.fin) {
-                second_fin = true;
-                must_generate_segment();
-            }
-            break;
+    // check if the ACK has been set
+    if (seg.header().ack) {
+        _sender.ack_received(seg.header().ackno, seg.header().win);
+        real_send();
     }
+
+    // send ack
+    if (seg.length_in_sequence_space() > 0) {
+        // handle the SYN/ACK case
+        _sender.fill_window();
+        bool isSend = real_send();
+        // send at least one ack message
+        if (!isSend) {
+            _sender.send_empty_segment();
+            TCPSegment ACKSeg = _sender.segments_out().front();
+            _sender.segments_out().pop();
+            set_ack_and_windowsize(ACKSeg);
+            _segments_out.push(ACKSeg);
+        }
+    }
+
+    return;
 }
 
 bool TCPConnection::active() const { return _active; }
 
-size_t TCPConnection::write(const string &data) {
-    // DUMMY_CODE(data);
-    auto len = _sender.stream_in().write(data);
-    _sender.fill_window();
-    return len;
+void TCPConnection::set_ack_and_windowsize(TCPSegment &segment) {
+    // ask receiver for ack and window size
+    optional<WrappingInt32> ackno = _receiver.ackno();
+    if (ackno.has_value()) {
+        segment.header().ack = true;
+        segment.header().ackno = ackno.value();
+    }
+    size_t window_size = _receiver.window_size();
+    segment.header().win = static_cast<uint16_t>(window_size);
+    return;
 }
 
-//! \param[in] ms_since_last_tick number of milliseconds since the last call to this method
-void TCPConnection::tick(const size_t ms_since_last_tick) {
-    _time_since_last_segment_received += ms_since_last_tick;
-    _sender.tick(ms_since_last_tick);
-    if (connection_state == LISTEN || connection_state == SYN_RCVD || connection_state == SYN_SENT) {
-        return;
-    }
-    if (connection_state == ESTABLISHED) {
-        if (_sender.consecutive_retransmissions() > _cfg.MAX_RETX_ATTEMPTS) {
-            unclean_shutdown();
-            _active = false;
-        }
-        send_segments();
-        clean_shutdown();
-        return;
-    }
+void TCPConnection::connect() {
+    // send SYN
+    _sender.fill_window();
+    real_send();
+}
 
-    if (connection_state == TIME_WAIT || connection_state == FIN_WAIT_1 || connection_state == CLOSING ||
-        connection_state == LAST_ACK) {
-        if (time_since_last_segment_received() < 10 * _cfg.rt_timeout) {
-            if (time_since_last_segment_received() >= _cfg.rt_timeout) {
-                if (connection_state == TIME_WAIT) {
-                    if (second_fin) {
-                        return;
-                    }
-                }
-                must_generate_segment(true);
-                send_segments();
-            }
-        } else {
-            // _active = false;
-            clean_shutdown();
-            send_empty_segment();
-        }
-    }
+size_t TCPConnection::write(const string &data) {
+    if (!data.size()) return 0;
+    size_t actually_write = _sender.stream_in().write(data);
+    _sender.fill_window();
+    real_send();
+    return actually_write;
 }
 
 void TCPConnection::end_input_stream() {
     _sender.stream_in().end_input();
-    if (connection_state == ESTABLISHED || connection_state == SYN_RCVD || connection_state == CLOSE_WAIT) {
-        must_generate_segment(true);
-        send_segments();
-
-        _time_since_last_segment_received = 0;
-        if (!_linger_after_streams_finish) {
-            connection_state = LAST_ACK;
-        } else {
-            connection_state = FIN_WAIT_1;
-        }
-    }
+    // cout<<"!!!!!!!!!! end input !!!!!!!!!!"<<endl;
+    // cout<<"stream_in : "<< _sender.stream_in().input_ended()<< " " << _sender.stream_in().buffer_empty() << endl;
+    // may send FIN
+    _sender.fill_window();
+    real_send();
 }
 
-void TCPConnection::connect() {
-    _sender.fill_window();
-    send_segments();
-    connection_state = SYN_SENT;
+void TCPConnection::send_RST() {
+    _sender.send_empty_segment();
+    TCPSegment RSTSeg = _sender.segments_out().front();
+    _sender.segments_out().pop();
+    set_ack_and_windowsize(RSTSeg);
+    RSTSeg.header().rst = true;
+    _segments_out.push(RSTSeg);
+}
+
+// prereqs1 : The inbound stream has been fully assembled and has ended.
+bool TCPConnection::check_inbound_ended() {
+    return _receiver.unassembled_bytes() == 0 && _receiver.stream_out().input_ended();
+}
+// prereqs2 : The outbound stream has been ended by the local application and fully sent (including
+// the fact that it ended, i.e. a segment with fin ) to the remote peer.
+// prereqs3 : The outbound stream has been fully acknowledged by the remote peer.
+bool TCPConnection::check_outbound_ended() {
+    return _sender.stream_in().eof() && _sender.next_seqno_absolute() == _sender.stream_in().bytes_written() + 2 &&
+           _sender.bytes_in_flight() == 0;
+}
+
+//! \param[in] ms_since_last_tick number of milliseconds since the last call to this method
+void TCPConnection::tick(const size_t ms_since_last_tick) {
+    _time_since_last_segment_received_counter += ms_since_last_tick;
+    // tick the sender to do the retransmit
+    _sender.tick(ms_since_last_tick);
+    // if new retransmit segment generated, send it
+    if (_sender.segments_out().size() > 0) {
+        TCPSegment retxSeg = _sender.segments_out().front();
+        _sender.segments_out().pop();
+        set_ack_and_windowsize(retxSeg);
+        // abort the connection
+        if (_sender.consecutive_retransmissions() > _cfg.MAX_RETX_ATTEMPTS) {
+            _sender.stream_in().set_error();
+            _receiver.stream_out().set_error();
+            retxSeg.header().rst = true;
+            _active = false;
+        }
+        _segments_out.push(retxSeg);
+    }
+
+    // // check if need to linger
+    // if (check_inbound_ended() && !_sender.stream_in().eof()) {
+    //     _linger_after_streams_finish = false;
+    // }
+
+    // check if done
+    if (check_inbound_ended() && check_outbound_ended()) {
+        if (!_linger_after_streams_finish) {
+            _active = false;
+        } else if (_time_since_last_segment_received_counter >= 10 * _cfg.rt_timeout) {
+            _active = false;
+        }
+    }
 }
 
 TCPConnection::~TCPConnection() {
     try {
         if (active()) {
             cerr << "Warning: Unclean shutdown of TCPConnection\n";
-            unclean_shutdown();
-            send_empty_segment();
+            // Your code here: need to send a RST segment to the peer
+            _sender.stream_in().set_error();
+            _receiver.stream_out().set_error();
+            send_RST();
+            _active = false;
         }
-        // Your code here: need to send a RST segment to the peer
     } catch (const exception &e) {
         std::cerr << "Exception destructing TCP FSM: " << e.what() << std::endl;
     }
