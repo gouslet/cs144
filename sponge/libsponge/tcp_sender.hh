@@ -1,6 +1,7 @@
 #ifndef SPONGE_LIBSPONGE_TCP_SENDER_HH
 #define SPONGE_LIBSPONGE_TCP_SENDER_HH
 
+#include "buffer.hh"
 #include "byte_stream.hh"
 #include "tcp_config.hh"
 #include "tcp_segment.hh"
@@ -8,7 +9,6 @@
 
 #include <functional>
 #include <queue>
-using std::string;
 
 //! \brief The "sender" part of a TCP implementation.
 
@@ -16,7 +16,6 @@ using std::string;
 //! segments, keeps track of which segments are still in-flight,
 //! maintains the Retransmission Timer, and retransmits in-flight
 //! segments if the retransmission timer expires.
-class Out_Segment;
 class TCPSender {
   private:
     //! our initial sequence number, the number for our SYN.
@@ -34,21 +33,21 @@ class TCPSender {
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
 
-    uint64_t _window_size{1};
+    bool _syn_sent = false;
+    bool _fin_sent = false;
+    uint64_t _bytes_in_flight = 0;
+    uint16_t _receiver_window_size = 0;
+    uint16_t _receiver_free_space = 0;
+    uint16_t _consecutive_retransmissions = 0;
+    unsigned int _rto = 0;
+    unsigned int _time_elapsed = 0;
+    bool _timer_running = false;
+    std::queue<TCPSegment> _segments_outstanding{};
+    // Lab4 modify:
+    // bool _fill_window_called_by_ack_received{false};
 
-    std::vector<Out_Segment> out_segments{};
-
-    uint64_t _bytes_in_flight{0};
-
-    unsigned int _consecutive_retransmissions{0};
-
-    bool fin_acked{false};
-
-    bool fin_sent{false};
-
-    bool zero_window_wize{false};
-
-    TCPSegment make_segment(const WrappingInt32 seqno, const bool syn, const bool fin, const string &payload);
+    bool _ack_valid(uint64_t abs_ackno);
+    void _send_segment(TCPSegment &seg);
 
   public:
     //! Initialize a TCPSender
@@ -105,24 +104,6 @@ class TCPSender {
     //! \brief relative seqno for the next byte to be sent
     WrappingInt32 next_seqno() const { return wrap(_next_seqno, _isn); }
     //!@}
-};
-
-struct Out_Segment {
-    TCPSegment seg;
-    uint64_t ackno_absolute;
-    size_t restrans_times{0};  // 发送次数
-    size_t timeout;            // 计时器
-    bool zero{false};          // 重发时timeout不加倍
-
-    // public:
-    Out_Segment(TCPSegment _seg, uint64_t _ackno_ab, uint64_t _timeout, bool zero_window_size)
-        : seg(_seg), ackno_absolute(_ackno_ab), timeout(_timeout), zero(zero_window_size){};
-
-    //   TCPSegment segment() { return _seg; }
-    //   size_t &restrans_times() { return _restrans_times; }
-    //   size_t &timeout() { return _timeout; }
-    //   uint64_t ackno() { return _ackno_absolute; }
-    //   bool zero() { return _zero; }
 };
 
 #endif  // SPONGE_LIBSPONGE_TCP_SENDER_HH
